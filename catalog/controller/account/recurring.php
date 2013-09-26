@@ -198,6 +198,187 @@ class ControllerAccountRecurring extends Controller {
 			$this->data['error_warning'] = '';
 		}
 		
+		$info = $this->model_account_recurring->getRecurringOrder($this->request->get['id']);
+		
+		if (isset($this->request->post['next_order_date']))
+		{
+			$this->data['next_order_date'] = $this->request->post['next_order_date'];
+		}
+		else if ($info)
+		{
+			$this->data['next_order_date'] = $info['next_order_date'];
+		}
+		
+		if (isset($this->request->post['recurring_frequency']))
+		{
+			$this->data['recurring_frequency'] = $this->request->post['recurring_frequency'];
+		}
+		else if ($info)
+		{
+			$this->data['recurring_frequency'] = $info['recurring'];
+		}
+		
+		if (isset($this->request->post['shipping_address_id']))
+		{
+			$this->data['shipping_address_id'] = $this->request->post['shipping_address_id'];
+		}
+		else if ($info)
+		{
+			$this->data['shipping_address_id'] = $info['shipping_address_id'];
+		}
+		
+		if (isset($this->request->post['comment']))
+		{
+			$this->data['comment'] = $this->request->post['comment'];
+		}
+		else if ($info)
+		{
+			$this->data['comment'] = $info['comment'];
+		}
+		
+		$results = $this->model_account_recurring->getRecurringOrderProducts($this->request->get['id']);
+		$this->data['products'] = array();
+		$this->load->model('catalog/product');
+		foreach($results as $result)
+		{
+			$product = $this->model_catalog_product->getProduct($result['product_id']);			
+			$result['name'] = $product['name'];			
+			$result['model'] = $product['model'];	
+			
+			// Display prices
+			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
+			} else {
+				$price = false;
+			}
+				
+			// Display prices
+			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+				$total = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $result['quantity']);
+			} else {
+				$total = false;
+			}
+			
+			$option_data = array();
+       		foreach ($product['option'] as $option) 
+			{
+				if ($option['type'] != 'file') 
+				{
+					$value = $option['option_value'];	
+				} 
+				else 
+				{
+					$filename = $this->encryption->decrypt($option['option_value']);
+					$value = utf8_substr($filename, 0, utf8_strrpos($filename, '.'));
+				}
+					
+				$option_data[] = array(
+					'name'  => $option['name'],
+					'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value)
+				);
+       		}
+			
+			$result['price'] = $price;
+			$result['total'] = $total;
+			$result['option'] = $option_data;
+			$this->data['products'][] = $result;
+		}
+		
+		$this->load->model('account/address');		
+		$this->data['addresses'] = $this->model_account_address->getAddresses();
+		
+		$shipping_address = $this->model_account_address->getAddress($info['shipping_address_id']);
+		$payment_address  = $this->model_account_address->getAddress($info['payment_address_id']);	
+		
+		$quote_data = array();			
+		$this->load->model('setting/extension');			
+		$results = $this->model_setting_extension->getExtensions('shipping');			
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('shipping/' . $result['code']);					
+				$quote = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address); 
+		
+				if ($quote) 
+				{
+					$quote_data[$result['code']] = array( 
+						'title'      => $quote['title'],
+						'quote'      => $quote['quote'], 
+						'sort_order' => $quote['sort_order'],
+						'error'      => $quote['error']
+					);
+				}
+			}
+		}
+	
+		$sort_order = array();
+		  
+		foreach ($quote_data as $key => $value) 
+		{
+			$sort_order[$key] = $value['sort_order'];
+		}
+	
+		array_multisort($sort_order, SORT_ASC, $quote_data);
+			
+		$this->data['shipping_methods'] = $quote_data;
+		
+		// Totals
+		$total_data = array();					
+		$total = 0;
+		$taxes = $this->cart->getTaxes();
+			
+		$this->load->model('setting/extension');
+			
+		$sort_order = array(); 
+			
+		$results = $this->model_setting_extension->getExtensions('total');
+			
+		foreach ($results as $key => $value) 
+		{
+			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+		}
+			
+		array_multisort($sort_order, SORT_ASC, $results);
+			
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('total/' . $result['code']);		
+				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+			}
+		}
+		
+		$method_data = array();
+			
+		$this->load->model('setting/extension');
+			
+		$results = $this->model_setting_extension->getExtensions('payment');
+	
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('payment/' . $result['code']);					
+				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $total); 
+					
+				if ($method) {
+					$method_data[$result['code']] = $method;
+				}
+			}
+		}
+
+		$sort_order = array(); 
+		  
+		foreach ($method_data as $key => $value) {
+			$sort_order[$key] = $value['sort_order'];
+		}
+	
+		array_multisort($sort_order, SORT_ASC, $method_data);			
+			
+		$this->data['payment_methods'] = $method_data;	
+		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/account/recurring_form.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/account/recurring_form.tpl';
 		} else {

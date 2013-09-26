@@ -1,0 +1,152 @@
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[29-Apr-2013 18:23:30] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[29-Apr-2013 18:23:30] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[29-Apr-2013 18:23:30] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[29-Apr-2013 18:23:30] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[29-Apr-2013 18:23:30] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[29-Apr-2013 18:23:30] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[29-Apr-2013 18:23:30] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 04:21:47] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 04:21:47] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 04:21:47] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 04:21:47] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 04:21:47] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 04:21:47] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 04:21:47] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 05:35:13] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 05:35:13] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 05:35:13] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 05:35:13] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 05:35:13] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 05:35:13] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 05:35:13] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 05:38:29] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 05:38:29] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 05:38:29] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 05:38:29] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 05:38:29] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 05:38:29] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 05:38:29] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 06:41:43] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 06:41:43] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 06:41:43] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 06:41:43] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 06:41:43] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 06:41:43] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 06:41:43] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 06:50:46] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 06:50:46] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 06:50:46] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 06:50:46] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 06:50:46] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 06:50:46] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 06:50:46] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 06:52:15] PHP Warning:  require_once(D:\Sites\test.petacoffee.com/RFCSACAPPDEV01Sites/test.petacoffee.com/system/startup.php): failed to open stream: No such file or directory in D:\Sites\test.petacoffee.com\index.php on line 21
+[30-Apr-2013 06:52:15] PHP Fatal error:  require_once(): Failed opening required 'D:\Sites\test.petacoffee.com/RFCSACAPPDEV01Sites/test.petacoffee.com/system/startup.php' (include_path='.;C:\php\pear') in D:\Sites\test.petacoffee.com\index.php on line 21
+[30-Apr-2013 06:52:19] PHP Warning:  require_once(D:\Sites\test.petacoffee.com/RFCSACAPPDEV01Sites/test.petacoffee.com/system/startup.php): failed to open stream: No such file or directory in D:\Sites\test.petacoffee.com\index.php on line 21
+[30-Apr-2013 06:52:19] PHP Fatal error:  require_once(): Failed opening required 'D:\Sites\test.petacoffee.com/RFCSACAPPDEV01Sites/test.petacoffee.com/system/startup.php' (include_path='.;C:\php\pear') in D:\Sites\test.petacoffee.com\index.php on line 21
+[30-Apr-2013 06:53:46] PHP Warning:  require_once(D:\Sites\test.petacoffee.comhttp://test.petacoffee.com/system/startup.php): failed to open stream: Invalid argument in D:\Sites\test.petacoffee.com\index.php on line 21
+[30-Apr-2013 06:53:46] PHP Fatal error:  require_once(): Failed opening required 'D:\Sites\test.petacoffee.comhttp://test.petacoffee.com/system/startup.php' (include_path='.;C:\php\pear') in D:\Sites\test.petacoffee.com\index.php on line 21
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 06:54:39] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 06:54:39] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 06:54:39] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 06:54:39] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 06:54:39] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 06:54:39] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 06:54:39] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_connect(): [2002] A connection attempt failed because the connected party did not properly respond after a period of time, or established connecti (trying to connect via tcp://72.3.209.193:3306) in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_connect(): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 6
+[30-Apr-2013 07:16:15] PHP Notice:  Error: Could not make a database link using petacoffee@72.3.209.193 in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 7
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 10
+[30-Apr-2013 07:16:15] PHP Notice:  Error: Could not connect to database rogerl_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 14
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 15
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 16
+[30-Apr-2013 07:16:15] PHP Warning:  mysql_query() expects parameter 2 to be resource, boolean given in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 17
+[30-Apr-2013 07:16:15] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 54
+[30-Apr-2013 07:16:15] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 07:16:15] PHP Warning:  Invalid argument supplied for foreach() in D:\Sites\test.petacoffee.com\index.php on line 63
+[30-Apr-2013 07:16:15] PHP Notice:  Trying to get property of non-object in D:\Sites\test.petacoffee.com\index.php on line 71
+[30-Apr-2013 07:21:11] PHP Notice:  Error: Could not connect to database test_petacoffee in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 11
+[30-Apr-2013 07:21:11] PHP Notice:  Error: No database selected<br />Error No: 1046<br />SELECT * FROM store WHERE REPLACE(`url`, 'www.', '') = 'http://test.petacoffee.com/' in D:\Sites\test.petacoffee.com\system\database\mysql.php on line 50
+[10-May-2013 13:16:59] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[10-May-2013 13:16:59] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[10-May-2013 13:16:59] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[10-May-2013 13:16:59] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[09-Jun-2013 04:15:08] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[09-Jun-2013 04:15:08] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[09-Jun-2013 04:15:08] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[09-Jun-2013 04:15:08] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[19-Jun-2013 06:37:02] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[19-Jun-2013 06:37:02] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[19-Jun-2013 06:37:02] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[19-Jun-2013 06:37:02] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[08-Jul-2013 15:28:39] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[08-Jul-2013 15:28:39] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[08-Jul-2013 15:28:39] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[08-Jul-2013 15:28:39] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[13-Jul-2013 16:38:27] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[13-Jul-2013 16:38:27] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[13-Jul-2013 16:38:27] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[13-Jul-2013 16:38:27] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[19-Jul-2013 02:11:14] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[19-Jul-2013 02:11:14] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[19-Jul-2013 02:11:14] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[19-Jul-2013 02:11:14] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[11-Aug-2013 15:02:30] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[11-Aug-2013 15:02:30] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[11-Aug-2013 15:02:30] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[11-Aug-2013 15:02:30] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
+[07-Sep-2013 13:53:13] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 3
+[07-Sep-2013 13:53:13] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 4
+[07-Sep-2013 13:53:13] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 7
+[07-Sep-2013 13:53:13] PHP Notice:  Undefined index: HTTP_HOST in D:\Sites\test.petacoffee.com\config.php on line 8
