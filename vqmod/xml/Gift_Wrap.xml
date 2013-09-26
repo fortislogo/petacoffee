@@ -1,0 +1,426 @@
+<modification>
+	<id>Gift Wrap</id>
+	<version>1.2</version>
+	<vqmver>2.1.5</vqmver>
+  <author>OpenCartWorld.com</author>
+  <website>http://www.opencartworld.com</website>
+	<email>support@opencartworld.com</email>
+
+  <!-- ******************************************* START: OCW LIBRARY -->
+
+  <!-- Add OpenCartWorld helper library -->
+  <file name="system/startup.php">
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="before"><![CDATA[
+        ?>
+      ]]></search>
+      <add><![CDATA[
+        require_once(DIR_SYSTEM . 'library/ocw.php');
+      ]]></add>
+    </operation>
+  </file>
+  <file name="system/engine/front.php">
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="before"><![CDATA[
+        $this->registry = $registry;
+      ]]></search>
+      <add><![CDATA[
+        $ocw = new OCW($registry);
+        $registry->set('ocw', $ocw);
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- ******************************************* END: OCW LIBRARY -->
+
+  <!-- Append gift wrap notes to comments -->
+  <file name="catalog/controller/checkout/confirm.php">
+    <operation error="skip">
+      <search position="before"><![CDATA[
+        public function index() {
+      ]]></search>
+      <add><![CDATA[
+        private function getGiftWrapNotes($comments) {
+          $note = $comments;
+          if(isset($this->session->data['gift_wrap_note']) && $this->session->data['gift_wrap_note'])
+          {
+            $note = '';
+            $this->language->load('total/gift_wrap');
+            if($comments != '') { $note .= "\n\n\n"; }
+            $note .= $this->language->get('text_gift_wrap_note') . "\n";
+            $note .= $this->session->data['gift_wrap_note'] . "\n";
+
+            // remove existing gift wrap notes
+            $comments = preg_replace('/' . $this->language->get('text_gift_wrap_note') . '(.*)/ims', '', $comments);
+            $comments .= $note;
+            $note = $comments;
+          }
+          return $note;
+        }
+      ]]></add>
+    </operation>
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="after"><![CDATA[
+        $data['comment'] = $this->session->data['comment'];	
+      ]]></search>
+      <add><![CDATA[
+        $data['comment'] = $this->getGiftWrapNotes($data['comment']);
+      ]]></add>
+    </operation>
+    <operation error="skip"> <!-- VERSION: 1.4.x -->
+      <search position="after"><![CDATA[
+        $this->data['comment'] = nl2br($this->session->data['comment']);
+      ]]></search>
+      <add><![CDATA[
+        $this->data['comment'] = nl2br($this->getGiftWrapNotes($this->data['comment']));
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- make sure gift wrap settings are submitted along with shipping method and comments -->
+   <file name="catalog/view/theme/*/template/checkout/checkout.tpl">
+    <operation error="skip"> <!-- VERSION: 1.5.x -->
+      <search position="replace"><![CDATA[
+        data: $('#shipping-method input[type=\'radio\']:checked, #shipping-method textarea'),
+      ]]></search>
+      <add><![CDATA[
+        data: $('#shipping-method input[type=\'radio\']:checked, #shipping-method input[type=\'checkbox\']:checked, #shipping-method textarea'),
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- Save and fetch gift wrap notes and settings -->
+  <file name="catalog/controller/checkout/shipping_method.php">
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="after"><![CDATA[
+        $this->session->data['comment'] = strip_tags($this->request->post['comment']);
+      ]]></search>
+      <add><![CDATA[
+        if ($this->config->get('gift_wrap_show_on_shipping')) {
+          if (isset($this->request->post['gift_wrap']) && $this->request->post['gift_wrap']) {
+            $this->session->data['gift_wrap'] = $this->request->post['gift_wrap'];
+			if (isset($this->request->post['gift_wrap_note'])) {
+				$this->session->data['gift_wrap_note'] = strip_tags($this->request->post['gift_wrap_note']);
+			}
+          } else {
+            unset($this->session->data['gift_wrap']);
+            unset($this->session->data['gift_wrap_note']);
+          }
+        }
+      ]]></add>
+    </operation>
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="after"><![CDATA[
+        $this->data['text_comments'] = $this->language->get('text_comments');
+      ]]></search>
+      <add><![CDATA[
+        $this->language->load('total/gift_wrap');
+        $this->data['text_gift_wrap_heading'] = $this->language->get('text_gift_wrap_heading');
+        $this->data['text_gift_wrap_info'] = $this->language->get('text_gift_wrap_info');
+        $this->data['text_gift_wrap_heading'] = $this->language->get('text_gift_wrap_heading');
+        $this->data['text_gift_wrap_note'] = $this->language->get('text_gift_wrap_note');
+        $this->data['gift_wrap_status'] = $this->config->get('gift_wrap_status');
+        $this->data['gift_wrap_show_on_shipping'] = $this->config->get('gift_wrap_show_on_shipping');
+        $this->data['gift_wrap_show_on_payment'] = $this->config->get('gift_wrap_show_on_payment');
+        $this->data['gift_wrap_use_note_field'] = $this->config->get('gift_wrap_use_note_field');
+        $this->data['gift_wrap_fee'] = $this->currency->format($this->tax->calculate($this->config->get('gift_wrap_fee'), $this->config->get('gift_wrap_tax_class_id'), $this->config->get('config_tax')));
+        if($this->config->get('gift_wrap_calculation_method') == 'per_qty'){
+          $this->data['gift_wrap_fee_note'] = $this->language->get('text_note_per_qty');
+        } else if($this->config->get('gift_wrap_calculation_method') == 'per_product'){
+          $this->data['gift_wrap_fee_note'] = $this->language->get('text_note_per_product');
+        } else {
+          $this->data['gift_wrap_fee_note'] = '';
+        }
+        if(isset($this->session->data['gift_wrap'])){
+          $this->data['gift_wrap'] = true;
+        } else {
+          $this->data['gift_wrap'] = false;
+        }
+        if(isset($this->session->data['gift_wrap_note'])){
+          $this->data['gift_wrap_note'] = $this->session->data['gift_wrap_note'];
+        } else {
+          $this->data['gift_wrap_note'] = '';
+        }
+      ]]></add>
+    </operation>
+
+    <!-- strip gift wrap notes from comments before displaying comments-->
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="replace"><![CDATA[
+        $this->data['comment'] = $this->session->data['comment'];
+      ]]></search>
+      <add><![CDATA[
+        $this->data['comment'] = preg_replace('/' . $this->language->get('text_gift_wrap_note') . '(.*)/ims', '', $this->session->data['comment']);
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- display gift wrap option to customer -->
+  <file name="catalog/view/theme/*/template/checkout/shipping_method.tpl">
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="before"><![CDATA[
+        <div class="buttons">
+      ]]></search>
+      <add><![CDATA[
+        <?php if ($gift_wrap_status && $gift_wrap_show_on_shipping) { ?>
+          <?php if ($this->ocw->getVersion() < 1.5) { ?>
+            <b style="margin-bottom: 2px; display: block;"><?php echo $text_gift_wrap_heading; ?></b>
+            <div class="content">
+              <table width="100%" cellpadding="3">
+                <tr>
+                  <td width="1"><input type="checkbox" name="gift_wrap" id="gift_wrap" value="1" <?php if($gift_wrap) { echo "checked"; } ?>/></td>
+                  <td><label for="gift_wrap" style="cursor: pointer;"><?php echo $text_gift_wrap_info; ?></label></td>
+                  <td width="1" align="right"><?php echo $gift_wrap_fee; ?>
+                    <?php if($gift_wrap_fee_note != ''){?>
+                      <br><small style="white-space:nowrap;"><?php echo $gift_wrap_fee_note; ?></small>
+                    <?php } ?>
+                  </td>
+                </tr>
+              </table>
+              <?php if ($gift_wrap_use_note_field) { ?>
+                <script type="text/javascript"><!--
+                $('#gift_wrap').change(function() {
+                  if ($(this).is(':checked')) {
+                    $(this).val(1);
+                    $('#gift_wrap_notes').slideDown();
+                  } else {
+                    $(this).val(0);
+                    $('#gift_wrap_notes').slideUp();
+                  }
+                });
+                $(document).ready(function() {
+                  if ($('#gift_wrap').is(':checked')) {
+                    $('#gift_wrap_notes').slideDown();
+                  }
+                });
+                //--></script>
+                <div id="gift_wrap_notes" style="display: none;">
+                  <?php echo $text_gift_wrap_note; ?><br>
+                  <textarea name="gift_wrap_note" style="width: 99%; height: 100px;"><?php echo $gift_wrap_note; ?></textarea>
+                </div>
+              <?php } ?>
+            </div>
+          <?php } else { ?>
+            <b><?php echo $text_gift_wrap_heading; ?></b>
+            <table class="form">
+	        	<tr>
+	        		<td style="width: 1px;"><input type="checkbox" name="gift_wrap" id="gift_wrap" value="1" <?php if($gift_wrap) { echo "checked"; } ?>/></td>
+	        		<td><label for="gift_wrap" style="cursor: pointer;"><?php echo $text_gift_wrap_info; ?></label></td>
+	        		<td style="text-align: right;"><?php echo $gift_wrap_fee; ?>
+	        			<?php if($gift_wrap_fee_note != ''){?>
+	        				<br><small style="white-space:nowrap;"><?php echo $gift_wrap_fee_note; ?></small>
+	        			<?php } ?>
+	        		</td>
+	        	</tr>
+	        	</table>
+	        	<?php if ($gift_wrap_use_note_field) { ?>
+	        	  <script type="text/javascript"><!--
+	        	  $('#gift_wrap').change(function() {
+	        	    if ($(this).is(':checked')) {
+	        	      $(this).val(1);
+	        	      $('#gift_wrap_notes').slideDown();
+	        	    } else {
+	        	      $(this).val(0);
+                  $('#gift_wrap_notes').slideUp();
+	        	    }
+	        	  });
+
+	        	  $(document).ready(function() {
+                if ($('#gift_wrap').is(':checked')) {
+                  $('#gift_wrap_notes').slideDown();
+                }
+              });
+	        	  //--></script>
+	        	  <div id="gift_wrap_notes" style="display: none;">
+	        	  <b><?php echo $text_gift_wrap_note; ?></b>
+	        		<textarea name="gift_wrap_note" rows="8" style="width: 98%;"><?php echo $gift_wrap_note; ?></textarea>
+	        		<br />
+              <br />
+	        		</div>
+	        	<?php } ?>
+          <?php } ?>
+        <?php } ?>
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- Save and fetch gift wrap notes and settings -->
+  <file name="catalog/controller/checkout/payment_method.php">
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="after"><![CDATA[
+        $this->session->data['comment'] = strip_tags($this->request->post['comment']);
+      ]]></search>
+      <add><![CDATA[
+        if ($this->config->get('gift_wrap_show_on_payment')) {
+          if (isset($this->request->post['gift_wrap']) && $this->request->post['gift_wrap']) {
+            $this->session->data['gift_wrap'] = $this->request->post['gift_wrap'];
+			if (isset($this->request->post['gift_wrap_note'])) {
+				$this->session->data['gift_wrap_note'] = strip_tags($this->request->post['gift_wrap_note']);
+			}
+          } else {
+            unset($this->session->data['gift_wrap']);
+            unset($this->session->data['gift_wrap_note']);
+          }
+        }
+      ]]></add>
+    </operation>
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="after"><![CDATA[
+        $this->data['text_comments'] = $this->language->get('text_comments');
+      ]]></search>
+      <add><![CDATA[
+        $this->language->load('total/gift_wrap');
+        $this->data['text_gift_wrap_heading'] = $this->language->get('text_gift_wrap_heading');
+        $this->data['text_gift_wrap_info'] = $this->language->get('text_gift_wrap_info');
+        $this->data['text_gift_wrap_heading'] = $this->language->get('text_gift_wrap_heading');
+        $this->data['text_gift_wrap_note'] = $this->language->get('text_gift_wrap_note');
+        $this->data['gift_wrap_status'] = $this->config->get('gift_wrap_status');
+        $this->data['gift_wrap_show_on_shipping'] = $this->config->get('gift_wrap_show_on_shipping');
+        $this->data['gift_wrap_show_on_payment'] = $this->config->get('gift_wrap_show_on_payment');
+        $this->data['gift_wrap_use_note_field'] = $this->config->get('gift_wrap_use_note_field');
+        $this->data['gift_wrap_fee'] = $this->currency->format($this->tax->calculate($this->config->get('gift_wrap_fee'), $this->config->get('gift_wrap_tax_class_id'), $this->config->get('config_tax')));
+        if($this->config->get('gift_wrap_calculation_method') == 'per_qty'){
+          $this->data['gift_wrap_fee_note'] = $this->language->get('text_note_per_qty');
+        } else if($this->config->get('gift_wrap_calculation_method') == 'per_product'){
+          $this->data['gift_wrap_fee_note'] = $this->language->get('text_note_per_product');
+        } else {
+          $this->data['gift_wrap_fee_note'] = '';
+        }
+        if(isset($this->session->data['gift_wrap'])){
+          $this->data['gift_wrap'] = true;
+        } else {
+          $this->data['gift_wrap'] = false;
+        }
+        if(isset($this->session->data['gift_wrap_note'])){
+          $this->data['gift_wrap_note'] = $this->session->data['gift_wrap_note'];
+        } else {
+          $this->data['gift_wrap_note'] = '';
+        }
+      ]]></add>
+    </operation>
+
+    <!-- strip gift wrap notes from comments before displaying comments-->
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="replace"><![CDATA[
+        $this->data['comment'] = $this->session->data['comment'];
+      ]]></search>
+      <add><![CDATA[
+        $this->data['comment'] = preg_replace('/' . $this->language->get('text_gift_wrap_note') . '(.*)/ims', '', $this->session->data['comment']);
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- display gift wrap option to customer -->
+  <file name="catalog/view/theme/*/template/checkout/payment_method.tpl">
+    <operation error="skip"> <!-- VERSION: All -->
+      <search position="before"><![CDATA[
+        <div class="buttons">
+      ]]></search>
+      <add><![CDATA[
+        <?php if ($gift_wrap_status && $gift_wrap_show_on_payment) { ?>
+          <?php if ($this->ocw->getVersion() < 1.5) { ?>
+            <b style="margin-bottom: 2px; display: block;"><?php echo $text_gift_wrap_heading; ?></b>
+            <div class="content">
+              <table width="100%" cellpadding="3">
+                <tr>
+                  <td width="1"><input type="checkbox" name="gift_wrap" id="gift_wrap_p" value="1" <?php if($gift_wrap) { echo "checked"; } ?>/></td>
+                  <td><label for="gift_wrap" style="cursor: pointer;"><?php echo $text_gift_wrap_info; ?></label></td>
+                  <td width="1" align="right"><?php echo $gift_wrap_fee; ?>
+                    <?php if($gift_wrap_fee_note != ''){?>
+                      <br><small style="white-space:nowrap;"><?php echo $gift_wrap_fee_note; ?></small>
+                    <?php } ?>
+                  </td>
+                </tr>
+              </table>
+              <?php if ($gift_wrap_use_note_field) { ?>
+                <script type="text/javascript"><!--
+                $('#gift_wrap_p').change(function() {
+                  if ($(this).is(':checked')) {
+                    $(this).val(1);
+                    $('#gift_wrap_notes_p').slideDown();
+                  } else {
+                    $(this).val(0);
+                    $('#gift_wrap_notes_p').slideUp();
+                  }
+                });
+                $(document).ready(function() {
+                  if ($('#gift_wrap_p').is(':checked')) {
+                    $('#gift_wrap_notes_p').slideDown();
+                  }
+                });
+                //--></script>
+                <div id="gift_wrap_notes_p" style="display: none;">
+                  <?php echo $text_gift_wrap_note; ?><br>
+                  <textarea name="gift_wrap_note" style="width: 99%; height: 100px;"><?php echo $gift_wrap_note; ?></textarea>
+                </div>
+              <?php } ?>
+            </div>
+          <?php } else { ?>
+            <b><?php echo $text_gift_wrap_heading; ?></b>
+            <table class="form">
+	        	<tr>
+	        		<td style="width: 1px;"><input type="checkbox" name="gift_wrap" id="gift_wrap_p" value="1" <?php if($gift_wrap) { echo "checked"; } ?>/></td>
+	        		<td><label for="gift_wrap_p" style="cursor: pointer;"><?php echo $text_gift_wrap_info; ?></label></td>
+	        		<td style="text-align: right;"><?php echo $gift_wrap_fee; ?>
+	        			<?php if($gift_wrap_fee_note != ''){?>
+	        				<br><small style="white-space:nowrap;"><?php echo $gift_wrap_fee_note; ?></small>
+	        			<?php } ?>
+	        		</td>
+	        	</tr>
+	        	</table>
+	        	<?php if ($gift_wrap_use_note_field) { ?>
+	        	  <script type="text/javascript"><!--
+	        	  $('#gift_wrap_p').change(function() {
+	        	    if ($(this).is(':checked')) {
+	        	      $(this).val(1);
+	        	      $('#gift_wrap_notes_p').slideDown();
+	        	    } else {
+	        	      $(this).val(0);
+                  $('#gift_wrap_notes_p').slideUp();
+	        	    }
+	        	  });
+
+	        	  $(document).ready(function() {
+                if ($('#gift_wrap_p').is(':checked')) {
+                  $('#gift_wrap_notes_p').slideDown();
+                }
+              });
+	        	  //--></script>
+	        	  <div id="gift_wrap_notes_p" style="display: none;">
+	        	  <b><?php echo $text_gift_wrap_note; ?></b>
+	        		<textarea name="gift_wrap_note" rows="8" style="width: 98%;"><?php echo $gift_wrap_note; ?></textarea>
+	        		<br />
+              <br />
+	        		</div>
+	        	<?php } ?>
+          <?php } ?>
+        <?php } ?>
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- unset session variables after placing order -->
+  <file name="catalog/controller/checkout/success.php">
+    <operation error="skip">
+      <search position="after"><![CDATA[
+        unset($this->session->data['comment']);
+      ]]></search>
+      <add><![CDATA[
+        unset($this->session->data['gift_wrap']);
+        unset($this->session->data['gift_wrap_note']);
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>
+
+<!--
+<modification>  - This is the highest point of the file and there can only be one
+<id>            - This is the name of the mod. Format: Free form text
+<version>       - This is the version of the mod. Format: Number and Decimal (1.0.0)
+<author>        - This is the author of the mod. Format: Free form text
+<file>          - This is the name of the file to modify. Requires attribute "name" as relative filename (catalog/controller/product/product.php). There can be multiple
+<operation>		- This is the wrapper of the actual operation occuring. There can be multiple operations to the same file. Uses an optional "error" attribute set to skip|abort (abort is default). skip means all other operations will be applied even if one cannot. abort means to revert to the original source.
+<search>        - This is the first required step of the operation. Uses an optional attribute "position" set to before|after|replace. replace is default. One per operation. Use CDATA tags to wrap code.
+<add>           - This is the second required step of the operation. Uses an optional attribute "trim" set to true|false. false is default. One per operation. Location of added data depends on the position of the <search> command. Use CDATA tags to wrap code.
+-->

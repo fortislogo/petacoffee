@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<SALES>
+  <TRANSACTION>
+    <ORDERID>26821</ORDERID>
+    <DATE>09/04/2013</DATE>
+    <TIME>11:35:28</TIME>
+    <TRANNO>26821</TRANNO>
+    <TYPE>ORDER</TYPE>
+    <DELIVERYCHARGE>5.00</DELIVERYCHARGE>
+    <DELIVERYCOMMENT>Flat Shipping Rate</DELIVERYCOMMENT>
+    <COMMENTS/>
+    <TOTAL>26.48</TOTAL>
+    <PAYMENT>26.48</PAYMENT>
+    <PAYMENTMETHOD>Credit Card / Debit Card (Authorize.Net)</PAYMENTMETHOD>
+    <PAYMENTCOMMENT>NO COMMENT</PAYMENTCOMMENT>
+    <ACCNO/>
+    <TITLE/>
+    <FIRSTNAME>Celso</FIRSTNAME>
+    <SURNAME>Malacas</SURNAME>
+    <PHONE1>888</PHONE1>
+    <PHONE2>88</PHONE2>
+    <EMAIL>celso.m@onlyopencart.com</EMAIL>
+    <ADDRESS1>Company Address 1</ADDRESS1>
+    <ADDRESS2>Address 2</ADDRESS2>
+    <ADDRESS3>City UT</ADDRESS3>
+    <POSTCODE>1229</POSTCODE>
+    <CUSTOMERCOMMENT/>
+    <Items>
+      <QTY>1</QTY>
+      <CODE>20</CODE>
+      <DESC>Morning Birdsong Breakfast Blend</DESC>
+      <PRICE>10.49</PRICE>
+      <DISC/>
+      <SELL>10.49</SELL>
+      <NETT>10.49</NETT>
+      <COMMENT/>
+    </Items>
+  </TRANSACTION>
+</SALES>

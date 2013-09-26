@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="yes"?>
+<SALES>
+  <TRANSACTION>
+    <ORDERID>26763</ORDERID>
+    <DATE>07/03/2013</DATE>
+    <TIME>14:34:47</TIME>
+    <TRANNO>26763</TRANNO>
+    <TYPE>ORDER</TYPE>
+    <DELIVERYCHARGE>0.00</DELIVERYCHARGE>
+    <DELIVERYCOMMENT/>
+    <COMMENTS>Please leave package inside the gate.</COMMENTS>
+    <TOTAL>61.47</TOTAL>
+    <PAYMENT>61.47</PAYMENT>
+    <PAYMENTMETHOD>Credit Card (AuthorizeNet: AIM)</PAYMENTMETHOD>
+    <PAYMENTCOMMENT>NO COMMENT</PAYMENTCOMMENT>
+    <ACCNO/>
+    <TITLE/>
+    <FIRSTNAME>Pamela</FIRSTNAME>
+    <SURNAME>Stanley</SURNAME>
+    <PHONE1>940-390-9601</PHONE1>
+    <PHONE2/>
+    <EMAIL>Easyheeldancer@yahoo.com</EMAIL>
+    <ADDRESS1> 8383 Crestview Rd.
+</ADDRESS1>
+    <ADDRESS2/>
+    <ADDRESS3>Sanger </ADDRESS3>
+    <POSTCODE>76266</POSTCODE>
+    <CUSTOMERCOMMENT/>
+  </TRANSACTION>
+</SALES>

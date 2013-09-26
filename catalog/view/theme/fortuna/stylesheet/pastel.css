@@ -1,0 +1,171 @@
+/*
+Your custom styles.
+*/
+
+/* PASTEL --------------------------- */
+
+#header {
+	background-color: #D4E6E8;
+}
+#topbar {
+	background-color: #F27979;
+}
+#wrapselector, #welcome {
+	color: #FFCEBA;
+}
+#wrapselector a {
+	border-left-color: #ff9e9f;
+}
+#wrapselector b {
+	background: #b54243;
+}
+
+.cart-total a {
+	color: #852223;
+	border-right-color: #ff9e9f;
+}
+.cart-total:hover {
+	background:transparent;
+}
+.cart-total a:hover {
+color: #fff;
+}
+
+.onsale .ribbon,
+.onsale .ribbonshadow{
+	background-color: #62C462;
+}
+
+.navbar a,
+.navbar .nav > li > a,
+.box-category > ul > li > a, 
+.box-category > ul > li > ul > li > a, 
+#maincontent a, 
+#maincontent a:visited, 
+#cart .content a,
+#cart-info .name a,
+.checkout-heading,
+#footer a,
+#footer a:visited,
+#zoom-image,
+legend,
+.module-header,
+#product-info .price-normal,
+.box-heading {
+	color: #39757c;
+}
+.grid-box .price, 
+.product-list .price, 
+.es-carousel .price {
+	color: #b54243;
+}
+.checkout-heading {
+	color: #39757c !important;
+}
+
+#cart .content,
+.grid-box:hover .inner,
+#cart.active .arrow {
+	border-color: #F27979;
+}
+
+#product-info .details,
+.span9 .mainborder,
+.span12 .mainborder,
+#toggle_sidebar,
+.page-header,
+.nav-tabs > .active > a, 
+.nav-tabs > .active > a:hover,
+.nav-tabs,
+#footer,
+#footer .bottom-row,
+#footend {
+	border-color: #D4E6E8;
+}
+.nav-tabs > .active > a, 
+.nav-tabs > .active > a:hover {
+	border-bottom-color: transparent;
+}
+h1.page-header,
+#footer h3,
+.checkout legend,
+.checkout-heading a {
+	color: #F27979;
+}
+
+.product-filter {
+	background: transparent;
+	border-color: #D4E6E8;
+}
+	.btn-cart {
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+		color: #fff !important;
+		text-transform: uppercase;
+		background-color: #F27979;
+		background-image: -moz-linear-gradient(top, #F27979, #dc6565);
+		background-image: -ms-linear-gradient(top, #F27979, #dc6565);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F27979), to(#dc6565));
+		background-image: -webkit-linear-gradient(top, #F27979, #dc6565);
+		background-image: -o-linear-gradient(top, #F27979, #dc6565);
+		background-image: linear-gradient(top, #F27979, #dc6565);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dc6565', endColorstr='#dc6565', GradientType=0);
+		border-color: #F27979 #F27979 #dc6565;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+	}
+
+	.btn-cart:hover,
+	.btn-cart:active,
+	.btn-cart.active,
+	.btn-cart.disabled,
+	.btn-cart[disabled] {
+	  	background-color: #dc6565;
+	  	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+			color: #fff;
+	}
+	.btn-cart:active, .btn-cart.active {
+		background-color: #dc6565 \9;
+	}
+
+	.btn-inverse {
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+		color: #fff !important;
+		text-transform: uppercase;
+		background-color: #46a1ac;
+		background-image: -moz-linear-gradient(top, #46a1ac, #308892);
+		background-image: -ms-linear-gradient(top, #46a1ac, #308892);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#46a1ac), to(#308892));
+		background-image: -webkit-linear-gradient(top, #46a1ac, #308892);
+		background-image: -o-linear-gradient(top, #46a1ac, #308892);
+		background-image: linear-gradient(top, #46a1ac, #308892);
+		background-repeat: repeat-x;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#46a1ac', endColorstr='#308892', GradientType=0);
+		border-color: #46a1ac #46a1ac #308892;
+		border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+	}
+
+	.btn-inverse:hover,
+	.btn-inverse:active,
+	.btn-inverse.active,
+	.btn-inverse.disabled,
+	.btn-inverse[disabled] {
+	  	background-color: #308892;
+	  	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+			color: #fff !important;
+	}
+	.btn-inverse:active, .btn-inverse.active {
+		background-color: #308892 \9;
+	}
+
+@media only screen and (max-width: 767px) {
+	#welcome { color: #999; }
+	#welcome a { color: #39757c; }
+	.nav-collapse .nav > li > a:hover, .nav-collapse .dropdown-menu a:hover {
+		background-color: #39757c;
+	}
+	#language + #currency {
+		border-left-color: #B54243;
+	}
+}
