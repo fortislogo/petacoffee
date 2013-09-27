@@ -2348,3 +2348,98 @@
 2013-09-27 2:18:14 - PHP Notice:  Undefined variable: action in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
 2013-09-27 2:18:14 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
 2013-09-27 2:18:14 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 2:10:21 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\vqmod\vqcache\vq2-catalog_controller_checkout_shipping_method.php on line 183
+2013-09-27 2:10:55 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\vqmod\vqcache\vq2-catalog_controller_checkout_shipping_method.php on line 183
+2013-09-27 2:12:51 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\vqmod\vqcache\vq2-catalog_controller_checkout_shipping_method.php on line 183
+2013-09-27 2:14:42 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\vqmod\vqcache\vq2-catalog_controller_checkout_shipping_method.php on line 183
+2013-09-27 2:17:25 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:23:04 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:24:10 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:24:25 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:24:41 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:31:32 - PHP Notice:  Undefined variable: gift_wrap_status in C:\xampp\htdocs\gbsmanila\petacoffee\vqmod\vqcache\vq2-catalog_view_theme_fortuna_template_checkout_shipping_method.tpl on line 86
+2013-09-27 2:31:52 - PHP Notice:  Undefined variable: gift_wrap_status in C:\xampp\htdocs\gbsmanila\petacoffee\vqmod\vqcache\vq2-catalog_view_theme_fortuna_template_checkout_shipping_method.tpl on line 86
+2013-09-27 2:56:32 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:56:44 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 2:58:15 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 3:15:19 - PHP Notice:  Undefined index: recurring_frequency in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\checkout\shipping_method.php on line 154
+2013-09-27 3:17:49 - PHP Notice:  Error: Unknown column 'comments' in 'field list'<br />Error No: 1054<br />INSERT INTO recurring SET 
+						 	customer_id = 3333, 
+							subscription_id = 0, 
+							name = '26933',
+							product = '',
+							recurring = '3',
+							previous_amount = '72.18',
+							amount = '72.18',
+							date = '2013-09-27',
+							next_order_date = '2013-10-18',
+							order_id = '26933',
+							shipping_address_id = '1948',
+							payment_address_id = '1948',
+							status = 'active',
+							comments = '',
+							cc_name = 'test',
+							cc_card_no = 'test',
+							cc_cv_no = 'asdf',
+							cc_expiry = '012014' in C:\xampp\htdocs\gbsmanila\petacoffee\system\database\mysql.php on line 50
+2013-09-27 3:20:13 - PHP Notice:  Undefined variable: option in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\payment\authorizenet_aim.php on line 392
+2013-09-27 4:32:12 - PHP Notice:  Undefined variable: option in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\payment\authorizenet_aim.php on line 392
+2013-09-27 4:43:04 - PHP Notice:  Undefined variable: option in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\payment\authorizenet_aim.php on line 392
+2013-09-27 4:51:53 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 4:51:53 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:51:53 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:52:00 - PHP Notice:  Undefined variable: product_id in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 267
+2013-09-27 4:52:00 - PHP Notice:  Undefined variable: product_id in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 267
+2013-09-27 4:52:00 - PHP Notice:  Undefined variable: product_id in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 267
+2013-09-27 4:52:01 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 4:52:01 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:52:01 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:58:05 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 4:58:05 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:58:05 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:58:53 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 4:58:53 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 4:58:53 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:31:03 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\payment\authorizenet_aim.php on line 399
+2013-09-27 5:31:03 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\payment\authorizenet_aim.php on line 399
+2013-09-27 5:31:03 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\payment\authorizenet_aim.php on line 399
+2013-09-27 5:32:07 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:32:07 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:32:07 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:34:04 - PHP Notice:  Undefined variable: option_price in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 282
+2013-09-27 5:34:04 - PHP Notice:  Undefined variable: option_points in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 291
+2013-09-27 5:34:04 - PHP Notice:  Undefined variable: option_weight in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 300
+2013-09-27 5:34:04 - PHP Notice:  Undefined variable: quantity in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 307
+2013-09-27 5:34:04 - PHP Notice:  Undefined variable: quantity in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 307
+2013-09-27 5:34:06 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:34:06 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:34:06 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:34:06 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:34:06 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:35:35 - PHP Notice:  Undefined variable: quantity in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-27 5:35:35 - PHP Notice:  Undefined variable: quantity in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-27 5:35:36 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:35:36 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:35:36 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:35:36 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:35:36 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:36:34 - PHP Notice:  Undefined variable: quantity in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-27 5:36:34 - PHP Notice:  Undefined variable: quantity in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-27 5:36:35 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:36:35 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:36:35 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:36:35 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:36:35 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:37:11 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:37:11 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:37:11 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:37:11 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:37:11 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:39:20 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:39:20 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:39:20 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:39:20 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:39:20 - PHP Notice:  Undefined index: value in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 233
+2013-09-27 5:40:22 - PHP Notice:  Undefined variable: action in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 45
+2013-09-27 5:40:22 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230
+2013-09-27 5:40:22 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 230

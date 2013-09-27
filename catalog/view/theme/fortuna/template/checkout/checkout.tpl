@@ -856,7 +856,7 @@
 	});
 
 	$('#button-shipping-method').live('click', function() {
-
+		
 		$.ajax({
 			url: 'index.php?route=checkout/shipping_method/validate',
 			type: 'post',

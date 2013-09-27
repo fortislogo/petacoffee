@@ -7,9 +7,13 @@
 		<?php } ?>
         
         <?php if ($has_recurring) { ?>
-	<div>
-		<div class="cart-heading" id="recurring-heading">RECURRING ORDER</div>
-	    <div class="cart-content" id="recurring">
+		
+        <div>
+		
+        
+    	<div class="cart-heading" id="recurring-heading">RECURRING ORDER</div>
+	    
+   		 <div class="cart-content" id="recurring">
     	<table>
     		<tr>
         	<td style="padding:5px; vertical-align:top;">
@@ -37,8 +41,10 @@
          </tr>   
     </table>     
     </div>
-</div>
-<?php } ?>
+    
+		</div>
+
+		<?php } ?>
         
 
 		<?php if ($shipping_methods) { ?>

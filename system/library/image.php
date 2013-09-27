@@ -107,7 +107,8 @@ class Image {
 		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
 	
         imagecopyresampled($this->image, $image_old, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->info['width'], $this->info['height']);
-        imagedestroy($image_old);
+        
+		imagedestroy($image_old);
            
         $this->info['width']  = $width;
         $this->info['height'] = $height;

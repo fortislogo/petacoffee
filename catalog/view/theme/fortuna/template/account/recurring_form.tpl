@@ -230,7 +230,7 @@
 								<a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
 								<?php foreach ($product['option'] as $option) { ?>
 								<br />
-								<small> - <?php echo $option['name']; ?>: <?php echo $option['value']; ?></small>
+								<small> - <?php echo $option['name']; ?>: <?php echo $option['option_value']; ?></small>
 								<?php } ?>
 							</td>
 							<td class="model"><?php echo $product['model']; ?></td>

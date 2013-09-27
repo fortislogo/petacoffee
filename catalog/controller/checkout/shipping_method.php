@@ -146,6 +146,8 @@ class ControllerCheckoutShippingMethod extends Controller {
 			}				
 		}
 		
+		
+		
 		if (isset($this->request->post['recurring']))
 		{
 			$this->session->data['recurring'] = 1;

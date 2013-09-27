@@ -374,7 +374,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 							shipping_address_id = '".$this->session->data['shipping_address_id']."',
 							payment_address_id = '".$this->session->data['payment_address_id']."',
 							status = 'active',
-							comments = '".$this->session->data['comment']."',
+							comment = '".$this->session->data['comment']."',
 							cc_name = '".$data['x_card_owner']."',
 							cc_card_no = '".$data['x_card_num']."',
 							cc_cv_no = '".$data['x_card_code']."',
@@ -389,12 +389,14 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		foreach($products as $product)
 		{
 			$this->db->query("insert into recurring_product set recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', quantity = '".$product['quantity']."'");
+			
 			if ($product['option'])
 			{
 				foreach($product['option'] as $option)
 				{
+					
 					$this->db->query("delete from recurring_product_options where recurring_id = " . $recurring_id . " and product_option_value_id = " . $option['product_option_value_id']);
-					$this->db->query("insert into recurring_product_options set recurring_id = '".$recurring_id."', product_option_value_id = '".$option['product_option_value_id']."'");
+					$this->db->query("insert into recurring_product_options set recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."', value ='".$option['option_value']."', type = '".$option['type']."'");
 				}
 			}
 		}

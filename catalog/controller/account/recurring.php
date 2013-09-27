@@ -260,11 +260,18 @@ class ControllerAccountRecurring extends Controller {
 			}
 			
 			$options = $this->model_account_recurring->getOrderProductOptions($this->request->get['id'], $result['product_id']);
-			
+			//print_r($options);
 			$option_data = array();
-       		foreach ($options as $product_option_id => $option_value) 
+			$option_price = 0;
+			$option_points = 0;
+			$option_weight = 0;
+			
+       		foreach ($options as $option) 
 			{
-				$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM " . DB_PREFIX . "product_option po LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id) LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				$product_option_id = $option['product_option_id'];
+				$option_value = $option['product_option_value_id'];
+				
+				$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM " . DB_PREFIX . "product_option po LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id) LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$result['product_id'] . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 						
 				if ($option_query->num_rows) 
 				{
@@ -301,7 +308,7 @@ class ControllerAccountRecurring extends Controller {
 								$option_weight -= $option_value_query->row['weight'];
 							}
 									
-							if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $quantity))) 
+							if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $result['quantity']))) 
 							{
 								$stock = false;
 							}
@@ -360,7 +367,7 @@ class ControllerAccountRecurring extends Controller {
 									$option_weight -= $option_value_query->row['weight'];
 								}
 									
-								if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $quantity))) 
+								if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $result['quantity']))) 
 								{
 									$stock = false;
 								}
@@ -412,6 +419,8 @@ class ControllerAccountRecurring extends Controller {
 					}
 				}
 			} 
+			
+			print_r($option_data);
 			
 			$result['price'] = $price;
 			$result['total'] = $total;
