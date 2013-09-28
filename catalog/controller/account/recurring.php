@@ -209,9 +209,11 @@ class ControllerAccountRecurring extends Controller {
       	);
 
 		$this->data['heading_title'] = sprintf('Recurring Order #%s', $info['name']);
-		
+		$this->data['text_wait'] = $this->language->get('text_wait');
 		$this->data['text_select'] = $this->language->get('text_select');
 		$this->data['entry_option'] = $this->language->get('entry_option');
+		$this->data['button_upload'] = $this->language->get('button_upload');
+		$this->data['token'] = md5(rand());
 		
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -290,7 +292,7 @@ class ControllerAccountRecurring extends Controller {
 				$total = false;
 			}
 			
-			$options = $this->model_account_recurring->getOrderProductOptions($this->request->get['id'], $result['product_id']);
+			$options = $this->model_account_recurring->getOrderProductOptions($result['recurring_product_id']);
 			
 			$option_data = array();
 			$option_price = 0;
@@ -915,7 +917,7 @@ class ControllerAccountRecurring extends Controller {
 					$total = false;
 				}
 			
-				$options = $this->model_account_recurring->getOrderProductOptions($this->request->get['id'], $result['product_id']);
+				$options = $this->model_account_recurring->getOrderProductOptions($result['recurring_product_id']);
 				
 				$option_data = array();
 				$option_price = 0;
@@ -1082,6 +1084,8 @@ class ControllerAccountRecurring extends Controller {
 				$json['order_product'][] = $result;
 			}
 		}
+		
+		//print_r($json);
 		
 		echo json_encode($json);
 	}

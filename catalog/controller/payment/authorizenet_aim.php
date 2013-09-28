@@ -390,13 +390,14 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		{
 			$this->db->query("insert into recurring_product set recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', quantity = '".$product['quantity']."'");
 			
+			$recurring_product_id = $this->db->getLastId();
+			
 			if ($product['option'])
 			{
 				foreach($product['option'] as $option)
-				{
-					
-					$this->db->query("delete from recurring_product_options where recurring_id = " . $recurring_id . " and product_option_value_id = " . $option['product_option_value_id']);
-					$this->db->query("insert into recurring_product_options set recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."', value ='".$option['option_value']."', type = '".$option['type']."'");
+				{					
+					//$this->db->query("delete from recurring_product_options where recurring_id = " . $recurring_id . " and product_option_value_id = " . $option['product_option_value_id']);
+					$this->db->query("insert into recurring_product_options set recurring_product_id = '".$recurring_product_id."', recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."', value ='".$option['option_value']."', type = '".$option['type']."'");
 				}
 			}
 		}

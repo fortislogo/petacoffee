@@ -414,7 +414,7 @@ $('#button-product').live('click', function()
 						for (j = 0; j < product['option'].length; j++) 
 						{
 							option = product['option'][j];							
-							html += '  <br />- <small>' + option['name'] + ': ' + option['value'] + '</small>';
+							html += '  <br />- <small>' + option['name'] + ': ' + option['option_value'] + '</small>';
 							option_row++;
 						}
 					}
@@ -667,7 +667,7 @@ $('input[name=\'product\']').autocomplete({
 				
 				if (option['type'] == 'file') {		
 					new AjaxUpload('#button-option-' + option['product_option_id'], {
-						action: 'index.php?route=sale/order/upload&token=<?php echo $token; ?>',
+						action: 'index.php?route=sale/order/upload',
 						name: 'file',
 						autoSubmit: true,
 						responseType: 'json',
