@@ -36,7 +36,7 @@
 
 				<?php if ($orders) { ?>
 
-					<div id="order-list">
+					<div id="recurring-list">
                     	
                         <table class="table table-bordered">
 
@@ -74,15 +74,15 @@
 
 							
 						<tbody>
-                        	<tr>
-                            	<td><a href="<?php echo $order['href']; ?>"><?php echo $order['product']; ?></a></td>
+                        	<tr class="<?php echo $order['status']; ?>">
+                            	<td><a href="<?php echo $order['href']; ?>"><?php echo $order['name']; ?></a></td>
                                 <td><?php echo $order['status']; ?></td>
                                 <td><?php echo $order['recurring']; ?> weeks</td>
                                 <td><?php echo $order['date']; ?></td>
                                 <td><?php echo $order['next_order_date']; ?></td>
-                                <td><?php echo $order['previous_amount']; ?></td>
-                                <td><?php echo $order['amount']; ?></td>
-                                <td>
+                                <td style="text-align:right"><?php echo $order['previous_amount']; ?></td>
+                                <td style="text-align:right"><?php echo $order['amount']; ?></td>
+                                <td nowrap="nowrap" style="text-align:center;">
                                 	<?php if ($order['status'] == 'active') { ?>
                                     <a href="<?php echo $order['edit']; ?>" class="btn btn-mini btn-cart" title="Edit">Modify</a>
                                 	<a href="<?php echo $order['reorder']; ?>" class="btn btn-mini btn-cart" title="Cancel">Cancel</a>
@@ -108,11 +108,7 @@
 
 				<?php } ?>
 
-				<div class="form-actions">
-                	
-					<a href="<?php echo $continue; ?>" class="btn btn-inverse"><?php echo $button_continue; ?></a>
-                    
-				</div>
+				
 
 			</div>
 

@@ -2492,6 +2492,27 @@ h4.module-header {
   width: 100% !important;
 }
 
+#recurring-list .cancel td,
+#recurring-list .cancel td a
+{
+	color:#F00;
+}
+
+#recurring-list .cancel td a.btn
+{
+	color:#fff;
+}
+
+td.quantity input
+{
+	width:auto;
+}
+td.quantity input[type=text]
+{
+	width:20px;
+	text-align:right;	
+}
+
 
 /* ---------------------------------------------------------------------- */
 /*	Media Queries

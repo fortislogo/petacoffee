@@ -104,8 +104,42 @@ class ModelAccountRecurring extends Model
 	
 	public function restart($id)
 	{
-		$this->db->query("update recurring set status = 'active' where recurring_id = " . $id);
+		$info = $this->getRecurringOrder($id);
 		
+		$next = $info['next_order_date'];
+		$today = date("Y-m-d");
+		
+		if ($next <= $today)
+		{
+			$next = date("Y-m-d", strtotime(sprintf("+%s week", $info['recurring'])));
+		}
+		
+		$this->db->query("update recurring set status = 'active', next_order_date = '".$next."' where recurring_id = " . $id);
+		
+	}
+	
+	
+	public function update($data, $id)
+	{
+		$this->db->query("update ".DB_PREFIX."recurring set next_order_date = '".$data['next_order_date']."', status = '".$data['status']."', recurring = '".$data['recurring']."' where recurring_id = " . $id);
+		
+		if (isset($data['product']))
+		{
+			foreach($data['product'] as $recurring_product_id => $product)
+			{
+				if ($product['quantity'] > 0)
+				{
+					$this->db->query("update ".DB_PREFIX."recurring_product set quantity = '".$product['quantity']."' where recurring_product_id = " . $recurring_product_id);
+				}
+			}
+		}
+	}
+	
+	
+	public function addProduct($data, $id)
+	{
+		print_r($data);
+		$this->db->query("insert into ".DB_PREFIX."recurring_product set product_id = '".$data['product_id']."', quantity = '".$data['quantity']."', recurring_id = '".$id."'");
 	}
 	
 }

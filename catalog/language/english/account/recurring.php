@@ -23,6 +23,8 @@ $_['text_success']          = 'You have successfully added the products from ord
 $_['text_empty']            = 'You have no recurring orders!';
 $_['text_error']            = 'The order you requested could not be found!';
 
+$_['entry_option']            = 'Choose Option:';
+
 // Column
 $_['column_name']           = 'Product Name';
 $_['column_model']          = 'Model';

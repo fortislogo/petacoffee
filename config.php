@@ -28,7 +28,7 @@ switch ($_SERVER['HTTP_HOST'])
 	case 'petacoffee.local':
 		define('DB_HOSTNAME', 'localhost');
 		define('DB_USERNAME', 'root');
-		define('DB_PASSWORD', '');
+		define('DB_PASSWORD', 'root');
 		define('DB_DATABASE', 'petacoffee_oc');
 	break;
 	default:
