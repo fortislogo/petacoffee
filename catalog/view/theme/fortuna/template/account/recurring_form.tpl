@@ -193,6 +193,7 @@
                         
                         <tr>
                         	<td>
+                            	<input type="radio" name="use_address" value="existing" checked="checked"> Use existing address
 								<select name="address_id" style="width:100%" size="5">
 								<?php foreach ($addresses as $address) { ?>
 								<?php if ($address['address_id'] == $shipping_address_id) { ?>
@@ -202,10 +203,51 @@
 								<?php } ?>
 								<?php } ?>
 								</select>
+                                <input type="radio" name="use_address" value="new"> New address
+                                <p>
+                                	<label>First Name:</label>
+                                    <input type="text" name="firstname">
+                                </p>
+                                <p>
+                                	<label>Last Name:</label>
+                                    <input type="text" name="lastname">
+                                </p>
+                                <p>
+                                	<label>Company:</label>
+                                    <input type="text" name="company">
+                                </p>
+                                <p>
+                                	<label>Address 1:</label>
+                                    <input type="text" name="address_1">
+                                </p>
+                                <p>
+                                	<label>Address 2:</label>
+                                    <input type="text" name="address_2">
+                                </p>
+                                <p>
+                                	<label>City:</label>
+                                    <input type="text" name="city">
+                                </p>
+                                <p>
+                                	<label>Postal Code:</label>
+                                    <input type="text" name="postcode">
+                                </p>
+                                <p>
+                                	<label>Country:</label>
+                                    <select name="country">
+                                    </select>
+                                </p>
+                                <p>
+                                	<label>Region / State:</label>
+                                    <select name="zone">
+                                    </select>
+                                </p>
                             </td>
                         </tr>
                         
 						<?php } ?>
+                        
+                        
                     	
                     </table>
                     
