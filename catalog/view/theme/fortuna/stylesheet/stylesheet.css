@@ -2513,6 +2513,22 @@ td.quantity input[type=text]
 	text-align:right;	
 }
 
+#addresses
+{
+	line-height:24px;
+}
+
+#addresses label
+{
+	display:block;
+}
+
+#new-address
+{
+	display:none;
+	line-height:24px;
+}
+
 
 /* ---------------------------------------------------------------------- */
 /*	Media Queries

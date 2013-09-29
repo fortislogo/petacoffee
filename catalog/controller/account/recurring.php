@@ -554,6 +554,10 @@ class ControllerAccountRecurring extends Controller {
 			
 		$this->data['payment_methods'] = $method_data;	
 		
+		$this->load->model('localisation/country');
+		
+    	$this->data['countries'] = $this->model_localisation_country->getCountries();
+		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/account/recurring_form.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/account/recurring_form.tpl';
 		} else {
