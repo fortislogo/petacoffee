@@ -164,6 +164,7 @@ class ControllerAccountRecurring extends Controller {
 		$this->language->load('account/recurring');
 		
 		$this->load->model('account/recurring');
+		$this->load->model('account/order');
 
     	$this->document->setTitle($this->language->get('heading_title'));
 		
@@ -174,6 +175,8 @@ class ControllerAccountRecurring extends Controller {
 		}
 		
 		$info = $this->model_account_recurring->getRecurringOrder($this->request->get['id']);
+		
+		$order_info = $this->model_account_order->getOrder($info['last_order_id']);
 
       	$this->data['breadcrumbs'] = array();
 
@@ -241,14 +244,9 @@ class ControllerAccountRecurring extends Controller {
 			$this->data['recurring_frequency'] = $info['recurring'];
 		}
 		
-		if (isset($this->request->post['shipping_address_id']))
-		{
-			$this->data['shipping_address_id'] = $this->request->post['shipping_address_id'];
-		}
-		else if ($info)
-		{
-			$this->data['shipping_address_id'] = $info['shipping_address_id'];
-		}
+		
+		
+		
 		
 		if (isset($this->request->post['comment']))
 		{
@@ -256,7 +254,7 @@ class ControllerAccountRecurring extends Controller {
 		}
 		else if ($info)
 		{
-			$this->data['comment'] = $info['comment'];
+			$this->data['comment'] = $order_info['comment'];
 		}
 		
 		if (isset($this->request->post['status']))
@@ -268,196 +266,68 @@ class ControllerAccountRecurring extends Controller {
 			$this->data['status'] = $info['status'];
 		}
 		
-		$results = $this->model_account_recurring->getRecurringOrderProducts($this->request->get['id']);
-		$this->data['products'] = array();
+		if (isset($this->request->post['order_product'])) 
+		{
+			$order_products = $this->request->post['order_product'];
+		} 
+		elseif (isset($info['last_order_id'])) 
+		{
+			$order_products = $this->model_account_recurring->getRecurringProducts($info['recurring_id']);			
+		} 
+		else 
+		{
+			$order_products = array();
+		}
+		
 		$this->load->model('catalog/product');
 		
-		foreach($results as $result)
+		$this->document->addScript('view/javascript/jquery/ajaxupload.js');
+		
+		$this->data['products'] = array();		
+		
+		foreach($order_products as $order_product)
 		{
-			$product = $this->model_catalog_product->getProduct($result['product_id']);			
-			$result['name'] = $product['name'];			
-			$result['model'] = $product['model'];	
-			$result['remove'] = $this->url->link('account/recurring/remove', 'id=' . $this->request->get['id'] . '&recurring_product_id=' . $result['recurring_product_id']);
-			// Display prices
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
+			if (isset($res['order_option'])) {
+				$order_option = $order_product['order_option'];
+			} elseif (isset($info['last_order_id'])) {
+				$order_option = $this->model_account_recurring->getRecurringOptions($info['recurring_id'], $order_product['recurring_product_id']);
 			} else {
-				$price = false;
+				$order_option = array();
 			}
-				
-			// Display prices
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$total = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $result['quantity']);
-			} else {
-				$total = false;
-			}
+
 			
-			$options = $this->model_account_recurring->getOrderProductOptions($result['recurring_product_id']);
-			
-			$option_data = array();
-			$option_price = 0;
-			$option_points = 0;
-			$option_weight = 0;
-			
-       		foreach ($options as $option) 
-			{
-				$product_option_id = $option['product_option_id'];
-				$option_value = $option['product_option_value_id'];
-				
-				$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM " . DB_PREFIX . "product_option po LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id) LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$result['product_id'] . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-						
-				if ($option_query->num_rows) 
-				{
-					if ($option_query->row['type'] == 'select' || $option_query->row['type'] == 'radio' || $option_query->row['type'] == 'image') 
-					{
-						$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix FROM " . DB_PREFIX . "product_option_value pov LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$option_value . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-								
-						if ($option_value_query->num_rows) 
-						{
-							if ($option_value_query->row['price_prefix'] == '+') 
-							{
-								$option_price += $option_value_query->row['price'];
-							}
-							elseif ($option_value_query->row['price_prefix'] == '-') 
-							{
-								$option_price -= $option_value_query->row['price'];
-							}
-	
-							if ($option_value_query->row['points_prefix'] == '+') 
-							{
-								$option_points += $option_value_query->row['points'];
-							}
-							elseif ($option_value_query->row['points_prefix'] == '-') 
-							{
-								$option_points -= $option_value_query->row['points'];
-							}
-																
-							if ($option_value_query->row['weight_prefix'] == '+') 
-							{
-								$option_weight += $option_value_query->row['weight'];
-							}
-							elseif ($option_value_query->row['weight_prefix'] == '-') 
-							{
-								$option_weight -= $option_value_query->row['weight'];
-							}
-									
-							if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $result['quantity']))) 
-							{
-								$stock = false;
-							}
-									
-							$option_data[] = array(
-								'product_option_id'       => $product_option_id,
-								'product_option_value_id' => $option_value,
-								'option_id'               => $option_query->row['option_id'],
-								'option_value_id'         => $option_value_query->row['option_value_id'],
-								'name'                    => $option_query->row['name'],
-								'option_value'            => $option_value_query->row['name'],
-								'type'                    => $option_query->row['type'],
-								'quantity'                => $option_value_query->row['quantity'],
-								'subtract'                => $option_value_query->row['subtract'],
-								'price'                   => $option_value_query->row['price'],
-								'price_prefix'            => $option_value_query->row['price_prefix'],
-								'points'                  => $option_value_query->row['points'],
-								'points_prefix'           => $option_value_query->row['points_prefix'],									
-								'weight'                  => $option_value_query->row['weight'],
-								'weight_prefix'           => $option_value_query->row['weight_prefix']
-							);								
-						}
-					} 
-					elseif ($option_query->row['type'] == 'checkbox' && is_array($option_value)) 
-					{
-						foreach ($option_value as $product_option_value_id) 
-						{
-							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix FROM " . DB_PREFIX . "product_option_value pov LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$product_option_value_id . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-									
-							if ($option_value_query->num_rows) 
-							{
-								if ($option_value_query->row['price_prefix'] == '+') 
-								{
-									$option_price += $option_value_query->row['price'];
-								} 
-								elseif ($option_value_query->row['price_prefix'] == '-') 
-								{
-									$option_price -= $option_value_query->row['price'];
-								}
-	
-								if ($option_value_query->row['points_prefix'] == '+') 
-								{
-									$option_points += $option_value_query->row['points'];
-								} 
-								elseif ($option_value_query->row['points_prefix'] == '-') 
-								{
-									$option_points -= $option_value_query->row['points'];
-								}
-																	
-								if ($option_value_query->row['weight_prefix'] == '+') 
-								{
-									$option_weight += $option_value_query->row['weight'];
-								} 
-								elseif ($option_value_query->row['weight_prefix'] == '-') 
-								{
-									$option_weight -= $option_value_query->row['weight'];
-								}
-									
-								if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $result['quantity']))) 
-								{
-									$stock = false;
-								}
-										
-								$option_data[] = array(
-									'product_option_id'       => $product_option_id,
-									'product_option_value_id' => $product_option_value_id,
-									'option_id'               => $option_query->row['option_id'],
-									'option_value_id'         => $option_value_query->row['option_value_id'],
-									'name'                    => $option_query->row['name'],
-									'option_value'            => $option_value_query->row['name'],
-									'type'                    => $option_query->row['type'],
-									'quantity'                => $option_value_query->row['quantity'],
-									'subtract'                => $option_value_query->row['subtract'],
-									'price'                   => $option_value_query->row['price'],
-									'price_prefix'            => $option_value_query->row['price_prefix'],
-									'points'                  => $option_value_query->row['points'],
-									'points_prefix'           => $option_value_query->row['points_prefix'],
-									'weight'                  => $option_value_query->row['weight'],
-									'weight_prefix'           => $option_value_query->row['weight_prefix']
-								);								
-							}
-						}						
-					} 
-					elseif ($option_query->row['type'] == 'text' || 
-							$option_query->row['type'] == 'textarea' || 
-							$option_query->row['type'] == 'file' || 
-							$option_query->row['type'] == 'date' || 
-							$option_query->row['type'] == 'datetime' || 
-							$option_query->row['type'] == 'time') 
-					{
-							$option_data[] = array(
-								'product_option_id'       => $product_option_id,
-								'product_option_value_id' => '',
-								'option_id'               => $option_query->row['option_id'],
-								'option_value_id'         => '',
-								'name'                    => $option_query->row['name'],
-								'option_value'            => $option_value,
-								'type'                    => $option_query->row['type'],
-								'quantity'                => '',
-								'subtract'                => '',
-								'price'                   => '',
-								'price_prefix'            => '',
-								'points'                  => '',
-								'points_prefix'           => '',								
-								'weight'                  => '',
-								'weight_prefix'           => ''
-							);						
-					}
-				}
-			} 
-			
-			$result['price'] = $price;
-			$result['total'] = $total;
-			$result['option'] = $option_data;
-			$this->data['products'][] = $result;
+			$order_download = array();
+							
+			$this->data['products'][] = array(
+				'recurring_product_id' => $order_product['recurring_product_id'],
+				'product_id'       => $order_product['product_id'],
+				'name'             => $order_product['name'],
+				'model'            => $order_product['model'],
+				'option'           => $order_option,
+				'download'         => $order_download,
+				'quantity'         => $order_product['quantity'],
+				'price'            => $order_product['price'],
+				'total'            => $order_product['total'],
+				'tax'              => $order_product['tax'],
+				'reward'           => $order_product['reward']
+			);
 		}
+		
+		if (isset($this->request->post['order_voucher'])) {
+			$this->data['order_vouchers'] = $this->request->post['order_voucher'];
+		} elseif (isset($info['last_order_id'])) {
+			$this->data['order_vouchers'] = $this->model_account_order->getOrderVouchers($info['last_order_id']);			
+		} else {
+			$this->data['order_vouchers'] = array();
+		}
+		
+		if (isset($this->request->post['order_total'])) {
+      		$this->data['order_totals'] = $this->request->post['order_total'];
+    	} elseif (isset($info['last_order_id'])) { 
+			$this->data['order_totals'] = $this->model_account_order->getOrderTotals($info['last_order_id']);
+		} else {
+      		$this->data['order_totals'] = array();
+    	}
 		
 		$this->load->model('account/address');		
 		$this->data['addresses'] = $this->model_account_address->getAddresses();

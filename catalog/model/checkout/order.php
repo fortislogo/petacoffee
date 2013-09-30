@@ -149,7 +149,8 @@ class ModelCheckoutOrder extends Model {
 				'user_agent'              => $order_query->row['user_agent'],	
 				'accept_language'         => $order_query->row['accept_language'],				
 				'date_modified'           => $order_query->row['date_modified'],
-				'date_added'              => $order_query->row['date_added']
+				'date_added'              => $order_query->row['date_added'],
+				'cc'					  => $order_query->row['cc']
 			);
 		} else {
 			return false;	
@@ -260,6 +261,13 @@ class ModelCheckoutOrder extends Model {
 			} else {
 				$order_status = '';
 			}
+			
+			
+			if (isset($this->session->data['recurring']) && $this->session->data['recurring'] == 1)
+			{
+				$this->process_recurring($order_info);
+			}
+			
 			
 			$subject = sprintf($language->get('text_new_subject'), $order_info['store_name'], $order_id);
 		
@@ -677,5 +685,106 @@ class ModelCheckoutOrder extends Model {
 			}
 		}
 	}
+	
+	public function updateCC($order_id, $data)
+	{
+		$this->db->query("update `".DB_PREFIX."order` set cc = '".serialize($data)."' WHERE order_id = '".(int)$order_id."'");
+	}
+	
+	private function process_recurring()
+	{
+		$next_order_date = date("Y-m-d", strtotime(sprintf("+%s week", $this->session->data['recurring_frequency'])));
+		
+		$order_info = $this->getOrder($this->session->data['order_id']);
+			
+		if (isset($this->session->data['recurring_id']) && $this->session->data['recurring_id'] > 0)
+		{
+		}
+		else
+		{
+			$data = $order_info;
+			
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "recurring` 
+							 SET customer_id = '" . (int)$data['customer_id'] . "', 
+							 	 payment_firstname = '" . $this->db->escape($data['payment_firstname']) . "', 
+								 payment_lastname = '" . $this->db->escape($data['payment_lastname']) . "',
+								 payment_company = '" . $this->db->escape($data['payment_company']) . "', 
+								 payment_company_id = '" . $this->db->escape($data['payment_company_id']) . "', 
+								 payment_tax_id = '" . $this->db->escape($data['payment_tax_id']) . "', 
+								 payment_address_1 = '" . $this->db->escape($data['payment_address_1']) . "', 
+								 payment_address_2 = '" . $this->db->escape($data['payment_address_2']) . "', 
+								 payment_city = '" . $this->db->escape($data['payment_city']) . "', 
+								 payment_postcode = '" . $this->db->escape($data['payment_postcode']) . "', 
+								 payment_country = '" . $this->db->escape($data['payment_country']) . "', 
+								 payment_country_id = '" . (int)$data['payment_country_id'] . "', 
+								 payment_zone = '" . $this->db->escape($data['payment_zone']) . "', 
+								 payment_zone_id = '" . (int)$data['payment_zone_id'] . "', 
+								 payment_address_format = '" . $this->db->escape($data['payment_address_format']) . "', 
+								 payment_method = '" . $this->db->escape($data['payment_method']) . "', 
+								 payment_code = '" . $this->db->escape($data['payment_code']) . "', 
+								 shipping_firstname = '" . $this->db->escape($data['shipping_firstname']) . "', 
+								 shipping_lastname = '" . $this->db->escape($data['shipping_lastname']) . "', 
+								 shipping_company = '" . $this->db->escape($data['shipping_company']) . "', 
+								 shipping_address_1 = '" . $this->db->escape($data['shipping_address_1']) . "', 
+								 shipping_address_2 = '" . $this->db->escape($data['shipping_address_2']) . "', 
+								 shipping_city = '" . $this->db->escape($data['shipping_city']) . "', 
+								 shipping_postcode = '" . $this->db->escape($data['shipping_postcode']) . "', 
+								 shipping_country = '" . $this->db->escape($data['shipping_country']) . "', 
+								 shipping_country_id = '" . (int)$data['shipping_country_id'] . "', 
+								 shipping_zone = '" . $this->db->escape($data['shipping_zone']) . "', 
+								 shipping_zone_id = '" . (int)$data['shipping_zone_id'] . "', 
+								 shipping_address_format = '" . $this->db->escape($data['shipping_address_format']) . "', 
+								 shipping_method = '" . $this->db->escape($data['shipping_method']) . "', 
+								 shipping_code = '" . $this->db->escape($data['shipping_code']) . "',
+								 comment = '" . $this->db->escape($data['comment']) . "', 
+								 amount = '" . (float)$data['total'] . "', 
+								 name = '".$this->session->data['order_id']."', 
+								 product = '', 
+								 recurring = '".$this->session->data['recurring_frequency']."', 
+								 previous_amount = '".$data['total']."', date = '".date("Y-m-d")."', 
+								 next_order_date = '".$next_order_date."', 
+								 status = 'active', 
+								 last_order_id = '".$this->session->data['order_id']."',
+								 order_id = '".$this->session->data['order_id']."',
+								 cc = '".$data['cc']."'");
+			
+			
+			$recurring_id = $this->db->getLastId();
+			
+			$this->load->model('account/order');
+			
+			foreach ($this->model_account_order->getOrderProducts($data['order_id']) as $product) 
+			{ 
+				$this->db->query("INSERT INTO " . DB_PREFIX . "recurring_product 
+								  SET recurring_id = '" . (int)$recurring_id . "', 
+								      product_id = '" . (int)$product['product_id'] . "', 
+									  name = '" . $this->db->escape($product['name']) . "', 
+									  model = '" . $this->db->escape($product['model']) . "', 
+									  quantity = '" . (int)$product['quantity'] . "', 
+									  price = '" . (float)$product['price'] . "', 
+									  total = '" . (float)$product['total'] . "', 
+									  tax = '" . (float)$product['tax'] . "', 
+									  reward = '" . (int)$product['reward'] . "'");
+ 
+				$recurring_product_id = $this->db->getLastId();
+				
+				$options = $this->model_account_order->getOrderOptions($data['order_id'], $product['order_product_id']);
+
+				foreach ($options as $option) 
+				{
+					$this->db->query("INSERT INTO " . DB_PREFIX . "recurring_option 
+									  SET recurring_id = '" . (int)$recurring_id . "', 
+									      recurring_product_id = '" . (int)$recurring_product_id . "', 
+										  product_option_id = '" . (int)$option['product_option_id'] . "', 
+										  product_option_value_id = '" . (int)$option['product_option_value_id'] . "', 
+										  name = '" . $this->db->escape($option['name']) . "', 
+										  `value` = '" . $this->db->escape($option['value']) . "', 
+										  `type` = '" . $this->db->escape($option['type']) . "'");
+				}
+				
+			}
+		}
+	}
+	
 }
 ?>

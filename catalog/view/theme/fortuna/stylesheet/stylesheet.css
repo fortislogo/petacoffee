@@ -2513,12 +2513,14 @@ td.quantity input[type=text]
 	text-align:right;	
 }
 
-#addresses
+#shipping_addresses,
+#payment_addresses
 {
 	line-height:24px;
 }
 
-#addresses label
+#shipping_addresses label,
+#payment_addresses label
 {
 	display:block;
 }

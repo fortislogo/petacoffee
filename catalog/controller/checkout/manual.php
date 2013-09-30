@@ -9,8 +9,6 @@ class ControllerCheckoutManual extends Controller {
 		
 		$this->user = new User($this->registry);
 		
-		print_r($this->request->post);
-				
 		if ($this->user->isLogged() && $this->user->hasPermission('modify', 'sale/order')) {	
 			// Reset everything
 			$this->cart->clear();

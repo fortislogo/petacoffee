@@ -3906,3 +3906,225 @@
 2013-09-29 11:17:21 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
 2013-09-29 11:17:21 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
 2013-09-29 11:17:21 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-29 21:18:47 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-29 21:18:47 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 21:18:47 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 21:18:47 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-29 21:18:47 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-29 22:21:39 - PHP Notice:  Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order set cc = 'a:4:{s:10:"card_owner";s:10:"card owner";s:8:"card_num";s:10:"ca' at line 1<br />Error No: 1064<br />update order set cc = 'a:4:{s:10:"card_owner";s:10:"card owner";s:8:"card_num";s:10:"cardnumber";s:8:"exp_date";s:6:"012014";s:9:"card_code";s:3:"123";}' WHERE order_id = '26955' in C:\projects\petacoffee\system\database\mysql.php on line 50
+2013-09-29 22:43:34 - PHP Notice:  Undefined variable: customer_id in C:\projects\petacoffee\catalog\model\checkout\order.php on line 707
+2013-09-29 22:43:34 - PHP Notice:  Undefined variable: order_inf in C:\projects\petacoffee\catalog\model\checkout\order.php on line 711
+2013-09-29 22:43:34 - PHP Notice:  Undefined variable: data in C:\projects\petacoffee\catalog\model\checkout\order.php on line 712
+2013-09-29 22:45:43 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-29 22:45:43 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:36:01 - PHP Notice:  Undefined variable: products in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 71
+2013-09-30 0:36:01 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 71
+2013-09-30 0:36:01 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-30 0:36:01 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:36:48 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-30 0:36:48 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:38:14 - PHP Notice:  Error: Could not load model sale/order! in C:\projects\petacoffee\system\engine\loader.php on line 48
+2013-09-30 0:38:49 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 296
+2013-09-30 0:38:49 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-30 0:38:49 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-30 0:38:49 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 82
+2013-09-30 0:38:49 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:38:49 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:38:49 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-30 0:38:49 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:40:40 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 296
+2013-09-30 0:40:40 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-30 0:40:40 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-30 0:40:40 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 82
+2013-09-30 0:40:40 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:40:40 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:40:40 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-30 0:40:40 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 310
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 311
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 312
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 313
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 316
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 317
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 318
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 319
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: order_product in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 320
+2013-09-30 0:42:03 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-30 0:42:03 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 82
+2013-09-30 0:42:03 - PHP Notice:  Undefined index: remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-30 0:42:03 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:43:38 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-30 0:43:38 - PHP Notice:  Undefined index: option_value in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 77
+2013-09-30 0:43:38 - PHP Notice:  Undefined index: option_value in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 77
+2013-09-30 0:43:38 - PHP Notice:  Undefined index: recurring_product_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 82
+2013-09-30 0:43:38 - PHP Notice:  Undefined index: remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:43:38 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:43:38 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 0:43:38 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 798
+2013-09-30 0:43:38 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 805
+2013-09-30 0:58:26 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 78
+2013-09-30 0:58:26 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 78
+2013-09-30 0:58:26 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 826
+2013-09-30 0:58:26 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 833
+2013-09-30 0:58:44 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 825
+2013-09-30 0:58:44 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 832
+2013-09-30 1:07:35 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 824
+2013-09-30 1:07:35 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 831
+2013-09-30 1:07:48 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 824
+2013-09-30 1:07:48 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 831
+2013-09-30 1:07:50 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 824
+2013-09-30 1:07:50 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 831
+2013-09-30 1:08:55 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 824
+2013-09-30 1:08:55 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 831
+2013-09-30 1:14:03 - PHP Notice:  Undefined variable: order_products in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 394
+2013-09-30 1:14:03 - PHP Notice:  Undefined variable: order_vouchers in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 394
+2013-09-30 1:14:03 - PHP Notice:  Undefined variable: order_totals in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 394
+2013-09-30 1:14:03 - PHP Notice:  Undefined variable: text_no_results in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 431
+2013-09-30 1:14:03 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 880
+2013-09-30 1:14:03 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 887
+2013-09-30 1:14:22 - PHP Notice:  Undefined variable: order_vouchers in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 407
+2013-09-30 1:14:22 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 407
+2013-09-30 1:14:22 - PHP Notice:  Undefined variable: order_totals in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 416
+2013-09-30 1:14:22 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 416
+2013-09-30 1:14:22 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 880
+2013-09-30 1:14:22 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 887
+2013-09-30 1:16:17 - PHP Notice:  Undefined variable: order_totals in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 416
+2013-09-30 1:16:17 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 416
+2013-09-30 1:16:17 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 880
+2013-09-30 1:16:17 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 887
+2013-09-30 1:17:11 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 880
+2013-09-30 1:17:11 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 887
+2013-09-30 1:22:39 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 891
+2013-09-30 1:22:39 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 898
+2013-09-30 1:25:41 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 960
+2013-09-30 1:25:41 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 967
+2013-09-30 1:26:34 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 960
+2013-09-30 1:26:34 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 967
+2013-09-30 1:27:49 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:27:49 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:28:11 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:28:11 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:29:06 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:29:06 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:29:23 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:29:23 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:32:17 - PHP Notice:  Undefined index: shipping_address in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 253
+2013-09-30 1:32:17 - PHP Notice:  Undefined index: payment_address in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 262
+2013-09-30 1:32:17 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 1:32:17 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 1:32:17 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:32:17 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:32:42 - PHP Notice:  Undefined index: shipping_address in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 254
+2013-09-30 1:32:42 - PHP Notice:  Undefined index: payment_address in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 263
+2013-09-30 1:32:42 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 1:32:42 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 1:32:42 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:32:42 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:33:03 - PHP Notice:  Undefined index: shipping_address in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 254
+2013-09-30 1:33:03 - PHP Notice:  Undefined index: payment_address in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 263
+2013-09-30 1:33:03 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 1:33:03 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 1:33:03 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:33:03 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 1:57:16 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 1:57:16 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 1:57:16 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 1:57:16 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 2:33:41 - PHP Notice:  Undefined variable: order in C:\projects\petacoffee\catalog\model\checkout\order.php on line 706
+2013-09-30 2:33:41 - PHP Notice:  Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''26967'' at line 1<br />Error No: 1064<br />INSERT INTO `recurring` SET customer_id = '3333', payment_firstname = 'Test', payment_lastname = 'Test', payment_company = 'Company', payment_company_id = '', payment_tax_id = '', payment_address_1 = 'Addresss', payment_address_2 = '', payment_city = 'City', payment_postcode = '', payment_country = 'United States', payment_country_id = '223', payment_zone = 'Utah', payment_zone_id = '3670', payment_address_format = '{firstname} {lastname}\r\n{company}\r\n{address_1}\r\n{address_2}\r\n{city}, {zone} {postcode}\r\n{country}', payment_method = 'Cash On Delivery', payment_code = 'cod', shipping_firstname = 'Test', shipping_lastname = 'Test', shipping_company = 'Company', shipping_address_1 = 'Addresss', shipping_address_2 = '', shipping_city = 'City', shipping_postcode = '', shipping_country = 'United States', shipping_country_id = '223', shipping_zone = 'Utah', shipping_zone_id = '3670', shipping_address_format = '{firstname} {lastname}\r\n{company}\r\n{address_1}\r\n{address_2}\r\n{city}, {zone} {postcode}\r\n{country}', shipping_method = 'Flat Shipping Rate', shipping_code = 'flat.flat', comment = '', amount = '57.97', name = '26967', product = '', recurring = '7', previous_amount = '', date = '2013-09-30', next_order_date = '2013-11-18', status = 'active', last_order_id = '26967', order_id '26967' in C:\projects\petacoffee\system\database\mysql.php on line 50
+2013-09-30 2:37:54 - PHP Notice:  Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''26969'' at line 42<br />Error No: 1064<br />INSERT INTO `recurring` 
+							 SET customer_id = '3333', 
+							 	 payment_firstname = 'Test', 
+								 payment_lastname = 'Test',
+								 payment_company = 'Company', 
+								 payment_company_id = '', 
+								 payment_tax_id = '', 
+								 payment_address_1 = 'Addresss', 
+								 payment_address_2 = '', 
+								 payment_city = 'City', 
+								 payment_postcode = '', 
+								 payment_country = 'United States', 
+								 payment_country_id = '223', 
+								 payment_zone = 'Utah', 
+								 payment_zone_id = '3670', 
+								 payment_address_format = '{firstname} {lastname}\r\n{company}\r\n{address_1}\r\n{address_2}\r\n{city}, {zone} {postcode}\r\n{country}', 
+								 payment_method = 'Cash On Delivery', 
+								 payment_code = 'cod', 
+								 shipping_firstname = 'Test', 
+								 shipping_lastname = 'Test', 
+								 shipping_company = 'Company', 
+								 shipping_address_1 = 'Addresss', 
+								 shipping_address_2 = '', 
+								 shipping_city = 'City', 
+								 shipping_postcode = '', 
+								 shipping_country = 'United States', 
+								 shipping_country_id = '223', 
+								 shipping_zone = 'Utah', 
+								 shipping_zone_id = '3670', 
+								 shipping_address_format = '{firstname} {lastname}\r\n{company}\r\n{address_1}\r\n{address_2}\r\n{city}, {zone} {postcode}\r\n{country}', 
+								 shipping_method = 'Flat Shipping Rate', 
+								 shipping_code = 'flat.flat',
+								 comment = '', 
+								 amount = '15.99', 
+								 name = '26969', 
+								 product = '', 
+								 recurring = '7', 
+								 previous_amount = '15.9900', date = '2013-09-30', 
+								 next_order_date = '2013-11-18', 
+								 status = 'active', 
+								 last_order_id = '26969',
+								 order_id '26969' in C:\projects\petacoffee\system\database\mysql.php on line 50
+2013-09-30 2:41:09 - PHP Notice:  Undefined index: cc in C:\projects\petacoffee\catalog\model\checkout\order.php on line 748
+2013-09-30 2:41:45 - PHP Notice:  Undefined index: cc in C:\projects\petacoffee\catalog\model\checkout\order.php on line 748
+2013-09-30 2:43:08 - PHP Notice:  Undefined index: cc in C:\projects\petacoffee\catalog\model\checkout\order.php on line 748
+2013-09-30 3:08:57 - PHP Notice:  Undefined index: products in C:\projects\petacoffee\catalog\model\checkout\order.php on line 754
+2013-09-30 3:08:57 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\model\checkout\order.php on line 754
+2013-09-30 3:11:22 - PHP Notice:  Undefined index: products in C:\projects\petacoffee\catalog\model\checkout\order.php on line 754
+2013-09-30 3:11:22 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\model\checkout\order.php on line 754
+2013-09-30 3:14:17 - PHP Notice:  Undefined index: option in C:\projects\petacoffee\catalog\model\checkout\order.php on line 771
+2013-09-30 3:14:17 - PHP Warning:  Invalid argument supplied for foreach() in C:\projects\petacoffee\catalog\model\checkout\order.php on line 771
+2013-09-30 3:19:23 - PHP Warning:  Missing argument 2 for ModelAccountOrder::getOrderOptions(), called in C:\projects\petacoffee\catalog\model\checkout\order.php on line 771 and defined in C:\projects\petacoffee\catalog\model\account\order.php on line 124
+2013-09-30 3:19:23 - PHP Notice:  Undefined variable: order_product_id in C:\projects\petacoffee\catalog\model\account\order.php on line 125
+2013-09-30 3:24:27 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:24:27 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:24:27 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:24:27 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 3:29:06 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 293
+2013-09-30 3:29:06 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 301
+2013-09-30 3:29:06 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 307
+2013-09-30 3:29:06 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:29:06 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:29:06 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:29:06 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 3:29:39 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 301
+2013-09-30 3:29:39 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 307
+2013-09-30 3:29:39 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:29:39 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:29:39 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:29:39 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 3:29:40 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 301
+2013-09-30 3:29:40 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 307
+2013-09-30 3:29:40 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:29:40 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:29:40 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:29:40 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 3:30:13 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\controller\account\recurring.php on line 307
+2013-09-30 3:30:14 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:30:14 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:30:14 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:30:14 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 3:30:42 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 79
+2013-09-30 3:30:42 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:30:42 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:30:42 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:30:42 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
+2013-09-30 3:32:39 - PHP Notice:  Undefined index: order_product_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 79
+2013-09-30 3:32:39 - PHP Notice:  Undefined index: order_option_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 3:32:39 - PHP Notice:  Undefined index: order_option_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-30 3:32:39 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 224
+2013-09-30 3:32:39 - PHP Notice:  Undefined variable: shipping_address_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 306
+2013-09-30 3:32:39 - PHP Notice:  Undefined variable: zone_id in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 966
+2013-09-30 3:32:39 - PHP Notice:  Undefined variable: text_none in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 973
