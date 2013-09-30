@@ -310,5 +310,17 @@ class ModelAccountRecurring extends Model
 		
 	}
 	
+	public function getRecurringProducts($recurring_id) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "recurring_product WHERE recurring_id = '" . (int)$recurring_id . "'");
+	
+		return $query->rows;
+	}2
+	
+	public function getRecurringOptions($recurring_id, $recurring_product_id) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "recurring_option WHERE recurring_id = '" . (int)$recurring_id . "' AND recurring_product_id = '" . (int)$recurring_product_id . "'");
+	
+		return $query->rows;
+	}
+	
 }
 ?>

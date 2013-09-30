@@ -68,29 +68,55 @@
                         
                         <tbody>
 				
-						<?php foreach ($products as $product) { ?>
-						<tr>
-							<td class="name">
-								<a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
-								<?php foreach ($product['option'] as $option) { ?>
-								<br />
-								<small> - <?php echo $option['name']; ?>: <?php echo $option['option_value']; ?></small>
-								<?php } ?>
-							</td>
-							<td class="model"><?php echo $product['model']; ?></td>
-							<td class="quantity" style="text-align:right">
-                            	<input type="text" name="product[<?php echo $product['recurring_product_id']; ?>][quantity]" value="<?php echo $product['quantity']; ?>">
-                                <input type="image" class="update-cart" src="catalog/view/theme/fortuna/images/update.png" alt="Update" title="Update" />
-								<a href="<?php echo $product['remove']; ?>" title="Remove"><img src="catalog/view/theme/fortuna/images/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
-                            </td>
-							<td class="price right"><?php echo $product['price']; ?></td>
-							<td class="total right"><?php echo $product['total']; ?></td>
-						</tr>
+						<?php $product_row = 0; ?>
+		            	<?php $option_row = 0; ?>
+        			    <?php $download_row = 0; ?>
+                        
+                        <?php if ($products) { ?>
+			              <?php foreach ($products as $order_product) { ?>
+            			  	<tr id="product-row<?php echo $product_row; ?>">
+		                		<td class="left"><?php echo $order_product['name']; ?><br />
+                  					<input type="hidden" name="order_product[<?php echo $product_row; ?>][order_product_id]" value="<?php echo $order_product['order_product_id']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][product_id]" value="<?php echo $order_product['product_id']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][name]" value="<?php echo $order_product['name']; ?>" />
+    					              <?php foreach ($order_product['option'] as $option) { ?>
+					                  - <small><?php echo $option['name']; ?>: <?php echo $option['value']; ?></small><br />
+                					  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][order_option_id]" value="<?php echo $option['order_option_id']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_id]" value="<?php echo $option['product_option_id']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_value_id]" value="<?php echo $option['product_option_value_id']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][name]" value="<?php echo $option['name']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][value]" value="<?php echo $option['value']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][type]" value="<?php echo $option['type']; ?>" />
+					                  <?php $option_row++; ?>
+					                  <?php } ?>
+					                  <?php foreach ($order_product['download'] as $download) { ?>
+						                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][order_download_id]" value="<?php echo $download['order_download_id']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][name]" value="<?php echo $download['name']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][filename]" value="<?php echo $download['filename']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][mask]" value="<?php echo $download['mask']; ?>" />
+					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][remaining]" value="<?php echo $download['remaining']; ?>" />
+					                  <?php $download_row++; ?>
+			                  <?php } ?></td>
+            			    <td class="left"><?php echo $order_product['model']; ?>
+			                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][model]" value="<?php echo $order_product['model']; ?>" /></td>
+            			    <td class="right quantity"><input type="text" name="order_product[<?php echo $product_row; ?>][quantity]" value="<?php echo $order_product['quantity']; ?>" /></td>                 
+            			    <td class="right"><?php echo $order_product['price']; ?>
+			                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][price]" value="<?php echo $order_product['price']; ?>" /></td>
+            			    <td class="right"><?php echo $order_product['total']; ?>
+			                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][total]" value="<?php echo $order_product['total']; ?>" />
+            			      <input type="hidden" name="order_product[<?php echo $product_row; ?>][tax]" value="<?php echo $order_product['tax']; ?>" />
+			                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][reward]" value="<?php echo $order_product['reward']; ?>" /></td>
+			              </tr>
+            			  <?php $product_row++; ?>
+			              <?php } ?>
+            			  <?php } else { ?>
+			              <tr>
+            			    <td class="center" colspan="6"><?php echo $text_no_results; ?></td>
+			              </tr>
+            			  <?php } ?>	
 	
-					<?php } ?>
 	
-	
-					</tbody>
+						</tbody>
                         
                         
                     	
@@ -176,25 +202,24 @@
                         </tr>
                         
                     </table>
-                    
-                    
-                    
-                    <table class="table table-bordered">
+                  
+                  	  <table class="table table-bordered">
                     	
                         <thead>
 							<tr>
 								<td colspan="2">
-									Delivery Details
+									Billing Details
 								</td>
 							</tr>
 						</thead>
                         
                         <?php if ($addresses) { ?>
                         
-                        <tr>
-                        	<td>
-                            	<input type="radio" name="use_address" value="existing" checked="checked"> Use existing address
-								<select name="address_id" style="width:100%" size="5">
+                         <tr>
+                        	<td id="payment_addresses">
+                            	<input type="radio" name="payment_use_address" value="existing-address" checked="checked"> Use existing address
+                                <div id="existing-address">
+								<select name="payment_address" style="width:100%" size="5">
 								<?php foreach ($addresses as $address) { ?>
 								<?php if ($address['address_id'] == $shipping_address_id) { ?>
 								<option value="<?php echo $address['address_id']; ?>" selected="selected"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
@@ -202,8 +227,13 @@
 								<option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
 								<?php } ?>
 								<?php } ?>
-								</select>
-                                <input type="radio" name="use_address" value="new"> New address
+                                </select>
+                                </div>
+                                
+                                <input type="radio" name="payment_use_address" value="new-address"> New address
+                                
+                                <div class="new-address" id="new-address">
+                                
                                 <p>
                                 	<label>First Name:</label>
                                     <input type="text" name="firstname">
@@ -234,14 +264,101 @@
                                 </p>
                                 <p>
                                 	<label>Country:</label>
-                                    <select name="country">
+                                    <select name="country_id">
+	                                    <option value=""><?php echo $text_select; ?></option>
+										<?php foreach ($countries as $country) { ?>
+										<option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+										<?php } ?>
                                     </select>
                                 </p>
                                 <p>
                                 	<label>Region / State:</label>
-                                    <select name="zone">
+                                    <select name="zone_id">
                                     </select>
                                 </p>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <?php } ?>
+                        
+                    </table>      
+                    
+                    
+                    <table class="table table-bordered">
+                    	
+                        <thead>
+							<tr>
+								<td colspan="2">
+									Delivery Details
+								</td>
+							</tr>
+						</thead>
+                        
+                        <?php if ($addresses) { ?>
+                        
+                        <tr>
+                        	<td id="shipping_addresses">
+                            	<input type="radio" name="shipping_use_address" value="existing-address" checked="checked"> Use existing address
+                                <div id="existing-address">
+								<select name="shipping_address" style="width:100%" size="5">
+								<?php foreach ($addresses as $address) { ?>
+								<?php if ($address['address_id'] == $shipping_address_id) { ?>
+								<option value="<?php echo $address['address_id']; ?>" selected="selected"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
+								<?php } else { ?>
+								<option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
+								<?php } ?>
+								<?php } ?>
+                                </select>
+                                </div>
+                                
+                                <input type="radio" name="shipping_use_address" value="new-address"> New address
+                                
+                                <div class="new-address" id="new-address">
+                                
+                                <p>
+                                	<label>First Name:</label>
+                                    <input type="text" name="firstname">
+                                </p>
+                                <p>
+                                	<label>Last Name:</label>
+                                    <input type="text" name="lastname">
+                                </p>
+                                <p>
+                                	<label>Company:</label>
+                                    <input type="text" name="company">
+                                </p>
+                                <p>
+                                	<label>Address 1:</label>
+                                    <input type="text" name="address_1">
+                                </p>
+                                <p>
+                                	<label>Address 2:</label>
+                                    <input type="text" name="address_2">
+                                </p>
+                                <p>
+                                	<label>City:</label>
+                                    <input type="text" name="city">
+                                </p>
+                                <p>
+                                	<label>Postal Code:</label>
+                                    <input type="text" name="postcode">
+                                </p>
+                                <p>
+                                	<label>Country:</label>
+                                    <select name="country_id">
+	                                    <option value=""><?php echo $text_select; ?></option>
+										<?php foreach ($countries as $country) { ?>
+										<option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+										<?php } ?>
+                                    </select>
+                                </p>
+                                <p>
+                                	<label>Region / State:</label>
+                                    <select name="zone_id">
+                                    </select>
+                                </p>
+                                </div>
                             </td>
                         </tr>
                         
@@ -340,6 +457,62 @@
                         
                         
                     </table>
+                    
+                    
+                    <table class="table table-bordered">
+			            <thead>
+            			  <tr>
+			                <td class="left">PRODUCT</td>
+			                <td class="left">MODEL</td>
+            			    <td class="right">QUANTITY</td>
+			                <td class="right">PRICE</td>
+            			    <td class="right">TOTAL</td>
+			              </tr>
+            			</thead>
+			            <tbody id="total">
+            			  <?php $total_row = 0; ?>
+			              <?php if ($products || $order_vouchers || $order_totals) { ?>
+             				 <?php foreach ($products as $order_product) { ?>
+				              <tr>
+                				<td class="left"><?php echo $order_product['name']; ?><br />
+				                  <?php foreach ($order_product['option'] as $option) { ?>
+                				  - <small><?php echo $option['name']; ?>: <?php echo $option['value']; ?></small><br />
+				                  <?php } ?></td>
+                				<td class="left"><?php echo $order_product['model']; ?></td>
+				                <td class="right"><?php echo $order_product['quantity']; ?></td>
+                				<td class="right"><?php echo $order_product['price']; ?></td>
+				                <td class="right"><?php echo $order_product['total']; ?></td>
+				              </tr>
+			              <?php } ?>
+            			  <?php foreach ($order_vouchers as $order_voucher) { ?>
+			              <tr>
+            			    <td class="left"><?php echo $order_voucher['description']; ?></td>
+			                <td class="left"></td>
+            			    <td class="right">1</td>
+			                <td class="right"><?php echo $order_voucher['amount']; ?></td>
+            			    <td class="right"><?php echo $order_voucher['amount']; ?></td>
+			              </tr>
+            			  <?php } ?>
+			              <?php foreach ($order_totals as $order_total) { ?>
+           				  <tr id="total-row<?php echo $total_row; ?>">
+			                <td class="right" colspan="4"><?php echo $order_total['title']; ?>:
+            			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][order_total_id]" value="<?php echo $order_total['order_total_id']; ?>" />
+			                  <input type="hidden" name="order_total[<?php echo $total_row; ?>][code]" value="<?php echo $order_total['code']; ?>" />
+            			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][title]" value="<?php echo $order_total['title']; ?>" />
+			                  <input type="hidden" name="order_total[<?php echo $total_row; ?>][text]" value="<?php echo $order_total['text']; ?>" />
+            			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][value]" value="<?php echo $order_total['value']; ?>" />
+				              <input type="hidden" name="order_total[<?php echo $total_row; ?>][sort_order]" value="<?php echo $order_total['sort_order']; ?>" /></td>
+			                <td class="right"><?php echo $order_total['value']; ?></td>
+            			  </tr>
+			              <?php $total_row++; ?>
+            		  <?php } ?>
+		              <?php } else { ?>
+        		      <tr>
+                		<td class="center" colspan="5"><?php echo $text_no_results; ?></td>
+		              </tr>
+        		      <?php } ?>
+		            </tbody>
+        		  </table>
                     
                     
                     
@@ -748,4 +921,68 @@ $('input[name=\'product\']').autocomplete({
    	}
 });	
 //--></script> 
+
+<script>
+$('#payment_addresses input[type=radio]').bind('click', function()
+{														 
+	$('#payment_addresses div').hide();
+	$('#payment_addresses #' + $(this).val()).show();
+});
+
+$('#shipping_addresses input[type=radio]').bind('click', function()
+{														 
+	$('#shipping_addresses div').hide();
+	$('#shipping_addresses #' + $(this).val()).show();
+});
+			
+</script>
+
+	<script type="text/javascript"><!--
+
+		$('select[name=\'country_id\']').bind('change', function() {
+	
+			$.ajax({
+				url: 'index.php?route=account/address/country&country_id=' + this.value,
+				dataType: 'json',
+				beforeSend: function() {
+					$('select[name=\'country_id\']').after('<span class="wait">&nbsp;<img src="catalog/view/theme/sellegance/images/loading.gif" alt="" /></span>');
+				},		
+				complete: function() {
+					$('.wait').remove();
+				},			
+				success: function(json) {
+					if (json['postcode_required'] == '1') {
+						$('#postcode-required').show();
+					} else {
+						$('#postcode-required').hide();
+					}
+					
+					html = '<option value=""><?php echo $text_select; ?></option>';
+					
+					if (json['zone'] != '') {
+						for (i = 0; i < json['zone'].length; i++) {
+		        			html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+			    			
+							if (json['zone'][i]['zone_id'] == '<?php echo $zone_id; ?>') {
+			      				html += ' selected="selected"';
+			    			}
+			
+			    			html += '>' + json['zone'][i]['name'] + '</option>';
+						}
+					} else {
+						html += '<option value="0" selected="selected"><?php echo $text_none; ?></option>';
+					}
+					
+					$('select[name=\'zone_id\']').html(html);
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+
+		$('select[name=\'country_id\']').trigger('change');
+		
+		//--></script> 
+
 	<?php echo $footer; ?>

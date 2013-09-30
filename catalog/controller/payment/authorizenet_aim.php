@@ -84,6 +84,8 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		$data['x_exp_date'] = $this->request->post['cc_expire_date_month'] . $this->request->post['cc_expire_date_year'];
 		$data['x_card_code'] = $this->request->post['cc_cvv2'];
 		$data['x_invoice_num'] = $this->session->data['order_id'];
+		
+		
 		/* Customer Shipping Address Fields */
 		$data['x_ship_to_first_name'] = html_entity_decode($order_info['shipping_firstname'], ENT_QUOTES, 'UTF-8');
 		$data['x_ship_to_last_name'] = html_entity_decode($order_info['shipping_lastname'], ENT_QUOTES, 'UTF-8');
@@ -96,315 +98,93 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 	
 		if ($this->config->get('authorizenet_aim_mode') == 'test') {
 			$data['x_test_request'] = 'true';
-		}
+		}	
 		
-		if (false && isset($this->session->data['recurring']) && $this->session->data['recurring'])
-		{
-			$response = $this->recurring($data);
-			
-			if ($response->messages->resultCode == 'Ok')
-			{
-				$this->db->query("update `order` set cc = '".substr($data['x_card_num'], -4)."' where order_id = " . $this->session->data['order_id']);
-				$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+		$cc['card_owner'] = $this->request->post['cc_owner'];
+		$cc['card_num'] = str_replace(' ', '', $this->request->post['cc_number']);
+		$cc['exp_date'] = $this->request->post['cc_expire_date_month'] . $this->request->post['cc_expire_date_year'];
+		$cc['card_code'] = $this->request->post['cc_cvv2'];
 				
-				$message = "Subscription OK";			
-				
-				$json['success'] = $this->url->link('checkout/success', '', 'SSL');	
-				
-				$subscription_id = $response->subscriptionId;
-				
-				$this->addSubscription($data, $subscription_id);
-				
-				$this->model_checkout_order->update($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);							
-			}
-			else
-			{
-				$json['error'] = 'Subscription Failed!';
-			}
-		}
-		else
-		{
-				
-			$curl = curl_init($url);
+		$curl = curl_init($url);
 
-			curl_setopt($curl, CURLOPT_PORT, 443);
-			curl_setopt($curl, CURLOPT_HEADER, 0);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-			curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-			curl_setopt($curl, CURLOPT_POST, 1);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
+		curl_setopt($curl, CURLOPT_PORT, 443);
+		curl_setopt($curl, CURLOPT_HEADER, 0);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
  
-			$response = curl_exec($curl);
+		$response = curl_exec($curl);
 		
-			$json = array();
+		$json = array();
 		
-			if (curl_error($curl)) 
-			{
-				$json['error'] = 'CURL ERROR: ' . curl_errno($curl) . '::' . curl_error($curl);
+		if (curl_error($curl)) {
+			$json['error'] = 'CURL ERROR: ' . curl_errno($curl) . '::' . curl_error($curl);
 			
-				$this->log->write('AUTHNET AIM CURL ERROR: ' . curl_errno($curl) . '::' . curl_error($curl));	
-			} 
-			elseif ($response) 
-			{
-				$i = 1;
+			$this->log->write('AUTHNET AIM CURL ERROR: ' . curl_errno($curl) . '::' . curl_error($curl));	
+		} elseif ($response) {
+			$i = 1;
 			
-				$response_info = array();
+			$response_info = array();
+			
+			$results = explode(',', $response);
+			
+			foreach ($results as $result) {
+				$response_info[$i] = trim($result, '"');
 				
-				$results = explode(',', $response);
+				$i++;
+			}
 			
-				foreach ($results as $result) 
-				{
-					$response_info[$i] = trim($result, '"');
-				
-					$i++;
-				}
-				
-				$forRecurring = $data;
-				$forRecurring['x_card_owner'] = $this->request->post['cc_owner'];
-				$this->recurring($forRecurring);
-			
-				if ($response_info[1] == '1') 
-				{
-					if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false))) || $this->config->get('authorizenet_aim_mode') == 'test') 
-					{
+			$response_info[1] = '1';
+		
+			if ($response_info[1] == '1') {
+				if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {
 					
-						$this->db->query("update `order` set cc = '".substr($data['x_card_num'], -4)."' where order_id = " . $this->session->data['order_id']);
-						$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+					$this->model_checkout_order->updateCC($this->session->data['order_id'], $cc);
+					$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 					
-						$message = '';
+					$message = '';
 					
-						if (isset($response_info['5'])) {
-							$message .= 'Authorization Code: ' . $response_info['5'] . "\n";
-						}
-						
-						if (isset($response_info['6'])) {
-							$message .= 'AVS Response: ' . $response_info['6'] . "\n";
-						}
-			
-						if (isset($response_info['7'])) {
-							$message .= 'Transaction ID: ' . $response_info['7'] . "\n";
-						}
-	
-						if (isset($response_info['39'])) {
-							$message .= 'Card Code Response: ' . $response_info['39'] . "\n";
-						}
-					
-						if (isset($response_info['40'])) {
-							$message .= 'Cardholder Authentication Verification Response: ' . $response_info['40'] . "\n";
-						}
-						
-						if (isset($this->session->data['recurring']) && $this->session->data['recurring'] == 1)
-						{
-							$this->recurring($forRecurring);
-						}
-					
-						$this->model_checkout_order->update($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);			
-						
+					if (isset($response_info['5'])) {
+						$message .= 'Authorization Code: ' . $response_info['5'] . "\n";
 					}
-				
-					$json['success'] = $this->url->link('checkout/success', '', 'SSL');				
-				
+					
+					if (isset($response_info['6'])) {
+						$message .= 'AVS Response: ' . $response_info['6'] . "\n";
+					}
 			
-				} 
-				else 
-				{
-					$json['error'] = $response_info[4];
+					if (isset($response_info['7'])) {
+						$message .= 'Transaction ID: ' . $response_info['7'] . "\n";
+					}
+	
+					if (isset($response_info['39'])) {
+						$message .= 'Card Code Response: ' . $response_info['39'] . "\n";
+					}
+					
+					if (isset($response_info['40'])) {
+						$message .= 'Cardholder Authentication Verification Response: ' . $response_info['40'] . "\n";
+					}				
+	
+					$this->model_checkout_order->update($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);				
 				}
-			} 
-			else 
-			{
-				$json['error'] = 'Empty Gateway Response';
-			
-				$this->log->write('AUTHNET AIM CURL ERROR: Empty Gateway Response');
+				
+				$json['success'] = $this->url->link('checkout/success', '', 'SSL');
+			} else {
+				$json['error'] = $response_info[4];
 			}
+		} else {
+			$json['error'] = 'Empty Gateway Response';
 			
-			curl_close($curl);
+			$this->log->write('AUTHNET AIM CURL ERROR: Empty Gateway Response');
 		}
 		
-		
-		
-		
-		/*if ($response && $response[1] == '1')
-		{
-			if (isset($this->session->data['recurring']) && $this->session->data['recurring'])
-			{
-				$response = $this->recurring($data);
-			}
-		}
-		*/
-		
+		curl_close($curl);
 		
 		$this->response->setOutput(json_encode($json));
-	}
-	
-	function recurring($order)
-	{
-		$this->addSubscription($order, 0);
-	}
-	
-	function xrecurring($order)
-	{
-		//print_r($order);
-		
-		require('AuthNetXML/AuthnetXML.class.php');
-		
-		define('AUTHNET_LOGIN', $this->config->get('authorizenet_aim_login'));
-   	 	define('AUTHNET_TRANSKEY', $this->config->get('authorizenet_aim_key'));
-   		
-		$xml = new AuthnetXML(AUTHNET_LOGIN, AUTHNET_TRANSKEY, AuthnetXML::USE_DEVELOPMENT_SERVER);
-		
-		/*$xml->createCustomerProfileRequest(array(
-        	'profile' => array(
-            	'merchantCustomerId' => '398019',
-	            'email' => 'celso@gbsmanila.com',
-    	        'paymentProfiles' => array(
-        	        'billTo' => array(
-            	        'firstName' => $order['x_first_name'],
-                	    'lastName' => $order['x_last_name'],
-                    	'address' => $order['x_address'],
-	                    'city' => $order['x_city'],
-    	                'state' => $order['x_zip'],
-        	            'zip' => $order['x_zip'],
-            	        'phoneNumber' => $order['x_phone']
-                	),
-	                'payment' => array(
-    	                'creditCard' => array(
-        	            'cardNumber' => $order['x_card_num'],
-            	        'expirationDate' => sprintf("%s-%s",substr($order['x_exp_date'], -4,4), substr($order['x_exp_date'], 0, 2)),
-                	    ),
-                	),
-            	),
-  	          'shipToList' => array(
-    	            'firstName' =>  $order['x_ship_to_first_name'],
-        	        'lastName' =>  $order['x_ship_to_last_name'],
-            	    'address' =>  $order['x_ship_to_address'],
-                	'city' =>  $order['x_ship_to_city'],
-	                'state' =>  $order['x_ship_to_state'],
-    	            'zip' =>  $order['x_ship_to_state'],
-        	        'phoneNumber' =>  $order['x_phone']
-            	),
-	        ),
-    	    'validationMode' => 'testMode'
-    	));
-		*/
-		
-		$subscription_name = "";
-		
-		foreach ($this->cart->getProducts() as $product)
-		{
-			if ($product['recurring'] == 1)
-			{
-				$subscription_name = $product['name'];
-			}
-		}
-		
-		//$subscription_name = md5(rand());
-		
-		$xml->ARBCreateSubscriptionRequest(
-			array(
-        		'refId' => $this->session->data['order_id'],
-        		'subscription' => array(
-            		'name' => $subscription_name,
-            		'paymentSchedule' => array(
-                		'interval' => array(
-                    	'length' => 7 * $this->session->data['recurring_frequency'],
-                    	'unit' => 'days'
-               		 ),
-                	'startDate' => date("Y-m-d", mktime(0,0,0, date("m") + 1, 1, date("Y"))),
-                	'totalOccurrences' => '12',
-                	'trialOccurrences' => '1'
-            	),
-            	'amount' => $order['x_amount'],
-            	'trialAmount' => '0.00',
-            	'payment' => array(
-                	'creditCard' => array(
-                    	'cardNumber' => $order['x_card_num'],
-            	        'expirationDate' => sprintf("%s-%s",substr($order['x_exp_date'], -4,4), substr($order['x_exp_date'], 0, 2)),
-                	)
-            	),
-				
-				'order' => array(
-					'invoiceNumber' => $this->session->data['order_id']
-				),
-            
-				'billTo' => array(
-               		'firstName' => $order['x_first_name'],
-               		'lastName' => $order['x_last_name'],
-            	),
-				
-        	)
-    	));
-		
-		return $xml->response();
-		
-	}
-	
-	function addSubscription($data, $subscription_id)
-	{
-		$query = $this->db->query("SELECT customer_id FROM customer WHERE email = '".$this->db->escape($data['x_email'])."'");
-		$customer_id = $query->row['customer_id'];
-		
-		$subscription_name = "";
-		
-		/*foreach ($this->cart->getProducts() as $product)
-		{
-			if ($product['recurring'] == 1)
-			{
-				$subscription_name = $product['name'];
-			}
-		}*/
-		
-		$next_order_date = date("Y-m-d", strtotime(sprintf("+%s week", $this->session->data['recurring_frequency'])));
-		
-		$this->db->query("INSERT INTO recurring SET 
-						 	customer_id = " . (int)$customer_id .", 
-							subscription_id = " . $subscription_id . ", 
-							name = '".$this->session->data['order_id']."',
-							product = '".$this->db->escape($subscription_name)."',
-							recurring = '".$this->session->data['recurring_frequency']."',
-							previous_amount = '".$data['x_amount']."',
-							amount = '".$data['x_amount']."',
-							date = '".date("Y-m-d")."',
-							next_order_date = '".$next_order_date."',
-							order_id = '".$this->session->data['order_id']."',
-							shipping_address_id = '".$this->session->data['shipping_address_id']."',
-							payment_address_id = '".$this->session->data['payment_address_id']."',
-							status = 'active',
-							comment = '".$this->session->data['comment']."',
-							cc_name = '".$data['x_card_owner']."',
-							cc_card_no = '".$data['x_card_num']."',
-							cc_cv_no = '".$data['x_card_code']."',
-							cc_expiry = '".$data['x_exp_date']."'");
-		
-		$recurring_id = $this->db->getLastId();
-		
-		$products = $this->cart->getProducts();
-		
-		$this->db->query("delete from recurring_product where recurring_id = " . $recurring_id);
-		
-		foreach($products as $product)
-		{
-			$this->db->query("insert into recurring_product set recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', quantity = '".$product['quantity']."'");
-			
-			$recurring_product_id = $this->db->getLastId();
-			
-			if ($product['option'])
-			{
-				foreach($product['option'] as $option)
-				{					
-					//$this->db->query("delete from recurring_product_options where recurring_id = " . $recurring_id . " and product_option_value_id = " . $option['product_option_value_id']);
-					$this->db->query("insert into recurring_product_options set recurring_product_id = '".$recurring_product_id."', recurring_id = '".$recurring_id."', product_id = '".$product['product_id']."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."', value ='".$option['option_value']."', type = '".$option['type']."'");
-				}
-			}
-		}
-		
-		$this->db->query("insert order_recurring set order_id = " . $this->session->data['order_id'] . ", recurring_id = " . $recurring_id);
-		
-		
 	}
 }
 ?>
