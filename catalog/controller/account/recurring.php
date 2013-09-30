@@ -165,6 +165,7 @@ class ControllerAccountRecurring extends Controller {
 		
 		$this->load->model('account/recurring');
 		$this->load->model('account/order');
+		
 
     	$this->document->setTitle($this->language->get('heading_title'));
 		
@@ -215,8 +216,10 @@ class ControllerAccountRecurring extends Controller {
 		$this->data['text_wait'] = $this->language->get('text_wait');
 		$this->data['text_select'] = $this->language->get('text_select');
 		$this->data['entry_option'] = $this->language->get('entry_option');
+		$this->data['text_none'] = $this->language->get('text_none');
 		$this->data['button_upload'] = $this->language->get('button_upload');
 		$this->data['token'] = md5(rand());
+		$this->data['text_no_results'] = $this->language->get('text_no_results');
 		
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -245,8 +248,60 @@ class ControllerAccountRecurring extends Controller {
 		}
 		
 		
+		if (isset($this->request->post['shipping_address_id']))
+		{
+			$this->data['shipping_address_id'] = $this->request->post['shipping_address_id'];
+		}
+		else if ($info)
+		{
+			$this->data['shipping_address_id'] = $info['shipping_address_id'];
+		}
 		
 		
+		if (isset($this->request->post['payment_address_id']))
+		{
+			$this->data['payment_address_id'] = $this->request->post['payment_address_id'];
+		}
+		else if ($info)
+		{
+			$this->data['payment_address_id'] = $info['payment_address_id'];
+		}
+		
+		if (isset($this->request->post['payment_zone_id']))
+		{
+			$this->data['payment_zone_id'] = $this->request->post['payment_zone_id'];
+		}
+		else if ($info)
+		{
+			$this->data['payment_zone_id'] = $info['payment_zone_id'];
+		}
+		
+		if (isset($this->request->post['shipping_zone_id']))
+		{
+			$this->data['shipping_zone_id'] = $this->request->post['shipping_zone_id'];
+		}
+		else if ($info)
+		{
+			$this->data['shipping_zone_id'] = $info['shipping_zone_id'];
+		}
+		
+		if (isset($this->request->post['shipping_method']))
+		{
+			$this->data['shipping_code'] = $this->request->post['shipping_method'];
+		}
+		else if ($info)
+		{
+			$this->data['shipping_code'] = $info['shipping_code'];
+		}	
+		
+		if (isset($this->request->post['payment_method']))
+		{
+			$this->data['payment_code'] = $this->request->post['payment_method'];
+		}
+		else if ($info)
+		{
+			$this->data['payment_code'] = $info['payment_code'];
+		}	
 		
 		if (isset($this->request->post['comment']))
 		{
@@ -254,7 +309,7 @@ class ControllerAccountRecurring extends Controller {
 		}
 		else if ($info)
 		{
-			$this->data['comment'] = $order_info['comment'];
+			$this->data['comment'] = $info['comment'];
 		}
 		
 		if (isset($this->request->post['status']))

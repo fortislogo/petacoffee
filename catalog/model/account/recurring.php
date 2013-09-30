@@ -121,18 +121,57 @@ class ModelAccountRecurring extends Model
 	
 	public function update($data, $id)
 	{
-		$this->db->query("update ".DB_PREFIX."recurring set next_order_date = '".$data['next_order_date']."', status = '".$data['status']."', recurring = '".$data['recurring']."' where recurring_id = " . $id);
+		//print_r($data); die();
+		$this->db->query("delete from recurring_product where recurring_id = '".$id."'");
+		$this->db->query("delete from recurring_option where recurring_id = '".$id."'");
 		
-		if (isset($data['product']))
+		if ($data['order_product'])
 		{
-			foreach($data['product'] as $recurring_product_id => $product)
+			foreach($data['order_product'] as $order_product)
 			{
-				if ($product['quantity'] > 0)
+				$this->db->query("insert into recurring_product set recurring_id = '".$id."', product_id = '".$order_product['product_id']."', name = '".$order_product['name']."', model = '".$order_product['model']."', quantity = '".$order_product['quantity']."', price = '".$order_product['price']."', total = '".((int)$order_product['quantity'] * (float)$order_product['price'])."', tax = '".$order_product['tax']."', reward = '".$order_product['reward']."'");
+				
+				$recurring_product_id = $this->db->getLastId();
+				
+				if ($order_product['order_option'])
 				{
-					$this->db->query("update ".DB_PREFIX."recurring_product set quantity = '".$product['quantity']."' where recurring_product_id = " . $recurring_product_id);
+					foreach($order_product['order_option'] as $option)
+					{
+						$this->db->query("insert into recurring_option set recurring_id = '".$id."', recurring_product_id = '".$recurring_product_id."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."',`value` = '".$option['value']."', `type` = '".$option['type']."'");
+					}
 				}
+				
 			}
 		}
+		
+		if ($data['payment_use_address'] == 'new-address')
+		{
+			$this->db->query("insert into address set customer_id = '".$this->customer->getId()."', firstname = '".$data['payment_firstname']."', lastname = '".$data['payment_lastname']."', company = '".$data['payment_company']."', company_id = '', tax_id = '', address_1 = '".$data['payment_address_1']."', address_2 = '".$data['payment_address_2']."', city = '".$data['payment_city']."', postcode = '".$data['payment_postcode']."', country_id = '".$data['payment_country_id']."', zone_id = '".$data['payment_zone_id']."'");
+			
+			$payment_address_id = $this->db->getLastId();
+		}
+		else
+		{
+			$payment_address_id = $data['payment_address_id'];
+		}
+		
+		if ($data['shipping_use_address'] == 'new-address')
+		{
+			$this->db->query("insert into address set customer_id = '".$this->customer->getId()."', firstname = '".$data['shipping_firstname']."', lastname = '".$data['shipping_lastname']."', company = '".$data['shipping_company']."', company_id = '', tax_id = '', address_1 = '".$data['shipping_address_1']."', address_2 = '".$data['shipping_address_2']."', city = '".$data['shipping_city']."', postcode = '".$data['shipping_postcode']."', country_id = '".$data['shipping_country_id']."', zone_id = '".$data['shipping_zone_id']."'");
+			
+			$shipping_address_id = $this->db->getLastId();
+		}
+		else
+		{
+			$shipping_address_id = $data['payment_address_id'];
+		}
+		
+		$this->load->model('account/address');
+		
+		$payment_address = $this->model_account_address->getAddress($payment_address_id);
+		$shipping_address = $this->model_account_address->getAddress($shipping_address_id);
+		
+		$this->db->query("update recurring set recurring = '".$data['recurring']."', next_order_date = '".$data['next_order_date']."', status = '".$data['status']."', payment_address_id = '".$data['payment_address_id']."', shipping_address_id = '".$data['shipping_address_id']."', comment = '".$data['comment']."', payment_firstname = '".$data['payment_firstname']."', payment_lastname = '".$data['payment_lastanme']."', payment_company = '".$data['payment_company']."',  payment_address_1 = '".$data['payment_address_1']."', payment_address_2 = '".$data['payment_address_2']."', payment_city = '".$data['payment_city']."', payment_postcode = '".$data['payment_postcode']."', payment_country_id = '".$data['payment_country_id']."', payment_zone_id = '".$data['payment_zone_id']."', shipping_firstname = '".$data['shipping_firstname']."', shipping_lastname = '".$data['shipping_lastname']."', shipping_company = '".$data['shipping_company']."',  shipping_address_1 = '".$data['shipping_address_1']."', shipping_address_2 = '".$data['shipping_address_2']."', shipping_city = '".$data['shipping_city']."', shipping_postcode = '".$data['shipping_postcode']."', shipping_country_id = '".$data['shipping_country_id']."', shipping_zone_id = '".$data['shipping_zone_id']."', payment_address_id = '".$payment_address_id."', shipping_address_id = '".$shipping_address_id."', shipping_code = '".$data['shipping_method']."', payment_code = '".$data['payment_method']."' where recurring_id = '".$id."'");
 	}
 	
 	
@@ -314,7 +353,7 @@ class ModelAccountRecurring extends Model
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "recurring_product WHERE recurring_id = '" . (int)$recurring_id . "'");
 	
 		return $query->rows;
-	}2
+	}
 	
 	public function getRecurringOptions($recurring_id, $recurring_product_id) {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "recurring_option WHERE recurring_id = '" . (int)$recurring_id . "' AND recurring_product_id = '" . (int)$recurring_product_id . "'");

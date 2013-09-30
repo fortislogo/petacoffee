@@ -76,12 +76,12 @@
 			              <?php foreach ($products as $order_product) { ?>
             			  	<tr id="product-row<?php echo $product_row; ?>">
 		                		<td class="left"><?php echo $order_product['name']; ?><br />
-                  					<input type="hidden" name="order_product[<?php echo $product_row; ?>][order_product_id]" value="<?php echo $order_product['order_product_id']; ?>" />
+                  					<input type="hidden" name="order_product[<?php echo $product_row; ?>][recurring_product_id]" value="<?php echo $order_product['recurring_product_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][product_id]" value="<?php echo $order_product['product_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][name]" value="<?php echo $order_product['name']; ?>" />
     					              <?php foreach ($order_product['option'] as $option) { ?>
 					                  - <small><?php echo $option['name']; ?>: <?php echo $option['value']; ?></small><br />
-                					  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][order_option_id]" value="<?php echo $option['order_option_id']; ?>" />
+                					  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][recurring_option_id]" value="<?php echo $option['recurring_option_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_id]" value="<?php echo $option['product_option_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_value_id]" value="<?php echo $option['product_option_value_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][name]" value="<?php echo $option['name']; ?>" />
@@ -219,9 +219,9 @@
                         	<td id="payment_addresses">
                             	<input type="radio" name="payment_use_address" value="existing-address" checked="checked"> Use existing address
                                 <div id="existing-address">
-								<select name="payment_address" style="width:100%" size="5">
+								<select name="payment_address_id" style="width:100%" size="5">
 								<?php foreach ($addresses as $address) { ?>
-								<?php if ($address['address_id'] == $shipping_address_id) { ?>
+								<?php if ($address['address_id'] == $payment_address_id) { ?>
 								<option value="<?php echo $address['address_id']; ?>" selected="selected"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
 								<?php } else { ?>
 								<option value="<?php echo $address['address_id']; ?>"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
@@ -236,35 +236,35 @@
                                 
                                 <p>
                                 	<label>First Name:</label>
-                                    <input type="text" name="firstname">
+                                    <input type="text" name="payment_firstname">
                                 </p>
                                 <p>
                                 	<label>Last Name:</label>
-                                    <input type="text" name="lastname">
+                                    <input type="text" name="payment_lastname">
                                 </p>
                                 <p>
                                 	<label>Company:</label>
-                                    <input type="text" name="company">
+                                    <input type="text" name="payment_company">
                                 </p>
                                 <p>
                                 	<label>Address 1:</label>
-                                    <input type="text" name="address_1">
+                                    <input type="text" name="payment_address_1">
                                 </p>
                                 <p>
                                 	<label>Address 2:</label>
-                                    <input type="text" name="address_2">
+                                    <input type="text" name="payment_address_2">
                                 </p>
                                 <p>
                                 	<label>City:</label>
-                                    <input type="text" name="city">
+                                    <input type="text" name="payment_city">
                                 </p>
                                 <p>
                                 	<label>Postal Code:</label>
-                                    <input type="text" name="postcode">
+                                    <input type="text" name="payment_postcode">
                                 </p>
                                 <p>
                                 	<label>Country:</label>
-                                    <select name="country_id">
+                                    <select name="payment_country_id">
 	                                    <option value=""><?php echo $text_select; ?></option>
 										<?php foreach ($countries as $country) { ?>
 										<option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
@@ -273,7 +273,7 @@
                                 </p>
                                 <p>
                                 	<label>Region / State:</label>
-                                    <select name="zone_id">
+                                    <select name="payment_zone_id">
                                     </select>
                                 </p>
                                 </div>
@@ -301,7 +301,7 @@
                         	<td id="shipping_addresses">
                             	<input type="radio" name="shipping_use_address" value="existing-address" checked="checked"> Use existing address
                                 <div id="existing-address">
-								<select name="shipping_address" style="width:100%" size="5">
+								<select name="shipping_address_id" style="width:100%" size="5">
 								<?php foreach ($addresses as $address) { ?>
 								<?php if ($address['address_id'] == $shipping_address_id) { ?>
 								<option value="<?php echo $address['address_id']; ?>" selected="selected"><?php echo $address['firstname']; ?> <?php echo $address['lastname']; ?>, <?php echo $address['address_1']; ?>, <?php echo $address['city']; ?>, <?php echo $address['zone']; ?>, <?php echo $address['country']; ?></option>
@@ -318,35 +318,35 @@
                                 
                                 <p>
                                 	<label>First Name:</label>
-                                    <input type="text" name="firstname">
+                                    <input type="text" name="shipping_firstname">
                                 </p>
                                 <p>
                                 	<label>Last Name:</label>
-                                    <input type="text" name="lastname">
+                                    <input type="text" name="shipping_lastname">
                                 </p>
                                 <p>
                                 	<label>Company:</label>
-                                    <input type="text" name="company">
+                                    <input type="text" name="shipping_company">
                                 </p>
                                 <p>
                                 	<label>Address 1:</label>
-                                    <input type="text" name="address_1">
+                                    <input type="text" name="shipping_address_1">
                                 </p>
                                 <p>
                                 	<label>Address 2:</label>
-                                    <input type="text" name="address_2">
+                                    <input type="text" name="shipping_address_2">
                                 </p>
                                 <p>
                                 	<label>City:</label>
-                                    <input type="text" name="city">
+                                    <input type="text" name="shipping_city">
                                 </p>
                                 <p>
                                 	<label>Postal Code:</label>
-                                    <input type="text" name="postcode">
+                                    <input type="text" name="shipping_postcode">
                                 </p>
                                 <p>
                                 	<label>Country:</label>
-                                    <select name="country_id">
+                                    <select name="shipping_country_id">
 	                                    <option value=""><?php echo $text_select; ?></option>
 										<?php foreach ($countries as $country) { ?>
 										<option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
@@ -355,7 +355,7 @@
                                 </p>
                                 <p>
                                 	<label>Region / State:</label>
-                                    <select name="zone_id">
+                                    <select name="shipping_zone_id">
                                     </select>
                                 </p>
                                 </div>
@@ -387,9 +387,13 @@
 									<?php foreach ($shipping_method['quote'] as $quote) { ?>
 
 									<label class="radio">
+                                    	<?php if ($shipping_code == $quote['code']): ?>
+                                        <input type="radio" name="shipping_method" value="<?php echo $quote['code']; ?>" id="<?php echo $quote['code']; ?>" class="radio inline" checked="checked" />
+                                        <?php else: ?>
 										<input type="radio" name="shipping_method" value="<?php echo $quote['code']; ?>" id="<?php echo $quote['code']; ?>" class="radio inline" />
+                                        <?php endif; ?>
 	
-										<?php echo $quote['title']; ?> (<b><?php echo $quote['text']; ?></b>)
+										<?php echo html_entity_decode($quote['title']); ?> (<b><?php echo $quote['text']; ?></b>)
 									
                                     </label><br />
 			
@@ -423,7 +427,11 @@
 								<?php foreach ($payment_methods as $payment_method) { ?>
 				
 								<label class="radio">
+                                	<?php if ($payment_code == $payment_method['code']): ?>
+                                    <input type="radio" name="payment_method" value="<?php echo $payment_method['code']; ?>" id="<?php echo $payment_method['code']; ?>" checked="checked" class="radio inline" />
+                                    <?php else: ?>
 									<input type="radio" name="payment_method" value="<?php echo $payment_method['code']; ?>" id="<?php echo $payment_method['code']; ?>" class="radio inline" />
+                                    <?php endif; ?>
 									<?php echo $payment_method['title']; ?>
 								</label> <br />
 
@@ -939,13 +947,13 @@ $('#shipping_addresses input[type=radio]').bind('click', function()
 
 	<script type="text/javascript"><!--
 
-		$('select[name=\'country_id\']').bind('change', function() {
+		$('select[name=\'payment_country_id\']').bind('change', function() {
 	
 			$.ajax({
 				url: 'index.php?route=account/address/country&country_id=' + this.value,
 				dataType: 'json',
 				beforeSend: function() {
-					$('select[name=\'country_id\']').after('<span class="wait">&nbsp;<img src="catalog/view/theme/sellegance/images/loading.gif" alt="" /></span>');
+					$('select[name=\'payment_country_id\']').after('<span class="wait">&nbsp;<img src="catalog/view/theme/sellegance/images/loading.gif" alt="" /></span>');
 				},		
 				complete: function() {
 					$('.wait').remove();
@@ -963,7 +971,7 @@ $('#shipping_addresses input[type=radio]').bind('click', function()
 						for (i = 0; i < json['zone'].length; i++) {
 		        			html += '<option value="' + json['zone'][i]['zone_id'] + '"';
 			    			
-							if (json['zone'][i]['zone_id'] == '<?php echo $zone_id; ?>') {
+							if (json['zone'][i]['zone_id'] == '<?php echo $payment_zone_id; ?>') {
 			      				html += ' selected="selected"';
 			    			}
 			
@@ -973,7 +981,7 @@ $('#shipping_addresses input[type=radio]').bind('click', function()
 						html += '<option value="0" selected="selected"><?php echo $text_none; ?></option>';
 					}
 					
-					$('select[name=\'zone_id\']').html(html);
+					$('select[name=\'payment_zone_id\']').html(html);
 				},
 				error: function(xhr, ajaxOptions, thrownError) {
 					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -981,7 +989,55 @@ $('#shipping_addresses input[type=radio]').bind('click', function()
 			});
 		});
 
-		$('select[name=\'country_id\']').trigger('change');
+		$('select[name=\'payment_country_id\']').trigger('change');
+		
+		//--></script> 
+        
+        <script type="text/javascript"><!--
+
+		$('select[name=\'shipping_country_id\']').bind('change', function() {
+	
+			$.ajax({
+				url: 'index.php?route=account/address/country&country_id=' + this.value,
+				dataType: 'json',
+				beforeSend: function() {
+					$('select[name=\'shipping_country_id\']').after('<span class="wait">&nbsp;<img src="catalog/view/theme/sellegance/images/loading.gif" alt="" /></span>');
+				},		
+				complete: function() {
+					$('.wait').remove();
+				},			
+				success: function(json) {
+					if (json['postcode_required'] == '1') {
+						$('#postcode-required').show();
+					} else {
+						$('#postcode-required').hide();
+					}
+					
+					html = '<option value=""><?php echo $text_select; ?></option>';
+					
+					if (json['zone'] != '') {
+						for (i = 0; i < json['zone'].length; i++) {
+		        			html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+			    			
+							if (json['zone'][i]['zone_id'] == '<?php echo $shipping_zone_id; ?>') {
+			      				html += ' selected="selected"';
+			    			}
+			
+			    			html += '>' + json['zone'][i]['name'] + '</option>';
+						}
+					} else {
+						html += '<option value="0" selected="selected"><?php echo $text_none; ?></option>';
+					}
+					
+					$('select[name=\'shipping_zone_id\']').html(html);
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+
+		$('select[name=\'shipping_country_id\']').trigger('change');
 		
 		//--></script> 
 

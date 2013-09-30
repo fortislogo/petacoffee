@@ -704,6 +704,8 @@ class ModelCheckoutOrder extends Model {
 		{
 			$data = $order_info;
 			
+			//print_r($data); die();
+			
 			$this->db->query("INSERT INTO `" . DB_PREFIX . "recurring` 
 							 SET customer_id = '" . (int)$data['customer_id'] . "', 
 							 	 payment_firstname = '" . $this->db->escape($data['payment_firstname']) . "', 
@@ -746,7 +748,9 @@ class ModelCheckoutOrder extends Model {
 								 status = 'active', 
 								 last_order_id = '".$this->session->data['order_id']."',
 								 order_id = '".$this->session->data['order_id']."',
-								 cc = '".$data['cc']."'");
+								 cc = '".$data['cc']."',
+								 payment_address_id = '".$this->session->data['payment_address_id']."',
+								 shipping_address_id = '".$this->session->data['shipping_address_id']."'");
 			
 			
 			$recurring_id = $this->db->getLastId();
