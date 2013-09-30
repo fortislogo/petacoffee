@@ -3854,3 +3854,12 @@
 2013-09-29 4:33:07 - PHP Notice:  Undefined index: href in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
 2013-09-29 4:33:07 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
 2013-09-29 4:33:07 - PHP Notice:  Undefined variable: button_remove in C:\projects\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 15:15:40 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-29 15:15:40 - PHP Notice:  Undefined variable: button_remove in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 15:15:40 - PHP Notice:  Undefined variable: button_remove in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 15:16:57 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-29 15:16:57 - PHP Notice:  Undefined variable: button_remove in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 15:16:57 - PHP Notice:  Undefined variable: button_remove in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 15:16:57 - PHP Notice:  Undefined index: href in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 74
+2013-09-29 15:16:57 - PHP Notice:  Undefined variable: button_remove in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
+2013-09-29 15:16:57 - PHP Notice:  Undefined variable: button_remove in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 84
