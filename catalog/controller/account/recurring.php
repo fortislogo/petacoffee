@@ -161,8 +161,20 @@ class ControllerAccountRecurring extends Controller {
 	
 	public function update()
 	{
-		$this->language->load('account/recurring');
+		$this->cart->clear();			
+		unset($this->session->data['shipping_method']);
+		unset($this->session->data['shipping_methods']);			
+		unset($this->session->data['payment_method']);
+		unset($this->session->data['payment_methods']);
+		unset($this->session->data['coupon']);
+		unset($this->session->data['reward']);
+		unset($this->session->data['voucher']);
+		unset($this->session->data['vouchers']);		
+		unset($this->session->data['recurring']);
+		unset($this->session->data['recurring_frequency']);
 		
+		
+		$this->language->load('account/recurring');		
 		$this->load->model('account/recurring');
 		$this->load->model('account/order');
 		
@@ -172,7 +184,7 @@ class ControllerAccountRecurring extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST'))
 		{
 			$this->model_account_recurring->update($this->request->post, $this->request->get['id']);
-			$this->redirect($this->url->link('account/recurring/update', 'id=' . $this->request->get['id'], 'SSL'));
+			$this->redirect($this->url->link('account/recurring/','', 'SSL'));
 		}
 		
 		$info = $this->model_account_recurring->getRecurringOrder($this->request->get['id']);
@@ -220,6 +232,9 @@ class ControllerAccountRecurring extends Controller {
 		$this->data['button_upload'] = $this->language->get('button_upload');
 		$this->data['token'] = md5(rand());
 		$this->data['text_no_results'] = $this->language->get('text_no_results');
+		
+		$this->session->data['recurring'] = 1;
+		$this->session->data['recurring_frequency'] = $info['recurring'];
 		
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -342,31 +357,67 @@ class ControllerAccountRecurring extends Controller {
 		
 		foreach($order_products as $order_product)
 		{
-			if (isset($res['order_option'])) {
-				$order_option = $order_product['order_option'];
-			} elseif (isset($info['last_order_id'])) {
-				$order_option = $this->model_account_recurring->getRecurringOptions($info['recurring_id'], $order_product['recurring_product_id']);
-			} else {
-				$order_option = array();
-			}
-
+			$order_options = array_filter($this->model_account_recurring->getRecurringOptions($info['recurring_id'], $order_product['recurring_product_id']));
 			
-			$order_download = array();
-							
+			$option = array();
+			
+			foreach($order_options as $order_option)
+			{
+				if ($order_option['type'] == 'select')
+				{
+					$option[$order_option['product_option_id']] = $order_option['product_option_value_id'];
+				}
+				else if ($order_option['type'] == 'checkbox')
+				{
+					$option[$order_option['product_option_id']] = array($order_option['product_option_value_id']);
+				}
+			}
+			
+			$this->cart->add($order_product['product_id'], $order_product['quantity'], $option);
+			
+		}
+		
+		$results = $this->cart->getProducts();
+		
+		foreach($results as $order_product)
+		{
+			$order_option = array();
+			
+			//print_r($order_product);
+			
+			foreach ($order_product['option'] as $option) 
+			{
+				if ($option['type'] != 'file') 
+				{
+					$value = $option['option_value'];	
+				} 
+				else 
+				{
+					$filename = $this->encryption->decrypt($option['option_value']);						
+					$value = utf8_substr($filename, 0, utf8_strrpos($filename, '.'));
+				}
+					
+				$order_option[] = array(
+					'product_option_id' => $option['product_option_id'],
+					'product_option_value_id' => $option['product_option_value_id'],
+					'type' => $option['type'],
+					'name'  => $option['name'],
+					'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value)
+				);
+        	}
+			
 			$this->data['products'][] = array(
-				'recurring_product_id' => $order_product['recurring_product_id'],
 				'product_id'       => $order_product['product_id'],
 				'name'             => $order_product['name'],
 				'model'            => $order_product['model'],
 				'option'           => $order_option,
-				'download'         => $order_download,
 				'quantity'         => $order_product['quantity'],
 				'price'            => $order_product['price'],
 				'total'            => $order_product['total'],
-				'tax'              => $order_product['tax'],
 				'reward'           => $order_product['reward']
 			);
 		}
+		
 		
 		if (isset($this->request->post['order_voucher'])) {
 			$this->data['order_vouchers'] = $this->request->post['order_voucher'];
@@ -376,19 +427,21 @@ class ControllerAccountRecurring extends Controller {
 			$this->data['order_vouchers'] = array();
 		}
 		
-		if (isset($this->request->post['order_total'])) {
+		/*if (isset($this->request->post['order_total'])) {
       		$this->data['order_totals'] = $this->request->post['order_total'];
     	} elseif (isset($info['last_order_id'])) { 
 			$this->data['order_totals'] = $this->model_account_order->getOrderTotals($info['last_order_id']);
 		} else {
       		$this->data['order_totals'] = array();
-    	}
+    	}*/
 		
 		$this->load->model('account/address');		
 		$this->data['addresses'] = $this->model_account_address->getAddresses();
 		
 		$shipping_address = $this->model_account_address->getAddress($info['shipping_address_id']);
 		$payment_address  = $this->model_account_address->getAddress($info['payment_address_id']);	
+		
+		//print_r($info);
 		
 		$quote_data = array();			
 		$this->load->model('setting/extension');			
@@ -417,6 +470,12 @@ class ControllerAccountRecurring extends Controller {
 		foreach ($quote_data as $key => $value) 
 		{
 			$sort_order[$key] = $value['sort_order'];
+			
+			foreach($value['quote'] as $quote)
+			{
+				if ($quote['code'] == $info['shipping_code']) $this->session->data['shipping_method'] = $quote;
+			}
+			
 		}
 	
 		array_multisort($sort_order, SORT_ASC, $quote_data);
@@ -455,7 +514,7 @@ class ControllerAccountRecurring extends Controller {
 		$this->load->model('setting/extension');
 			
 		$results = $this->model_setting_extension->getExtensions('payment');
-	
+		
 		foreach ($results as $result) 
 		{
 			if ($this->config->get($result['code'] . '_status')) 
@@ -478,6 +537,7 @@ class ControllerAccountRecurring extends Controller {
 		array_multisort($sort_order, SORT_ASC, $method_data);			
 			
 		$this->data['payment_methods'] = $method_data;	
+		$this->data['order_totals'] = $total_data;
 		
 		$this->load->model('localisation/country');
 		
@@ -488,6 +548,20 @@ class ControllerAccountRecurring extends Controller {
 		} else {
 			$this->template = 'default/template/account/recurring_form.tpl';
 		}
+		
+		$this->cart->clear();
+			
+		unset($this->session->data['shipping_method']);
+		unset($this->session->data['shipping_methods']);			
+		unset($this->session->data['payment_method']);
+		unset($this->session->data['payment_methods']);
+		unset($this->session->data['coupon']);
+		unset($this->session->data['reward']);
+		unset($this->session->data['voucher']);
+		unset($this->session->data['vouchers']);
+		
+		unset($this->session->data['recurring']);
+		unset($this->session->data['recurring_frequency']);
 		
 		$this->children = array(
 			'common/column_left',
@@ -746,6 +820,8 @@ class ControllerAccountRecurring extends Controller {
 			} else {
 				$this->template = 'default/template/account/order_info.tpl';
 			}
+			
+			
 			
 			$this->children = array(
 				'common/column_left',

@@ -427,12 +427,12 @@ class ModelShippingUsps extends Model {
 									if ($this->config->get('usps_display_time')) {
 										$title .= ' (' . $this->language->get('text_eta') . ' ' . $service->getElementsByTagName('SvcCommitments')->item(0)->nodeValue . ')';
 									}
-
+									
 									$cost = $service->getElementsByTagName('Postage')->item(0)->nodeValue;
 
 									$quote_data[$id] = array(
 										'code'         => 'usps.' . $id,
-										'title'        => $title,
+										'title'        => html_entity_decode($title),
 										'cost'         => $this->currency->convert($cost, 'USD', $this->config->get('config_currency')),
 										'tax_class_id' => $this->config->get('usps_tax_class_id'),
 										'text'         => $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id'), $this->config->get('config_tax')), $this->currency->getCode(), 1.0000000)

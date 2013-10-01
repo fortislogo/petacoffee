@@ -129,15 +129,63 @@ class ModelAccountRecurring extends Model
 		{
 			foreach($data['order_product'] as $order_product)
 			{
-				$this->db->query("insert into recurring_product set recurring_id = '".$id."', product_id = '".$order_product['product_id']."', name = '".$order_product['name']."', model = '".$order_product['model']."', quantity = '".$order_product['quantity']."', price = '".$order_product['price']."', total = '".((int)$order_product['quantity'] * (float)$order_product['price'])."', tax = '".$order_product['tax']."', reward = '".$order_product['reward']."'");
+				$quantity = $order_product['quantity'];
+				
+				if (isset($order_product['order_option']))
+				{
+					foreach($order_product['order_option'] as $order_option)
+					{
+						if ($order_option['type'] == 'select')
+						{
+							$option[$order_option['product_option_id']] = $order_option['product_option_value_id'];
+						}
+						else if ($order_option['type'] == 'checkbox')
+						{
+							$option[$order_option['product_option_id']] = array($order_option['product_option_value_id']);
+						}
+					}
+				}
+				else
+				{
+					$option = array();
+				}
+				
+				$this->cart->add($order_product['product_id'], $quantity, $option);
+			}
+		}
+		
+		if ($data['product'])
+		{
+			if (isset($data['option'])) 
+			{
+				$option = array_filter($data['option']);
+			}
+			else
+			{
+				$option = array();
+			}
+			
+			$this->cart->add($data['product_id'], $data['quantity'], $option);
+		}
+		
+		$data['order_product'] = $this->cart->getProducts();
+		
+		//print_r($data['order_product']); die();
+		
+		if ($data['order_product'])
+		{
+			foreach($data['order_product'] as $order_product)
+			{
+				
+				$this->db->query("insert into recurring_product set recurring_id = '".$id."', product_id = '".$order_product['product_id']."', name = '".$order_product['name']."', model = '".$order_product['model']."', quantity = '".$order_product['quantity']."', price = '".$order_product['price']."', total = '".((int)$order_product['quantity'] * (float)$order_product['price'])."', tax = '".$order_product['tax_class_id']."', reward = '".$order_product['reward']."'");
 				
 				$recurring_product_id = $this->db->getLastId();
 				
-				if ($order_product['order_option'])
+				if ($order_product['option'])
 				{
-					foreach($order_product['order_option'] as $option)
+					foreach($order_product['option'] as $option)
 					{
-						$this->db->query("insert into recurring_option set recurring_id = '".$id."', recurring_product_id = '".$recurring_product_id."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."',`value` = '".$option['value']."', `type` = '".$option['type']."'");
+						$this->db->query("insert into recurring_option set recurring_id = '".$id."', recurring_product_id = '".$recurring_product_id."', product_option_id = '".$option['product_option_id']."', product_option_value_id = '".$option['product_option_value_id']."', name = '".$option['name']."',`value` = '".$option['option_value']."', `type` = '".$option['type']."'");
 					}
 				}
 				
@@ -171,7 +219,85 @@ class ModelAccountRecurring extends Model
 		$payment_address = $this->model_account_address->getAddress($payment_address_id);
 		$shipping_address = $this->model_account_address->getAddress($shipping_address_id);
 		
-		$this->db->query("update recurring set recurring = '".$data['recurring']."', next_order_date = '".$data['next_order_date']."', status = '".$data['status']."', payment_address_id = '".$data['payment_address_id']."', shipping_address_id = '".$data['shipping_address_id']."', comment = '".$data['comment']."', payment_firstname = '".$data['payment_firstname']."', payment_lastname = '".$data['payment_lastanme']."', payment_company = '".$data['payment_company']."',  payment_address_1 = '".$data['payment_address_1']."', payment_address_2 = '".$data['payment_address_2']."', payment_city = '".$data['payment_city']."', payment_postcode = '".$data['payment_postcode']."', payment_country_id = '".$data['payment_country_id']."', payment_zone_id = '".$data['payment_zone_id']."', shipping_firstname = '".$data['shipping_firstname']."', shipping_lastname = '".$data['shipping_lastname']."', shipping_company = '".$data['shipping_company']."',  shipping_address_1 = '".$data['shipping_address_1']."', shipping_address_2 = '".$data['shipping_address_2']."', shipping_city = '".$data['shipping_city']."', shipping_postcode = '".$data['shipping_postcode']."', shipping_country_id = '".$data['shipping_country_id']."', shipping_zone_id = '".$data['shipping_zone_id']."', payment_address_id = '".$payment_address_id."', shipping_address_id = '".$shipping_address_id."', shipping_code = '".$data['shipping_method']."', payment_code = '".$data['payment_method']."' where recurring_id = '".$id."'");
+		$quote_data = array();	
+		$this->load->model('setting/extension');			
+		$results = $this->model_setting_extension->getExtensions('shipping');			
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('shipping/' . $result['code']);					
+				$quote = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address); 
+		
+				if ($quote) 
+				{
+					$quote_data[$result['code']] = array( 
+						'title'      => $quote['title'],
+						'quote'      => $quote['quote'], 
+						'sort_order' => $quote['sort_order'],
+						'error'      => $quote['error']
+					);
+				}
+			}
+		}
+		
+		$sort_order = array();
+		  
+		foreach ($quote_data as $key => $value) 
+		{
+			$sort_order[$key] = $value['sort_order'];
+			
+			foreach($value['quote'] as $quote)
+			{
+				if ($quote['code'] == $data['shipping_method']) 
+				{
+					$this->session->data['shipping_method'] = $quote;
+					$data['shipping_method'] = $quote['code'];
+				}
+			}
+			
+		}
+		
+		// Totals
+		$total_data = array();					
+		$total = 0;
+		$taxes = $this->cart->getTaxes();
+		$this->session->data['recurring'] = 1;
+		$this->session->data['recurring_frequency'] = $data['recurring'];
+			
+		$this->load->model('setting/extension');
+			
+		$sort_order = array(); 
+			
+		$results = $this->model_setting_extension->getExtensions('total');
+			
+		foreach ($results as $key => $value) 
+		{
+			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+		}
+			
+		array_multisort($sort_order, SORT_ASC, $results);
+			
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('total/' . $result['code']);		
+				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+			}
+		}
+		
+		$next_order_total = 0;
+		
+		foreach($total_data as $total)
+		{
+			if ($total['code'] == 'total') $next_order_total = $total['value'];
+		}
+		
+		//print_r($payment_address);
+		
+		$this->db->query("update recurring set recurring = '".$data['recurring']."', next_order_date = '".$data['next_order_date']."', status = '".$data['status']."', comment = '".$data['comment']."', payment_firstname = '".$payment_address['firstname']."', payment_lastname = '".$payment_address['lastname']."', payment_company = '".$payment_address['company']."',  payment_address_1 = '".$payment_address['address_1']."', payment_address_2 = '".$payment_address['address_2']."', payment_city = '".$payment_address['city']."', payment_postcode = '".$payment_address['postcode']."', payment_country_id = '".$payment_address['country_id']."', payment_zone_id = '".$payment_address['zone_id']."', shipping_firstname = '".$shipping_address['firstname']."', shipping_lastname = '".$$shipping_address['lastname']."', shipping_company = '".$shipping_address['company']."',  shipping_address_1 = '".$shipping_address['address_1']."', shipping_address_2 = '".$shipping_address['address_2']."', shipping_city = '".$shipping_address['city']."', shipping_postcode = '".$shipping_address['postcode']."', shipping_country_id = '".$shipping_address['country_id']."', shipping_zone_id = '".$shipping_address['zone_id']."', payment_address_id = '".$payment_address_id."', shipping_address_id = '".$shipping_address_id."', shipping_code = '".$data['shipping_method']."', payment_code = '".$data['payment_method']."', amount = '".(float)$next_order_total."' where recurring_id = '".$id."'");
+	
 	}
 	
 	

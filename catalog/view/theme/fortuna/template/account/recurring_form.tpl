@@ -76,27 +76,19 @@
 			              <?php foreach ($products as $order_product) { ?>
             			  	<tr id="product-row<?php echo $product_row; ?>">
 		                		<td class="left"><?php echo $order_product['name']; ?><br />
-                  					<input type="hidden" name="order_product[<?php echo $product_row; ?>][recurring_product_id]" value="<?php echo $order_product['recurring_product_id']; ?>" />
+                  					
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][product_id]" value="<?php echo $order_product['product_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][name]" value="<?php echo $order_product['name']; ?>" />
     					              <?php foreach ($order_product['option'] as $option) { ?>
 					                  - <small><?php echo $option['name']; ?>: <?php echo $option['value']; ?></small><br />
-                					  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][recurring_option_id]" value="<?php echo $option['recurring_option_id']; ?>" />
-					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_id]" value="<?php echo $option['product_option_id']; ?>" />
+                					  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_id]" value="<?php echo $option['product_option_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][product_option_value_id]" value="<?php echo $option['product_option_value_id']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][name]" value="<?php echo $option['name']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][value]" value="<?php echo $option['value']; ?>" />
 					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_option][<?php echo $option_row; ?>][type]" value="<?php echo $option['type']; ?>" />
 					                  <?php $option_row++; ?>
 					                  <?php } ?>
-					                  <?php foreach ($order_product['download'] as $download) { ?>
-						                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][order_download_id]" value="<?php echo $download['order_download_id']; ?>" />
-					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][name]" value="<?php echo $download['name']; ?>" />
-					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][filename]" value="<?php echo $download['filename']; ?>" />
-					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][mask]" value="<?php echo $download['mask']; ?>" />
-					                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][order_download][<?php echo $download_row; ?>][remaining]" value="<?php echo $download['remaining']; ?>" />
-					                  <?php $download_row++; ?>
-			                  <?php } ?></td>
+					                  </td>
             			    <td class="left"><?php echo $order_product['model']; ?>
 			                  <input type="hidden" name="order_product[<?php echo $product_row; ?>][model]" value="<?php echo $order_product['model']; ?>" /></td>
             			    <td class="right quantity"><input type="text" name="order_product[<?php echo $product_row; ?>][quantity]" value="<?php echo $order_product['quantity']; ?>" /></td>                 
@@ -503,14 +495,14 @@
             			  <?php } ?>
 			              <?php foreach ($order_totals as $order_total) { ?>
            				  <tr id="total-row<?php echo $total_row; ?>">
-			                <td class="right" colspan="4"><?php echo $order_total['title']; ?>:
+			                <td class="right" colspan="4"><?php echo html_entity_decode($order_total['title']); ?>:
             			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][order_total_id]" value="<?php echo $order_total['order_total_id']; ?>" />
 			                  <input type="hidden" name="order_total[<?php echo $total_row; ?>][code]" value="<?php echo $order_total['code']; ?>" />
             			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][title]" value="<?php echo $order_total['title']; ?>" />
 			                  <input type="hidden" name="order_total[<?php echo $total_row; ?>][text]" value="<?php echo $order_total['text']; ?>" />
             			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][value]" value="<?php echo $order_total['value']; ?>" />
 				              <input type="hidden" name="order_total[<?php echo $total_row; ?>][sort_order]" value="<?php echo $order_total['sort_order']; ?>" /></td>
-			                <td class="right"><?php echo $order_total['value']; ?></td>
+			                <td class="right"><?php echo $order_total['text']; ?></td>
             			  </tr>
 			              <?php $total_row++; ?>
             		  <?php } ?>
@@ -554,112 +546,7 @@
 <script type="text/javascript"><!--
 $('#button-product').live('click', function() 
 {	
-	data  = '#add-product input[type=\'text\'], #add-product input[type=\'hidden\'], #add-product input[type=\'radio\']:checked, #add-product input[type=\'checkbox\']:checked, #add-product select, #add-product textarea, ';
-
-	$.ajax({
-		url: '<?php echo HTTP_SERVER; ?>/?route=account/recurring/addproduct&id=<?php echo $this->request->get['id']; ?>',
-		type: 'post',
-		data: $(data),
-		dataType: 'json',	
-		beforeSend: function() {
-			$('.success, .warning, .attention, .error').remove();
-			
-			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $text_wait; ?></div>');
-		},			
-		success: function(json) {
-			$('.success, .warning, .attention, .error').remove();
-			
-			// Check for errors
-			if (json['error']) {
-				if (json['error']['warning']) {
-					$('.box').before('<div class="warning">' + json['error']['warning'] + '</div>');
-				}
-				
-				// Products
-				if (json['error']['product']) {
-					if (json['error']['product']['option']) {	
-						for (i in json['error']['product']['option']) {
-							$('#option-' + i).after('<span class="error">' + json['error']['product']['option'][i] + '</span>');
-						}						
-					}
-					
-					if (json['error']['product']['stock']) {
-						$('.box').before('<div class="warning">' + json['error']['product']['stock'] + '</div>');
-					}	
-											
-					if (json['error']['product']['minimum']) {	
-						for (i in json['error']['product']['minimum']) {
-							$('.box').before('<div class="warning">' + json['error']['product']['minimum'][i] + '</div>');
-						}						
-					}
-				} else {
-					$('input[name=\'product\']').attr('value', '');
-					$('input[name=\'product_id\']').attr('value', '');
-					$('#option td').remove();			
-					$('input[name=\'quantity\']').attr('value', '1');			
-				}
-				
-			} else {
-				$('input[name=\'product\']').attr('value', '');
-				$('input[name=\'product_id\']').attr('value', '');
-				$('#option td').remove();	
-				$('input[name=\'quantity\']').attr('value', '1');	
-				
-				$('input[name=\'from_name\']').attr('value', '');	
-				$('input[name=\'from_email\']').attr('value', '');	
-				$('input[name=\'to_name\']').attr('value', '');
-				$('input[name=\'to_email\']').attr('value', '');	
-				$('textarea[name=\'message\']').attr('value', '');	
-				$('input[name=\'amount\']').attr('value', '25.00');									
-			}
-
-			if (json['success']) {
-				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
-				
-				$('.success').fadeIn('slow');				
-			}
-			
-			if (json['order_product'] != '') {
-				var product_row = 0;
-				var option_row = 0;
-				var download_row = 0;
-	
-				html = '';
-				
-				for (i = 0; i < json['order_product'].length; i++) {
-					product = json['order_product'][i];
-					
-					html += '<tr>';
-					html += '  <td><a href="">' + product['name'] + '</a>';
-					
-					if (product['option']) 
-					{
-						for (j = 0; j < product['option'].length; j++) 
-						{
-							option = product['option'][j];							
-							html += '  <br />- <small>' + option['name'] + ': ' + option['option_value'] + '</small>';
-							option_row++;
-						}
-					}
-					
-					html += '  </td>';
-					html += '  <td class="left">' + product['model'] + '<input type="hidden" name="order_product[' + product_row + '][model]" value="' + product['model'] + '" /></td>';
-					html += '  <td class="quantity" style="text-align:right"><input type="text" name="product['+product['recurring_product_id']+'][quantity]" value="'+product['quantity']+'"> <input type="image" class="update-cart" src="catalog/view/theme/fortuna/images/update.png" alt="Update" title="Update" /> <a href="'+product['remove']+'" title="Remove"><img src="catalog/view/theme/fortuna/images/remove.png" alt="Remove" title="Remove" /></a></td>';
-					html += '  <td class="right">' + product['price'] + '<input type="hidden" name="order_product[' + product_row + '][price]" value="' + product['price'] + '" /></td>';
-					html += '  <td class="right">' + product['total'] + '<input type="hidden" name="order_product[' + product_row + '][total]" value="' + product['total'] + '" /><input type="hidden" name="order_product[' + product_row + '][tax]" value="' + product['tax'] + '" /><input type="hidden" name="order_product[' + product_row + '][reward]" value="' + product['reward'] + '" /></td>';
-					html += '</tr>';
-					
-					product_row++;			
-				}
-				
-				$('#product-list tbody').html(html);
-			} 
-			
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
-	});	
+	$('#recurring_form').submit();
 });
 //--></script>
 <script type="text/javascript"><!--
