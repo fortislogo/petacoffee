@@ -139,7 +139,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 				$i++;
 			}
 			
-			$response_info[1] = '1';
+			//$response_info[1] = '1';
 		
 			if ($response_info[1] == '1') {
 				if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {

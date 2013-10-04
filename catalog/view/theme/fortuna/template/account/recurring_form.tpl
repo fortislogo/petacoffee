@@ -40,7 +40,17 @@
 
 				</header>
 
+				<style>
+				#payment-method label
+				{
+					display:block;
+				}
 				
+				#payment-method label div
+				{
+					display:none;
+				}
+				</style>
 
 				<form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="recurring_form" class="form-horizontal">
                 
@@ -401,7 +411,36 @@
                     	
                     </table>
                     
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="gift-coupon">
+                    	
+                        <thead>
+							<tr>
+								<td colspan="2">
+									Coupon / Gift Voucher
+								</td>
+							</tr>
+						</thead>
+                        
+                        <tbody>
+                        	<tr>
+                            	<td>Coupon:</td>
+                            	<td>
+                                	<input type="text" name="coupon" value="<?php echo $coupon; ?>" />
+									<input type="submit" value="Submit" class="btn btn-coupon" />
+                                </td>
+                            </tr>
+                            <tr>
+                            	<td>Gift Voucher:</td>
+                            	<td>
+                                	<input type="text" name="gift_voucher" value="<?php echo $gift_voucher; ?>" />
+									<input type="submit" value="Submit" class="btn btn-gift-voucher" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    
+                    </table>
+                    
+                    <table class="table table-bordered" id="payment-method">
                     	
                         <thead>
 							<tr>
@@ -411,6 +450,7 @@
 							</tr>
 						</thead>
                         
+                        <tbody>
                         <?php if ($payment_methods) { ?>
                         
                         <tr>
@@ -418,22 +458,24 @@
                             <td>
 								<?php foreach ($payment_methods as $payment_method) { ?>
 				
-								<label class="radio">
+								<label>
                                 	<?php if ($payment_code == $payment_method['code']): ?>
                                     <input type="radio" name="payment_method" value="<?php echo $payment_method['code']; ?>" id="<?php echo $payment_method['code']; ?>" checked="checked" class="radio inline" />
                                     <?php else: ?>
 									<input type="radio" name="payment_method" value="<?php echo $payment_method['code']; ?>" id="<?php echo $payment_method['code']; ?>" class="radio inline" />
                                     <?php endif; ?>
-									<?php echo $payment_method['title']; ?>
-								</label> <br />
+									<?php echo $payment_method['title']; ?><br />
+                                    <?php include($payment_method['form']); ?>
+								</label>
 
 								<?php } ?>
-                                
                            </td>     
                            
                         </tr>   
                         
                         <?php } ?>
+                        
+                        </tbody>
                     
                     </table>
                     
@@ -459,7 +501,7 @@
                     </table>
                     
                     
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="table-totals">
 			            <thead>
             			  <tr>
 			                <td class="left">PRODUCT</td>
@@ -469,9 +511,11 @@
             			    <td class="right">TOTAL</td>
 			              </tr>
             			</thead>
-			            <tbody id="total">
+			           
             			  <?php $total_row = 0; ?>
 			              <?php if ($products || $order_vouchers || $order_totals) { ?>
+                             <?php if ($products): ?>
+                             <tbody id="product-totals">
              				 <?php foreach ($products as $order_product) { ?>
 				              <tr>
                 				<td class="left"><?php echo $order_product['name']; ?><br />
@@ -484,6 +528,9 @@
 				                <td class="right"><?php echo $order_product['total']; ?></td>
 				              </tr>
 			              <?php } ?>
+                          </tbody>
+                          <?php endif; ?>
+                          <tbody id="voucher-total">
             			  <?php foreach ($order_vouchers as $order_voucher) { ?>
 			              <tr>
             			    <td class="left"><?php echo $order_voucher['description']; ?></td>
@@ -493,6 +540,8 @@
             			    <td class="right"><?php echo $order_voucher['amount']; ?></td>
 			              </tr>
             			  <?php } ?>
+                          </tbody>
+                          <tbody id="ordertotals-total">
 			              <?php foreach ($order_totals as $order_total) { ?>
            				  <tr id="total-row<?php echo $total_row; ?>">
 			                <td class="right" colspan="4"><?php echo html_entity_decode($order_total['title']); ?>:
@@ -505,13 +554,14 @@
 			                <td class="right"><?php echo $order_total['text']; ?></td>
             			  </tr>
 			              <?php $total_row++; ?>
-            		  <?php } ?>
+            		  	  <?php } ?>
+                      	  </tbody>
 		              <?php } else { ?>
         		      <tr>
                 		<td class="center" colspan="5"><?php echo $text_no_results; ?></td>
 		              </tr>
         		      <?php } ?>
-		            </tbody>
+		            
         		  </table>
                     
                     
@@ -546,7 +596,134 @@
 <script type="text/javascript"><!--
 $('#button-product').live('click', function() 
 {	
-	$('#recurring_form').submit();
+	var params = $('#recurring_form').serialize();
+	$.ajax(
+	{
+		url: '/index.php?route=account/recurring/json',
+		data: params,
+		dataType: 'json',
+		type: 'post',
+		success: function(json)
+		{
+			var productHtml = '';
+			var products = json['products'];
+			for(var i=0; i<products.length; i++)
+			{
+				productHtml += '<tr>';
+				
+				productHtml += '<td>' + products[i].name;
+				productHtml += '<input type="hidden" name="order_product[' + i + '][product_id]" value="' + products[i].product_id + '" />';
+				productHtml += '<input type="hidden" name="order_product[' + i + '][name]" value="' + products[i].name + '" />';
+				
+				if (products[i].option)
+				{
+					var option = products[i].option;
+					for(var x=0; x<option.length; x++)
+					{
+						productHtml += '<br /> - <small>' + option[x].name + ': ' + option[x].value + '</small>';
+						productHtml += '<input type="hidden" name="order_product[' + i + '][order_option][' + x + '][product_option_id]" value="' + option[x].product_option_id + '" />';
+						productHtml += '<input type="hidden" name="order_product[' + i + '][order_option][' + x + '][product_option_value_id]" value="' + option[x].product_option_value_id + '" />';
+						productHtml += '<input type="hidden" name="order_product[' + i + '][order_option][' + x + '][name]" value="' + option[x].name + '" />';
+						productHtml += '<input type="hidden" name="order_product[' + i + '][order_option][' + x + '][value]" value="' + option[x].value + '" />';
+						productHtml += '<input type="hidden" name="order_product[' + i + '][order_option][' + x + '][type]" value="' + option[x].type + '" />'
+						
+					}
+				}
+				
+				productHtml += '</td>';
+				productHtml += '<td>' + products[i].model  + '<input type="hidden" name="order_product[' + i + '][model]" value="' +products[i].model+'" /></td>';
+				productHtml += '<td class="right quantity"><input type="text" name="order_product['+i+'][quantity]" value="'+products[i].quantity+'"></td>';
+				productHtml += '<td class="right">' + products[i].price  + '<input type="hidden" name="order_product[' + i + '][price]" value="'+products[i].price+'" /></td>';
+				productHtml += '<td class="right">' + products[i].total;
+				productHtml += '<input type="hidden" name="order_product[' + i + '][total]" value="' + products[i].total + '" />';
+            	productHtml += '<input type="hidden" name="order_product[' + i + '][tax]" value="' + products[i].tax + '" />';
+			    productHtml += '<input type="hidden" name="order_product[' + i + '][reward]" value="' + products[i].reward + '" />';
+				productHtml += '</td>';
+				
+				productHtml += '</tr>';
+			}
+			
+			$('#product-list tbody').html(productHtml);
+			
+			var html = '';
+			
+			if (json['products'] != '')
+			{
+				var products = json['products'];
+				for(var i=0; i<products.length; i++)
+				{
+					var product = products[i];
+					html += '<tr>';
+					html += '<td class="left">' + product.name;
+					
+					if (product.option)
+					{
+						var option = product.option;
+						for(var x=0; x<option.length; x++)
+						{
+							html += '<br /> - <small>' + option[x].name + ': ' + option[x].value + '</small>';
+						}
+					}
+					
+					html += '</td>';
+					html += '<td class="left">' + product.model + '</td>';
+					html += '<td class="right">' + product.quantity + '</td>';
+					html += '<td class="right">' + product.price + '</td>';
+					html += '<td class="right">' + product.total + '</td>';
+					html += '</tr>';
+				}
+				
+			}
+			
+			$('#product-totals').html(html);
+			
+			html = '';
+			
+			if (json['order_totals'] != '')
+			{
+				var totals = json['order_totals'];
+			
+				for(var i=0; i<totals.length; i++)
+				{
+					var total = totals[i];
+					html += '<tr id="total-row' + i + '">';
+					html += '<td class="right" colspan="4">' + total.title + ':</td>';
+					html += '<td class="right">' + total.text + '</td>';
+            		html += '</tr>';
+				}
+			}
+			
+			$('#ordertotals-total').html(html);
+			
+			html = '';
+			
+			if (json['payment_methods'])
+			{
+				html += '<tr>';
+				html += '<td>';
+				
+				var payments = json['payment_methods'];
+				
+				for(var i=0; i<payments.length; i++)
+				{
+					var payment = payments[i];
+					
+					html += '<label>';
+					html += '<input type="radio" name="payment_method" value="' + payment.code + '" id="' +payment.code+ '" class="radio inline" /> ';
+					html += payment.title;
+					html += '<br />' + payment.form +  '</label>';
+					
+				}
+			}
+			
+			html += '</td>';
+			html += '</tr>'
+			
+			$('#payment-method tbody').html(html);
+			
+			enable_payment_method();
+		}
+	})
 });
 //--></script>
 <script type="text/javascript"><!--
@@ -830,6 +1007,20 @@ $('#shipping_addresses input[type=radio]').bind('click', function()
 	$('#shipping_addresses #' + $(this).val()).show();
 });
 			
+</script>
+
+<script>
+
+enable_payment_method();
+
+function enable_payment_method()
+{
+	$('#payment-method input[type=radio]').bind('change', function()
+	{
+		$('#payment-method div').hide();
+		$(this).parent().find('div').show();
+	});															   
+}
 </script>
 
 	<script type="text/javascript"><!--

@@ -318,7 +318,7 @@ class ControllerSaleRecurring extends Controller {
 						
 			$action[] = array(
 				'text' => 'View Orders',
-				'href' => $this->url->link('sale/order', 'token=' . $this->session->data['token'] . '&filter_recurring_id=' . $result['recurring_id'] . $url, 'SSL')
+				'href' => $this->url->link('sale/order/info', 'token=' . $this->session->data['token'] . '&order_id=' . $result['order_id'] . $url, 'SSL')
 			);
 			
 			/*if (strtotime($result['date_added']) > strtotime('-' . (int)$this->config->get('config_recurring_edit') . ' day')) {
@@ -329,18 +329,12 @@ class ControllerSaleRecurring extends Controller {
 			}
 			*/
 			
-			$amount = 0;
-			$this->load->model('sale/order');
-			$data['filter_recurring_id'] = $result['recurring_id'];
-			$orders = $this->model_sale_order->getOrders($data);
-			
-			foreach($orders as $order) $amount += $order['total'];
 			
 			$this->data['orders'][] = array(
 				'recurring_id'      => $result['recurring_id'],
 				'customer'      	=> $result['customer'],
 				'status'        	=> $result['status'],
-				'total'         	=> $this->currency->format($amount, $result['currency_code'], $result['currency_value']),
+				'total'         	=> $this->currency->format($result['amount'], $result['currency_code'], $result['currency_value']),
 				'date'    			=> date($this->language->get('date_format_short'), strtotime($result['date'])),
 				'next_order_date' 	=> date($this->language->get('date_format_short'), strtotime($result['next_order_date'])),
 				'selected'      	=> isset($this->request->post['selected']) && in_array($result['recurring_id'], $this->request->post['selected']),

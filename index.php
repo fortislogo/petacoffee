@@ -112,6 +112,8 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 
 	return true;
 }
+
+
 	
 // Error Handler
 set_error_handler('error_handler');
@@ -138,6 +140,7 @@ $registry->set('session', $session);
 $languages = array();
 
 $query = $db->query("SELECT * FROM `" . DB_PREFIX . "language` WHERE status = '1'"); 
+
 
 foreach ($query->rows as $result) {
 	$languages[$result['code']] = $result;

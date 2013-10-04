@@ -161,23 +161,12 @@ class ControllerAccountRecurring extends Controller {
 	
 	public function update()
 	{
-		$this->cart->clear();			
-		unset($this->session->data['shipping_method']);
-		unset($this->session->data['shipping_methods']);			
-		unset($this->session->data['payment_method']);
-		unset($this->session->data['payment_methods']);
-		unset($this->session->data['coupon']);
-		unset($this->session->data['reward']);
-		unset($this->session->data['voucher']);
-		unset($this->session->data['vouchers']);		
-		unset($this->session->data['recurring']);
-		unset($this->session->data['recurring_frequency']);
+		$this->do_unset();
 		
-		
-		$this->language->load('account/recurring');		
 		$this->load->model('account/recurring');
 		$this->load->model('account/order');
 		
+		$this->load->language('account/recurring');
 
     	$this->document->setTitle($this->language->get('heading_title'));
 		
@@ -336,6 +325,24 @@ class ControllerAccountRecurring extends Controller {
 			$this->data['status'] = $info['status'];
 		}
 		
+		if (isset($this->request->post['coupon']))
+		{
+			$this->data['coupon'] = $this->request->post['coupon'];
+		}
+		else if ($info)
+		{
+			$this->data['coupon'] = $info['coupon'];
+		}
+		
+		if (isset($this->request->post['gift_voucher']))
+		{
+			$this->data['gift_voucher'] = $this->request->post['gift_voucher'];
+		}
+		else if ($info)
+		{
+			$this->data['gift_voucher'] = $info['gift_voucher'];
+		}
+		
 		if (isset($this->request->post['order_product'])) 
 		{
 			$order_products = $this->request->post['order_product'];
@@ -348,6 +355,14 @@ class ControllerAccountRecurring extends Controller {
 		{
 			$order_products = array();
 		}
+		
+		$cc = unserialize($info['cc']);
+		
+		$this->data['card_owner'] = isset($cc['card_owner']) ? $cc['card_owner'] : '';
+		$this->data['card_num'] = isset($cc['card_num']) ? $cc['card_num'] : '';
+		$this->data['exp_date_month'] = isset($cc['exp_date']) ? substr($cc['exp_date'], 0, 2): '01';
+		$this->data['exp_date_year'] = isset($cc['exp_date']) ? substr($cc['exp_date'], -4) : (date("Y") + 1);
+		$this->data['card_code'] = isset($cc['card_code']) ? $cc['card_code'] : '';
 		
 		$this->load->model('catalog/product');
 		
@@ -416,6 +431,38 @@ class ControllerAccountRecurring extends Controller {
 				'total'            => $order_product['total'],
 				'reward'           => $order_product['reward']
 			);
+		}
+		
+		// Coupon
+		if (!empty($info['coupon'])) 
+		{
+			$this->load->model('checkout/coupon');
+			
+			$coupon_info = $this->model_checkout_coupon->getCoupon($info['coupon']);			
+			
+			if ($coupon_info) 
+			{					
+				$this->session->data['coupon'] = $info['coupon'];
+			} 
+			else 
+			{
+				$json['error']['coupon'] = $this->language->get('error_coupon');
+			}
+		}
+		
+		// Voucher
+		if (!empty($info['gift_voucher'])) 
+		{
+			$this->load->model('checkout/voucher');
+			
+			$voucher_info = $this->model_checkout_voucher->getVoucher($info['gift_voucher']);			
+			
+			if ($voucher_info) 
+			{					
+				$this->session->data['voucher'] = $info['gift_voucher'];
+			} else {
+				$json['error']['voucher'] = $this->language->get('error_voucher');
+			}
 		}
 		
 		
@@ -521,8 +568,9 @@ class ControllerAccountRecurring extends Controller {
 			{
 				$this->load->model('payment/' . $result['code']);					
 				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $total); 
-					
-				if ($method) {
+				if ($method) 
+				{
+					$method['form'] = 'catalog/view/theme/default/template/recurring/' . $result['code'] . '.tpl';
 					$method_data[$result['code']] = $method;
 				}
 			}
@@ -543,25 +591,33 @@ class ControllerAccountRecurring extends Controller {
 		
     	$this->data['countries'] = $this->model_localisation_country->getCountries();
 		
+		$this->data['months'] = array();
+		
+		for ($i = 1; $i <= 12; $i++) {
+			$this->data['months'][] = array(
+				'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)), 
+				'value' => sprintf('%02d', $i)
+			);
+		}
+		
+		$today = getdate();
+
+		$this->data['year_expire'] = array();
+
+		for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
+			$this->data['year_expire'][] = array(
+				'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)),
+				'value' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)) 
+			);
+		}
+		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/account/recurring_form.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/account/recurring_form.tpl';
 		} else {
 			$this->template = 'default/template/account/recurring_form.tpl';
 		}
 		
-		$this->cart->clear();
-			
-		unset($this->session->data['shipping_method']);
-		unset($this->session->data['shipping_methods']);			
-		unset($this->session->data['payment_method']);
-		unset($this->session->data['payment_methods']);
-		unset($this->session->data['coupon']);
-		unset($this->session->data['reward']);
-		unset($this->session->data['voucher']);
-		unset($this->session->data['vouchers']);
-		
-		unset($this->session->data['recurring']);
-		unset($this->session->data['recurring_frequency']);
+		$this->do_unset();
 		
 		$this->children = array(
 			'common/column_left',
@@ -889,210 +945,269 @@ class ControllerAccountRecurring extends Controller {
     	}
   	}
 	
-	public function addproduct()
+	private function do_unset()
 	{
-		$this->load->model('account/recurring');
-		$json = array();
+		$this->cart->clear();			
+		unset($this->session->data['shipping_method']);
+		unset($this->session->data['shipping_methods']);			
+		unset($this->session->data['payment_method']);
+		unset($this->session->data['payment_methods']);
+		unset($this->session->data['coupon']);
+		unset($this->session->data['reward']);
+		unset($this->session->data['voucher']);
+		unset($this->session->data['vouchers']);		
+		unset($this->session->data['recurring']);
+		unset($this->session->data['recurring_frequency']);
+		unset($this->session->data['card']);
+	}
+	
+	public function json()
+	{
+		$this->do_unset();
 		
-		if (isset($this->request->post['product']))
+		$this->session->data['card'] = array('owner' => '', 'num' => '', 'code' => '', 'exp_month' => '', 'exp_year' => '');
+		
+		
+		if (isset($this->request->post['cc_owner']))
 		{
-			$this->model_account_recurring->addProduct($this->request->post, $this->request->get['id']);
-			
-			$results = $this->model_account_recurring->getRecurringOrderProducts($this->request->get['id']);
-			$json['order_product'] = array();
-			$this->load->model('catalog/product');
+			$this->session->data['card']['owner'] = $this->request->post['cc_owner'];
+		}
 		
-			foreach($results as $result)
+		if (isset($this->request->post['cc_number']))
+		{
+			$this->session->data['card']['num'] = $this->request->post['cc_number'];
+		}
+		
+		if (isset($this->request->post['cc_cvv2']))
+		{
+			$this->session->data['card']['code'] = $this->request->post['cc_cvv2'];
+		}
+		
+		if (isset($this->request->post['cc_expire_date_month']))
+		{
+			$this->session->data['card']['exp_month'] = $this->request->post['cc_expire_date_month'];
+		}
+		
+		if (isset($this->request->post['cc_expire_date_year']))
+		{
+			$this->session->data['card']['exp_year'] = $this->request->post['cc_expire_date_year'];
+		}
+		
+		$json['products'] = array();
+		
+		//print_r($this->request->post);
+		
+		if (isset($this->request->post['order_product']))
+		{
+			foreach($this->request->post['order_product'] as $order_product)
 			{
-				$product = $this->model_catalog_product->getProduct($result['product_id']);			
-				$result['name'] = $product['name'];			
-				$result['model'] = $product['model'];	
-				$result['remove'] = $this->url->link('account/recurring/remove', 'id=' . $this->request->get['id'] . '&recurring_product_id=' . $result['recurring_product_id']);
-				// Display prices
-				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
-				} else {
-					$price = false;
-				}
+				$option = array();
 				
-				// Display prices
-				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$total = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $result['quantity']);
-				} else {
-					$total = false;
-				}
-			
-				$options = $this->model_account_recurring->getOrderProductOptions($result['recurring_product_id']);
-				
-				$option_data = array();
-				$option_price = 0;
-				$option_points = 0;
-				$option_weight = 0;
-			
-       			foreach ($options as $option) 
+				if (isset($order_product['order_option']))
 				{
-					$product_option_id = $option['product_option_id'];
-					$option_value = $option['product_option_value_id'];
-				
-					$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM " . DB_PREFIX . "product_option po LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id) LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$result['product_id'] . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-						
-					if ($option_query->num_rows) 
+					foreach($order_product['order_option'] as $order_option)
 					{
-						if ($option_query->row['type'] == 'select' || $option_query->row['type'] == 'radio' || $option_query->row['type'] == 'image') 
+						if ($order_option['type'] == 'select')
 						{
-							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix FROM " . DB_PREFIX . "product_option_value pov LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$option_value . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-								
-							if ($option_value_query->num_rows) 
-							{
-								if ($option_value_query->row['price_prefix'] == '+') 
-								{
-									$option_price += $option_value_query->row['price'];
-								}
-								elseif ($option_value_query->row['price_prefix'] == '-') 
-								{
-									$option_price -= $option_value_query->row['price'];
-								}
-	
-								if ($option_value_query->row['points_prefix'] == '+') 
-								{
-									$option_points += $option_value_query->row['points'];
-								}
-								elseif ($option_value_query->row['points_prefix'] == '-') 
-								{
-									$option_points -= $option_value_query->row['points'];
-								}
-																
-								if ($option_value_query->row['weight_prefix'] == '+') 
-								{
-									$option_weight += $option_value_query->row['weight'];
-								}
-								elseif ($option_value_query->row['weight_prefix'] == '-') 
-								{
-									$option_weight -= $option_value_query->row['weight'];
-								}
-									
-								if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $result['quantity']))) 
-								{
-									$stock = false;
-								}
-									
-								$option_data[] = array(
-									'product_option_id'       => $product_option_id,
-									'product_option_value_id' => $option_value,
-									'option_id'               => $option_query->row['option_id'],
-									'option_value_id'         => $option_value_query->row['option_value_id'],
-									'name'                    => $option_query->row['name'],
-									'option_value'            => $option_value_query->row['name'],
-									'type'                    => $option_query->row['type'],
-									'quantity'                => $option_value_query->row['quantity'],
-									'subtract'                => $option_value_query->row['subtract'],
-									'price'                   => $option_value_query->row['price'],
-									'price_prefix'            => $option_value_query->row['price_prefix'],
-									'points'                  => $option_value_query->row['points'],
-									'points_prefix'           => $option_value_query->row['points_prefix'],									
-									'weight'                  => $option_value_query->row['weight'],
-									'weight_prefix'           => $option_value_query->row['weight_prefix']
-								);								
-							}
-						} 
-						elseif ($option_query->row['type'] == 'checkbox' && is_array($option_value)) 
+							$option[$order_option['product_option_id']] = $order_option['product_option_value_id'];
+						}
+						else if ($order_option['type'] == 'checkbox')
 						{
-							foreach ($option_value as $product_option_value_id) 
-							{
-								$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix FROM " . DB_PREFIX . "product_option_value pov LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$product_option_value_id . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-									
-								if ($option_value_query->num_rows) 
-								{
-									if ($option_value_query->row['price_prefix'] == '+') 
-									{
-										$option_price += $option_value_query->row['price'];
-									} 
-									elseif ($option_value_query->row['price_prefix'] == '-') 
-									{
-										$option_price -= $option_value_query->row['price'];
-									}
-	
-									if ($option_value_query->row['points_prefix'] == '+') 
-									{
-										$option_points += $option_value_query->row['points'];
-									} 
-									elseif ($option_value_query->row['points_prefix'] == '-') 
-									{
-										$option_points -= $option_value_query->row['points'];
-									}
-																	
-									if ($option_value_query->row['weight_prefix'] == '+') 
-									{
-										$option_weight += $option_value_query->row['weight'];
-									} 
-									elseif ($option_value_query->row['weight_prefix'] == '-') 
-									{
-										$option_weight -= $option_value_query->row['weight'];
-									}
-									
-									if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $result['quantity']))) 
-									{
-										$stock = false;
-									}
-										
-									$option_data[] = array(
-										'product_option_id'       => $product_option_id,
-										'product_option_value_id' => $product_option_value_id,
-										'option_id'               => $option_query->row['option_id'],
-										'option_value_id'         => $option_value_query->row['option_value_id'],
-										'name'                    => $option_query->row['name'],
-										'option_value'            => $option_value_query->row['name'],
-										'type'                    => $option_query->row['type'],
-										'quantity'                => $option_value_query->row['quantity'],
-										'subtract'                => $option_value_query->row['subtract'],
-										'price'                   => $option_value_query->row['price'],
-										'price_prefix'            => $option_value_query->row['price_prefix'],
-										'points'                  => $option_value_query->row['points'],
-										'points_prefix'           => $option_value_query->row['points_prefix'],
-										'weight'                  => $option_value_query->row['weight'],
-										'weight_prefix'           => $option_value_query->row['weight_prefix']
-									);								
-								}
-							}						
-						} 
-						elseif ($option_query->row['type'] == 'text' || 
-								$option_query->row['type'] == 'textarea' || 
-								$option_query->row['type'] == 'file' || 
-								$option_query->row['type'] == 'date' || 
-								$option_query->row['type'] == 'datetime' || 
-								$option_query->row['type'] == 'time') 
-						{
-							$option_data[] = array(
-								'product_option_id'       => $product_option_id,
-								'product_option_value_id' => '',
-								'option_id'               => $option_query->row['option_id'],
-								'option_value_id'         => '',
-								'name'                    => $option_query->row['name'],
-								'option_value'            => $option_value,
-								'type'                    => $option_query->row['type'],
-								'quantity'                => '',
-								'subtract'                => '',
-								'price'                   => '',
-								'price_prefix'            => '',
-								'points'                  => '',
-								'points_prefix'           => '',								
-								'weight'                  => '',
-								'weight_prefix'           => ''
-							);						
+							$option[$order_option['product_option_id']] = array($order_option['product_option_value_id']);
 						}
 					}
-				}	 
+				}				
 			
-				$result['price'] = $price;
-				$result['total'] = $total;
-				$result['option'] = $option_data;
-				$json['order_product'][] = $result;
+				$this->cart->add($order_product['product_id'], $order_product['quantity'], $option);
 			}
 		}
 		
-		//print_r($json);
+		if ($this->request->post['product_id'] > 0)
+		{
+			$option = array();
+			if (isset($this->request->post['option'])) $option = $this->request->post['option'];
+			$this->cart->add($this->request->post['product_id'], $this->request->post['quantity'], $option);
+		}
+		
+		$results = $this->cart->getProducts();
+		
+		foreach($results as $order_product)
+		{
+			$order_option = array();
+			
+			//print_r($order_product);
+			
+			foreach ($order_product['option'] as $option) 
+			{
+				if ($option['type'] != 'file') 
+				{
+					$value = $option['option_value'];	
+				} 
+				else 
+				{
+					$filename = $this->encryption->decrypt($option['option_value']);						
+					$value = utf8_substr($filename, 0, utf8_strrpos($filename, '.'));
+				}
+					
+				$order_option[] = array(
+					'product_option_id' => $option['product_option_id'],
+					'product_option_value_id' => $option['product_option_value_id'],
+					'type' => $option['type'],
+					'name'  => $option['name'],
+					'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value)
+				);
+        	}
+			
+			$json['products'][] = array(
+				'product_id'       => $order_product['product_id'],
+				'name'             => $order_product['name'],
+				'model'            => $order_product['model'],
+				'option'           => $order_option,
+				'quantity'         => $order_product['quantity'],
+				'price'            => $order_product['price'],
+				'total'            => $order_product['total'],
+				'reward'           => $order_product['reward']
+			);
+		}
+		
+		$this->load->model('account/address');		
+		$this->data['addresses'] = $this->model_account_address->getAddresses();
+		
+		$shipping_address = $this->model_account_address->getAddress($this->request->post['shipping_address_id']);
+		$payment_address  = $this->model_account_address->getAddress($this->request->post['payment_address_id']);	
+		
+		$quote_data = array();			
+		$this->load->model('setting/extension');			
+		$results = $this->model_setting_extension->getExtensions('shipping');			
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('shipping/' . $result['code']);					
+				$quote = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address); 
+		
+				if ($quote) 
+				{
+					$quote_data[$result['code']] = array( 
+						'title'      => $quote['title'],
+						'quote'      => $quote['quote'], 
+						'sort_order' => $quote['sort_order'],
+						'error'      => $quote['error']
+					);
+				}
+			}
+		}
+	
+		$sort_order = array();
+		
+		foreach ($quote_data as $key => $value) 
+		{
+			$sort_order[$key] = $value['sort_order'];
+			
+			foreach($value['quote'] as $quote)
+			{
+				if ($quote['code'] == $this->request->post['shipping_method'])
+				{
+					$title = $quote['title'];
+					$title = str_replace('<sup>®</sup>','', $title);
+					$quote['title'] = $title;
+					$this->session->data['shipping_method'] = $quote;
+				}
+			}
+			
+		}
+	
+		array_multisort($sort_order, SORT_ASC, $quote_data);
+			
+		$json['shipping_methods'] = $quote_data;
+		
+		// Totals
+		$total_data = array();					
+		$total = 0;
+		$this->session->data['recurring'] = 1;
+		$this->session->data['recurring_frequency'] = $this->request->post['recurring'];
+		
+		// Coupon
+		if (!empty($this->request->post['coupon'])) 
+		{
+			$this->load->model('checkout/coupon');
+			
+			$coupon_info = $this->model_checkout_coupon->getCoupon($this->request->post['coupon']);			
+			
+			if ($coupon_info) 
+			{					
+				$this->session->data['coupon'] = $this->request->post['coupon'];
+			} 
+			else 
+			{
+				$json['error']['coupon'] = $this->language->get('error_coupon');
+			}
+		}
+		
+		
+		$taxes = $this->cart->getTaxes();
+			
+		$this->load->model('setting/extension');
+			
+		$sort_order = array(); 
+		
+		$results = $this->model_setting_extension->getExtensions('total');
+		
+		
+		foreach ($results as $key => $value) 
+		{
+			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+		}
+			
+		array_multisort($sort_order, SORT_ASC, $results);
+			
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('total/' . $result['code']);		
+				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+			}
+		}
+		
+		$method_data = array();
+			
+		$this->load->model('setting/extension');
+			
+		$results = $this->model_setting_extension->getExtensions('payment');
+		
+		foreach ($results as $result) 
+		{
+			if ($this->config->get($result['code'] . '_status')) 
+			{
+				$this->load->model('payment/' . $result['code']);					
+				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $total); 
+				if ($method) 
+				{
+					$method['form'] = $this->getChild('recurring/' . $method['code']);
+					$method_data[] = $method;
+				}
+			}
+		}
+
+		$sort_order = array(); 
+		  
+		foreach ($method_data as $key => $value) 
+		{
+			$sort_order[$key] = $value['sort_order'];
+		}
+	
+		array_multisort($sort_order, SORT_ASC, $method_data);			
+			
+		$json['payment_methods'] = $method_data;	
+		$json['order_totals'] = $total_data;
+		
+		$this->do_unset();
 		
 		echo json_encode($json);
+		
 	}
+	
+	
 }
 ?>

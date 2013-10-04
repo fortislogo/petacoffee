@@ -406,14 +406,49 @@ class ControllerCommonHome extends Controller {
 	
 	public function import()
 	{
-		//$this->import_category();
-		//$this->import_product();
-		//$this->import_product_options();
-		//$this->import_orders();
-		//$this->import_orders_items();
-		//$this->import_customers();
-		$this->import_temp_orders();
+		/*$this->import_category();
+		$this->import_product();
+		$this->import_product_options();
+		$this->import_orders();
+		$this->import_orders_items();
+		$this->import_customers();
+		$this->import_temp_orders();*/
 	}
+	
+	public function update_customer_password()
+	{
+		$query = $this->db->query("select * from xcart_customers");
+		$result = $query->rows;
+		foreach($result as $row)
+		{
+			$email = $row['email'];
+			$pass = $row['password'];
+			
+			//echo sprintf("email:%s password: %s<br />", $email, $pass);
+			
+			$id = $this->getCustomerIdByEmail($email);
+			
+			if ($id > 0)
+			{
+				$this->db->query("update customer set password = '".$pass."' where customer_id = " . $id);
+			}
+		}
+	}
+	
+	function getCustomerIdByEmail($email)
+	{
+		$query = $this->db->query("select * from customer where email = '".$email."'");
+		$result = $query->row;
+		$id = 0;
+		if ($result)
+		{
+			$id = $result['customer_id'];
+		}
+		
+		return $id;
+	}
+	
+	/*
 	
 	public function import_customers()
 	{
@@ -580,6 +615,7 @@ class ControllerCommonHome extends Controller {
 												'tag' => $data[7]
 											)
 									 	),
+									 'recurring' => 1,
 									  'product_store' => array(0),
 									  'product_category' => array($category_id)
 									 );
@@ -667,7 +703,6 @@ class ControllerCommonHome extends Controller {
 	{
 		if (isset($data['product_option'])) {
 			foreach ($data['product_option'] as $product_option) {
-				print_r($product_option);
 				if ($product_option['type'] == 'select' || $product_option['type'] == 'radio' || $product_option['type'] == 'checkbox' || $product_option['type'] == 'image') {
 					$this->db->query("INSERT INTO " . DB_PREFIX . "product_option SET product_id = '" . (int)$product_id . "', option_id = '" . (int)$product_option['option_id'] . "', required = '" . (int)$product_option['required'] . "'");
 				
@@ -974,7 +1009,8 @@ class ControllerCommonHome extends Controller {
 			
 			return $this->getCustomerId($data);
 		}
+		
 				
-	}
+	}*/
 }
 ?>
