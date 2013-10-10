@@ -232,6 +232,7 @@ class ControllerAccountRecurring extends Controller {
 		$this->data['button_upload'] = $this->language->get('button_upload');
 		$this->data['token'] = md5(rand());
 		$this->data['text_no_results'] = $this->language->get('text_no_results');
+		$this->data['button_remove'] = $this->language->get('button_remove');
 		
 		$this->session->data['recurring'] = 1;
 		$this->session->data['recurring_frequency'] = $info['recurring'];
@@ -1092,6 +1093,34 @@ class ControllerAccountRecurring extends Controller {
 		
 		//print_r($json);
 		
+		echo json_encode($json);
+	}
+	
+	private function unset_session()
+	{
+		$this->cart->clear();
+			
+		unset($this->session->data['shipping_method']);
+		unset($this->session->data['shipping_methods']);			
+		unset($this->session->data['payment_method']);
+		unset($this->session->data['payment_methods']);
+		unset($this->session->data['coupon']);
+		unset($this->session->data['reward']);
+		unset($this->session->data['voucher']);
+		unset($this->session->data['vouchers']);
+		
+		unset($this->session->data['recurring']);
+		unset($this->session->data['recurring_frequency']);
+	}
+	
+	public function json()
+	{
+		$this->unset_session();
+		$json = array();
+		
+		print_r($this->request->post);
+		
+		$this->unset_session();
 		echo json_encode($json);
 	}
 }
