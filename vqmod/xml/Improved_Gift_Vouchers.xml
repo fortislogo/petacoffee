@@ -1,0 +1,1240 @@
+﻿<modification>
+    <id>Improved Gift Vouchers</id>
+    <version>1.2.1</version>
+    <vqmver>2.1.7</vqmver>
+    <author>doug@opencartworld.com</author>
+
+    <!-- ******************************************* START: ADMIN COMMON -->
+
+    <file name="admin/language/english/common/home.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['error_voucher'] = 'Gift Vouchers extension has not been configured yet! <a href="%s">Configure Now</a>';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/language/english/common/header.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['text_mass_generate'] = 'Mass Generate';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/header.php">
+        <operation>
+            <search position="after"><![CDATA[
+        $this->data['heading_title'] = $this->language->get('heading_title');
+      ]]></search>
+            <add><![CDATA[
+        $this->data['text_mass_generate'] = $this->language->get('text_mass_generate');
+      ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+      $this->data['setting'] = $this->url->link('setting/store', 'token=' . $this->session->data['token'], 'SSL');
+      ]]></search>
+            <add><![CDATA[
+      $this->data['voucher_setting'] = $this->url->link('total/voucher', 'token=' . $this->session->data['token'], 'SSL');
+      $this->data['voucher_generate'] = $this->url->link('sale/voucher_generate', 'token=' . $this->session->data['token'], 'SSL');
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/header.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+      <li><a href="<?php echo $voucher_theme; ?>"><?php echo $text_voucher_theme; ?></a></li>
+      ]]></search>
+            <add><![CDATA[
+      <li><a href="<?php echo $voucher_generate; ?>"><?php echo $text_mass_generate; ?></a></li>
+      <li><a href="<?php echo $voucher_setting; ?>"><?php echo $text_setting; ?></a></li>
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/home.php">
+        <operation>
+            <search position="before"><![CDATA[
+      if (is_dir(dirname(DIR_APPLICATION) . '/install')) {
+      ]]></search>
+            <add><![CDATA[
+      if (!$this->config->get('code_chars')) {
+        $this->data['error_voucher'] = sprintf($this->language->get('error_voucher'),$this->url->link('total/voucher', 'token=' . $this->session->data['token'], 'SSL'));;
+      } else {
+        $this->data['error_voucher'] = '';
+      }
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/home.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+      <?php if ($error_install) { ?>
+      ]]></search>
+            <add><![CDATA[
+      <?php if ($error_voucher) { ?>
+      <div class="warning"><?php echo $error_voucher; ?></div>
+      <?php } ?>
+      ]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: ADMIN COMMON -->
+
+    <!-- ******************************************* START: ORDER FORM -->
+
+    <file name="admin/language/english/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['text_voucher'] = 'Vouchers';
+      $_['column_voucher_code'] = 'Code';
+      $_['column_voucher_from'] = 'From';
+      $_['column_voucher_to'] = 'To';
+      $_['column_voucher_amount'] = 'Amount';
+      $_['column_voucher_theme'] = 'Theme';
+      $_['column_voucher_status'] = 'Status';
+      $_['text_send'] = 'Send';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+      $this->data['text_download'] = $this->language->get('text_download');
+      ]]></search>
+            <add><![CDATA[
+      $this->data['text_voucher'] = $this->language->get('text_voucher');
+      $this->data['column_voucher_code'] = $this->language->get('column_voucher_code');
+      $this->data['column_voucher_from'] = $this->language->get('column_voucher_from');
+      $this->data['column_voucher_to'] = $this->language->get('column_voucher_to');
+      $this->data['column_voucher_amount'] = $this->language->get('column_voucher_amount');
+      $this->data['column_voucher_theme'] = $this->language->get('column_voucher_theme');
+      $this->data['column_voucher_status'] = $this->language->get('column_voucher_status');
+      $this->data['column_action'] = $this->language->get('column_action');
+      $this->data['text_edit'] = $this->language->get('text_edit');
+      $this->data['text_send'] = $this->language->get('text_send');
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="replace" offset="10"><![CDATA[
+      $this->data['vouchers'] = array();
+      ]]></search>
+            <add><![CDATA[
+      $vouchers = $this->model_sale_order->getOrderVouchers($this->request->get['order_id']);
+
+      $this->data['vouchers'] = array();
+
+      foreach ($vouchers as $voucher)
+      {
+        $this->data['vouchers'][] = array(
+          'voucher_id' => $voucher['voucher_id'],
+          'code' => $voucher['code'],
+          'from' => $voucher['from_name'],
+          'to' => $voucher['to_name'],
+          'amount' => $this->currency->format($voucher['amount']),
+          'theme' => $voucher['theme'],
+          'description' => $voucher['description'],
+          'status' => $voucher['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+          'href' => $this->url->link('sale/voucher/update', 'token=' . $this->session->data['token'] . '&voucher_id=' . $voucher['voucher_id'], 'SSL')
+        );
+      }
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/order_info.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+      <?php if ($downloads) { ?>
+      ]]></search>
+            <add><![CDATA[
+      <?php if ($vouchers) { ?>
+      <h3><?php echo $text_voucher; ?></h3>
+      <table class="list">
+        <thead>
+          <tr>
+            <td class="left"><b><?php echo $column_voucher_code; ?></b></td>
+            <td class="left"><b><?php echo $column_voucher_from; ?></b></td>
+            <td class="left"><b><?php echo $column_voucher_to; ?></b></td>
+            <td class="right"><b><?php echo $column_voucher_amount; ?></b></td>
+            <td class="left"><b><?php echo $column_voucher_theme; ?></b></td>
+            <td class="left"><b><?php echo $column_voucher_status; ?></b></td>
+            <td class="left"><b><?php echo $column_action; ?></b></td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($vouchers as $voucher) { ?>
+          <tr>
+            <td class="left"><?php echo $voucher['code']; ?></td>
+            <td class="left"><?php echo $voucher['from']; ?></td>
+            <td class="left"><?php echo $voucher['to']; ?></td>
+            <td class="right"><?php echo $voucher['amount']; ?></td>
+            <td class="left"><?php echo $voucher['theme']; ?></td>
+            <td class="left"><?php echo $voucher['status']; ?></td>
+            <td class="right">
+              [ <a onclick="sendVoucher('<?php echo $voucher['voucher_id']; ?>');"><?php echo $text_send; ?></a> ] [ <a href="<?php echo $voucher['href']; ?>"><?php echo $text_edit; ?></a> ]
+            </td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+      <?php } ?>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+      <script type="text/javascript"><!--
+      ]]></search>
+            <add><![CDATA[
+      <script type="text/javascript"><!--
+      function sendVoucher(voucher_id) {
+        $.ajax({
+          type: 'POST',
+          url: 'index.php?route=sale/voucher/send&token=<?php echo $token; ?>&voucher_id=' + voucher_id,
+          dataType: 'json',
+          beforeSend: function() {
+            $('.success, .warning').remove();
+            $('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $text_wait; ?></div>');
+          },
+          complete: function() {
+            $('.attention').remove();
+          },
+          success: function(json) {
+            if (json['error']) {
+              $('.box').before('<div class="warning">' + json['error'] + '</div>');
+            }
+
+            if (json['success']) {
+              $('.box').before('<div class="success">' + json['success'] + '</div>');
+            }
+          }
+        });
+      }
+      //--></script>
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="after"><![CDATA[
+      public function addOrderHistory($order_id, $data) {
+      ]]></search>
+            <add><![CDATA[
+
+      if (isset($data['voucher_comment']))
+      {
+        $data['comment'] = $data['voucher_comment'];
+      }
+
+      $order_info = $this->getOrder($order_id);
+
+      // dont send multiple emails if status hasnt changed
+      $isAutoEmailEligible = $data['order_status_id'] != $order_info['order_status_id'] ? true : false;
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+       if ($this->config->get('config_complete_status_id') == $data['order_status_id']) {
+     ]]></search>
+            <add><![CDATA[
+       if ($this->config->get('config_complete_status_id') == $data['order_status_id'] && $this->config->get('auto_email_voucher') && $isAutoEmailEligible) {
+     ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/voucher.php">
+        <operation>
+            <search position="after"><![CDATA[
+      if ($order_info) {
+      ]]></search>
+            <add><![CDATA[
+      $this->language->load('sale/voucher');
+
+      $data = array(
+        'voucher_comment' => $this->language->get('text_sent'),
+        'order_status_id' => $order_info['order_status_id'],
+        'notify' => 0
+      );
+
+      $this->model_sale_order->addOrderHistory($order_id, $data);
+      ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
+    		]]></search>
+            <add><![CDATA[
+                $query = $this->db->query("SELECT v.voucher_id, v.code, ov.description, v.from_name, v.from_email, v.to_name, v.to_email, v.amount, vtd.name AS theme, v.status, v.date_added FROM " . DB_PREFIX . "voucher v LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (v.voucher_theme_id = vtd.voucher_theme_id) LEFT JOIN " . DB_PREFIX . "order_voucher ov ON (v.voucher_id = ov.voucher_id) WHERE v.order_id = '" . (int)$order_id . "' AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+    		]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: ORDER FORM -->
+
+    <!-- ******************************************* START: SETTINGS -->
+
+    <file name="admin/language/english/total/voucher.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['entry_allow_remove'] = 'Allow Voucher Removal:<br/><span class="help">Allow customers to remove vouchers from their order.</span>';
+      $_['entry_allow_check_balance'] = 'Allow Balance Check:<br/><span class="help">Allow customers to check the balance of their vouchers.</span>';
+      $_['entry_show_during_checkout'] = 'Redeem During Checkout:<br/><span class="help">Allow customers to redeem vouchers during the checkout process. Without this, customers can only redeem on the shopping cart page.</span>';
+      $_['entry_amount_range'] = 'Voucher Amount Range:<br/><span class="help">Value of ordered vouchers must be between these amounts.</span>';
+      $_['entry_default_amount'] = 'Default Voucher Amount:<br/><span class="help">Default voucher amount when a customer visits the purchase page.</span>';
+      $_['entry_code_chars'] = 'Code Characters:<br/><span class="help">Allowable characters in the automatically generated gift voucher codes. Note: Characters that can easily be confused for others are removed by default.</span>';
+      $_['entry_code_length'] = 'Code Length:<br/><span class="help">Length of the automatically generated gift voucher codes.</span>';
+      $_['entry_auto_email_voucher'] = 'Auto E-mail:<br/><span class="help">Automatically e-mail the customer the voucher once order status set as complete.</span>';
+      $_['entry_valid_for_shipping'] = 'Valid For Shipping:<br/><span class="help">Gift vouchers can be used towards shipping costs.</span>';
+      $_['entry_valid_for_tax'] = 'Valid For Tax:<br/><span class="help">Gift vouchers can be used towards taxes.</span>';
+
+      $_['error_min_amount'] = 'Minimum amount must be a number greater than zero.';
+      $_['error_max_amount'] = 'Maximum amount must be a number greater than zero.';
+      $_['error_default_amount'] = 'Default amount must be a number greater than zero.';
+      $_['error_code_chars'] = 'A minimum of 3 characters is required.';
+      $_['error_code_length'] = 'Code length must be a number between 3 and 10.';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/total/voucher.php">
+        <operation>
+            <search position="after"><![CDATA[
+      $this->data['heading_title'] = $this->language->get('heading_title');
+      ]]></search>
+            <add><![CDATA[
+      $this->data['entry_allow_remove'] = $this->language->get('entry_allow_remove');
+      $this->data['entry_allow_check_balance'] = $this->language->get('entry_allow_check_balance');
+      $this->data['entry_show_during_checkout'] = $this->language->get('entry_show_during_checkout');
+      $this->data['entry_amount_range'] = $this->language->get('entry_amount_range');
+      $this->data['entry_default_amount'] = $this->language->get('entry_default_amount');
+      $this->data['entry_code_chars'] = $this->language->get('entry_code_chars');
+      $this->data['entry_code_length'] = $this->language->get('entry_code_length');
+      $this->data['entry_auto_email_voucher'] = $this->language->get('entry_auto_email_voucher');
+      $this->data['entry_valid_for_shipping'] = $this->language->get('entry_valid_for_shipping');
+      $this->data['entry_valid_for_tax'] = $this->language->get('entry_valid_for_tax');
+      ]]></add>
+        </operation>
+        <operation error="log">
+            <search position="after"><![CDATA[
+        		$this->model_setting_setting->editSetting('voucher', $this->request->post);
+        	]]></search>
+            <add><![CDATA[
+                $this->db->query("UPDATE " . DB_PREFIX . "setting SET `value` = '" . (float)$this->request->post['min_amount'] . "' WHERE `key` = 'config_voucher_min'");
+                $this->db->query("UPDATE " . DB_PREFIX . "setting SET `value` = '" . (float)$this->request->post['max_amount'] . "' WHERE `key` = 'config_voucher_max'");
+        	]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+      if (isset($this->request->post['voucher_status'])) {
+      ]]></search>
+            <add><![CDATA[
+      if (isset($this->request->post['allow_remove'])) {
+        $this->data['allow_remove'] = $this->request->post['allow_remove'];
+      } elseif ($this->config->get('allow_remove') != null) {
+        $this->data['allow_remove'] = $this->config->get('allow_remove');
+      } else {
+        $this->data['allow_remove'] =  1;
+      }
+      if (isset($this->request->post['allow_check_balance'])) {
+        $this->data['allow_check_balance'] = $this->request->post['allow_check_balance'];
+      } elseif ($this->config->get('allow_check_balance') != null) {
+        $this->data['allow_check_balance'] = $this->config->get('allow_check_balance');
+      } else {
+        $this->data['allow_check_balance'] =  1;
+      }
+      if (isset($this->request->post['show_during_checkout'])) {
+        $this->data['show_during_checkout'] = $this->request->post['show_during_checkout'];
+      } elseif ($this->config->get('show_during_checkout') != null) {
+        $this->data['show_during_checkout'] = $this->config->get('show_during_checkout');
+      } else {
+        $this->data['show_during_checkout'] =  1;
+      }
+      if (isset($this->request->post['min_amount'])) {
+        $this->data['min_amount'] = $this->request->post['min_amount'];
+      } elseif ($this->config->get('min_amount')) {
+        $this->data['min_amount'] = $this->config->get('config_voucher_min');
+      } else {
+        $this->data['min_amount'] = '1.00';
+      }
+      if (isset($this->request->post['max_amount'])) {
+        $this->data['max_amount'] = $this->request->post['max_amount'];
+      } elseif ($this->config->get('max_amount')) {
+        $this->data['max_amount'] = $this->config->get('config_voucher_max');
+      } else {
+        $this->data['max_amount'] = '1000.00';
+      }
+      if (isset($this->request->post['default_amount'])) {
+        $this->data['default_amount'] = $this->request->post['default_amount'];
+      } elseif ($this->config->get('default_amount')) {
+        $this->data['default_amount'] = $this->config->get('default_amount');
+      } else {
+        $this->data['default_amount'] = '25.00';
+      }
+      if (isset($this->request->post['code_chars'])) {
+        $this->data['code_chars'] = $this->request->post['code_chars'];
+      } elseif ($this->config->get('code_chars')) {
+        $this->data['code_chars'] = $this->config->get('code_chars');
+      } else {
+        $this->data['code_chars'] = 'ABCDEFGHJKMNPRSTWXYZ123456789';
+      }
+      if (isset($this->request->post['code_length'])) {
+        $this->data['code_length'] = $this->request->post['code_length'];
+      } elseif ($this->config->get('code_length')) {
+        $this->data['code_length'] = $this->config->get('code_length');
+      } else {
+        $this->data['code_length'] = 7;
+      }
+      if (isset($this->request->post['auto_email_voucher'])) {
+        $this->data['auto_email_voucher'] = $this->request->post['auto_email_voucher'];
+      } elseif ($this->config->get('auto_email_voucher') != null) {
+        $this->data['auto_email_voucher'] = $this->config->get('auto_email_voucher');
+      } else {
+        $this->data['auto_email_voucher'] = 1;
+      }
+      if (isset($this->request->post['valid_for_shipping'])) {
+        $this->data['valid_for_shipping'] = $this->request->post['valid_for_shipping'];
+      } else {
+        $this->data['valid_for_shipping'] = $this->config->get('valid_for_shipping');
+      }
+      if (isset($this->request->post['valid_for_tax'])) {
+        $this->data['valid_for_tax'] = $this->request->post['valid_for_tax'];
+      } else {
+        $this->data['valid_for_tax'] = $this->config->get('valid_for_tax');
+      }
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+      if (isset($this->error['warning'])) {
+      ]]></search>
+            <add><![CDATA[
+      if (isset($this->error['min_amount'])) {
+        $this->data['error_min_amount'] = $this->error['min_amount'];
+      } else {
+        $this->data['error_min_amount'] = '';
+      }
+      if (isset($this->error['max_amount'])) {
+        $this->data['error_max_amount'] = $this->error['max_amount'];
+      } else {
+        $this->data['error_max_amount'] = '';
+      }
+      if (isset($this->error['default_amount'])) {
+        $this->data['error_default_amount'] = $this->error['default_amount'];
+      } else {
+        $this->data['error_default_amount'] = '';
+      }
+      if (isset($this->error['code_chars'])) {
+        $this->data['error_code_chars'] = $this->error['code_chars'];
+      } else {
+        $this->data['error_code_chars'] = '';
+      }
+      if (isset($this->error['code_length'])) {
+        $this->data['error_code_length'] = $this->error['code_length'];
+      } else {
+        $this->data['error_code_length'] = '';
+      }
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+      protected function validate() {
+      ]]></search>
+            <add><![CDATA[
+      if ((strlen(utf8_decode($this->request->post['min_amount']) < 1)) || $this->request->post['min_amount'] <= 0 || !is_numeric($this->request->post['min_amount']) ) {
+      		$this->error['min_amount'] = $this->language->get('error_min_amount');
+    	}
+    	if ((strlen(utf8_decode($this->request->post['max_amount']) < 1)) || $this->request->post['max_amount'] <= 0 || !is_numeric($this->request->post['max_amount']) ) {
+      		$this->error['max_amount'] = $this->language->get('error_max_amount');
+    	}
+    	if ((strlen(utf8_decode($this->request->post['default_amount']) < 1)) || $this->request->post['default_amount'] <= 0 || !is_numeric($this->request->post['default_amount']) ) {
+      		$this->error['default_amount'] = $this->language->get('error_default_amount');
+    	}
+    	if ((strlen(utf8_decode($this->request->post['code_chars'])) < 3)) {
+      		$this->error['code_chars'] = $this->language->get('error_code_chars');
+    	}
+    	if ((strlen(utf8_decode($this->request->post['code_length']) < 1)) || $this->request->post['code_length'] < 3 || $this->request->post['code_length'] > 10 || !is_numeric($this->request->post['code_length']) ) {
+      		$this->error['code_length'] = $this->language->get('error_code_length');
+    	}
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/total/voucher.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+      <table class="form">
+      ]]></search>
+            <add><![CDATA[
+      <tr>
+        <td><span class="required">*</span> <?php echo $entry_code_chars; ?></td>
+        <td><input type="text" name="code_chars" value="<?php echo $code_chars; ?>" size="50" />
+              <?php if ($error_code_chars) { ?>
+              <span class="error"><?php echo $error_code_chars; ?></span>
+              <?php } ?></td>
+      </tr>
+      <tr>
+        <td><span class="required">*</span> <?php echo $entry_code_length; ?></td>
+        <td><input type="text" name="code_length" value="<?php echo $code_length; ?>" size="1" />
+              <?php if ($error_code_length) { ?>
+              <span class="error"><?php echo $error_code_length; ?></span>
+              <?php } ?></td>
+      </tr>
+      <tr>
+        <td><span class="required">*</span> <?php echo $entry_default_amount; ?></td>
+        <td><input type="text" name="default_amount" value="<?php echo $default_amount; ?>" size="10" />
+              <?php if ($error_default_amount) { ?>
+              <span class="error"><?php echo $error_default_amount; ?></span>
+              <?php } ?></td>
+      </tr>
+      <tr>
+        <td><span class="required">*</span> <?php echo $entry_amount_range; ?></td>
+        <td><input type="text" name="min_amount" value="<?php echo $min_amount; ?>" size="10" /> - <input type="text" name="max_amount" value="<?php echo $max_amount; ?>" size="10" />
+              <?php if ($error_min_amount) { ?>
+              <span class="error"><?php echo $error_min_amount; ?></span>
+              <?php } ?>
+              <?php if ($error_max_amount) { ?>
+              <span class="error"><?php echo $error_max_amount; ?></span>
+              <?php } ?></td>
+      </tr>
+      <tr>
+        <td><?php echo $entry_auto_email_voucher; ?></td>
+        <td><select name="auto_email_voucher">
+            <?php if ($auto_email_voucher) { ?>
+            <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+            <option value="0"><?php echo $text_disabled; ?></option>
+            <?php } else { ?>
+            <option value="1"><?php echo $text_enabled; ?></option>
+            <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+            <?php } ?>
+          </select></td>
+      </tr>
+      <tr>
+        <td><?php echo $entry_valid_for_shipping; ?></td>
+        <td><select name="valid_for_shipping">
+            <?php if ($valid_for_shipping) { ?>
+            <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+            <option value="0"><?php echo $text_disabled; ?></option>
+            <?php } else { ?>
+            <option value="1"><?php echo $text_enabled; ?></option>
+            <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+            <?php } ?>
+          </select></td>
+      </tr>
+      <tr>
+        <td><?php echo $entry_valid_for_tax; ?></td>
+        <td><select name="valid_for_tax">
+            <?php if ($valid_for_tax) { ?>
+            <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+            <option value="0"><?php echo $text_disabled; ?></option>
+            <?php } else { ?>
+            <option value="1"><?php echo $text_enabled; ?></option>
+            <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+            <?php } ?>
+          </select></td>
+      </tr>
+      <tr>
+        <td><?php echo $entry_show_during_checkout; ?></td>
+        <td><select name="show_during_checkout">
+            <?php if ($show_during_checkout) { ?>
+            <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+            <option value="0"><?php echo $text_disabled; ?></option>
+            <?php } else { ?>
+            <option value="1"><?php echo $text_enabled; ?></option>
+            <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+            <?php } ?>
+          </select></td>
+      </tr>
+      <tr>
+        <td><?php echo $entry_allow_check_balance; ?></td>
+        <td><select name="allow_check_balance">
+            <?php if ($allow_check_balance) { ?>
+            <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+            <option value="0"><?php echo $text_disabled; ?></option>
+            <?php } else { ?>
+            <option value="1"><?php echo $text_enabled; ?></option>
+            <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+            <?php } ?>
+          </select></td>
+      </tr>
+      <tr>
+        <td><?php echo $entry_allow_remove; ?></td>
+        <td><select name="allow_remove">
+            <?php if ($allow_remove) { ?>
+            <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+            <option value="0"><?php echo $text_disabled; ?></option>
+            <?php } else { ?>
+            <option value="1"><?php echo $text_enabled; ?></option>
+            <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+            <?php } ?>
+          </select></td>
+      </tr>
+      ]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: SETTINGS -->
+
+    <!-- ******************************************* START: ADMIN VOUCHER FORM -->
+
+    <file name="admin/language/english/sale/voucher.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['entry_order'] = 'Parent Order:<br /><span class="help">The order that purchased this voucher, if any.</span>';
+      $_['text_no_order'] = 'None, this voucher was created manually.';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/sale/voucher.php">
+        <operation>
+            <search position="after"><![CDATA[
+      $this->data['entry_code'] = $this->language->get('entry_code');
+      ]]></search>
+            <add><![CDATA[
+      $this->data['entry_order'] = $this->language->get('entry_order');
+      $this->data['text_no_order'] = $this->language->get('text_no_order');
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+      if (isset($this->request->post['code'])) {
+      ]]></search>
+            <add><![CDATA[
+      if (isset($this->request->get['voucher_id'])) {
+        $this->data['order_id'] = $voucher_info['order_id'];
+        $this->data['order_href'] = $this->url->link('sale/order/info', 'token=' . $this->session->data['token'] . '&order_id=' . $voucher_info['order_id'], 'SSL');
+      } else {
+        $this->data['code_chars'] = $this->config->get('code_chars');
+        $this->data['code_length'] = $this->config->get('code_length');
+      }
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/voucher_form.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+      <table class="form">
+      ]]></search>
+            <add><![CDATA[
+      <?php if ($voucher_id) { ?>
+      <tr>
+        <td><?php echo $entry_order; ?></td>
+        <td>
+        <?php if ($order_id) { ?>
+        <a href="<?php echo $order_href; ?>"><?php echo $order_id; ?></a>
+        <?php } else { ?>
+        <?php echo $text_no_order; ?>
+        <?php } ?>
+        </td>
+      </tr>
+      <?php } ?>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+      <td><input type="text" name="code" value="<?php echo $code; ?>" />
+      ]]></search>
+            <add><![CDATA[
+      <?php if (!$voucher_id) { ?>
+      <input onclick="generateCode();" type="button" id="generate" name="generator" value="Generate" />
+      <?php } ?>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+      <script type="text/javascript"><!--
+        ]]></search>
+            <add><![CDATA[
+      <?php if (!$voucher_id) { ?>
+      function generateCode() {
+        $('input[name="code"]').val(getCode());
+      }
+
+      function getCode() {
+        var chars = "<?php echo $code_chars; ?>";
+        var size = <?php echo $code_length; ?>;
+        var i = 1;
+        var ret = "";
+        while ( i <= size ) {
+         $max = chars.length-1;
+         $num = Math.floor(Math.random()*$max);
+         $temp = chars.substr($num, 1);
+         ret += $temp;
+         i++;
+        }
+        return ret;
+      }
+      <?php } ?>
+      ]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: ADMIN VOUCHER FORM  -->
+
+    <!-- ******************************************* START: FRONT END / CHECKOUT -->
+
+    <file name="catalog/language/english/account/voucher.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['heading_title_balance'] = 'Check Balance';
+      $_['text_description_balance'] = 'Please fill out the form below to check the balance remaining on your gift voucher.';
+      $_['entry_code'] = 'Voucher Code:';
+      $_['entry_captcha'] = 'Enter Captcha:';
+      $_['text_captcha'] = 'Enter the code in the box below:';
+      $_['text_success'] = 'Success: Your gift voucher (%s) has a remaining balance of: %s';
+
+      $_['text_error'] = 'Error: Invalid gift voucher code.';
+      $_['error_voucher'] = 'Warning: Gift Voucher is either invalid or the balance has been used up!';
+      $_['error_captcha'] = 'Verification code does not match the image!';
+      $_['button_check_balance'] = 'Check Balance';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/language/english/total/voucher.php">
+        <operation>
+            <search position="before"><![CDATA[
+          ?>
+          ]]></search>
+            <add><![CDATA[
+          $_['heading_title'] = 'Use Gift Voucher';
+
+          // Text
+          $_['text_success']  = 'Success: Your gift voucher discount has been applied!';
+
+          // Entry
+          $_['entry_voucher'] = 'Enter your gift voucher code here:';
+
+          // Error
+          $_['error_voucher'] = 'Warning: Gift Voucher is either invalid or the balance has been used up!';
+          ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/account/voucher.php">
+        <operation>
+            <search position="after"><![CDATA[
+        public function index() {
+      ]]></search>
+            <add><![CDATA[
+        if (isset($this->request->post['check_balance'])) {
+
+          $this->language->load('account/voucher');
+
+          if (!isset($this->session->data['captcha']) || ($this->session->data['captcha'] != $this->request->post['captcha'])) {
+            $this->session->data['balance_error'] = $this->language->get('error_captcha');
+          } else {
+
+
+            $this->load->model('checkout/voucher');
+
+            $voucher_info = $this->model_checkout_voucher->getVoucher($this->request->post['voucher']);
+
+            if ($voucher_info) {
+              $this->session->data['voucher'] = $this->request->post['voucher'];
+
+              $this->session->data['balance_success'] = sprintf($this->language->get('text_success'), $this->request->post['voucher'], $this->currency->format($voucher_info['amount']));
+
+            } else {
+              $this->session->data['balance_error'] = $this->language->get('error_voucher');
+            }
+          }
+
+          $this->redirect($this->url->link('account/voucher'));
+        }
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="after" index="1"><![CDATA[
+      $this->data['heading_title'] = $this->language->get('heading_title');
+      ]]></search>
+            <add><![CDATA[
+      $this->data['heading_title_balance'] = $this->language->get('heading_title_balance');
+      $this->data['text_description_balance'] = $this->language->get('text_description_balance');
+      $this->data['entry_code'] = $this->language->get('entry_code');
+      $this->data['entry_captcha'] = $this->language->get('entry_captcha');
+      $this->data['text_captcha'] = $this->language->get('text_captcha');
+      $this->data['button_check_balance'] = $this->language->get('button_check_balance');
+      $this->data['allow_check_balance'] = $this->config->get('allow_check_balance');
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before" index="1"><![CDATA[
+        $this->response->setOutput($this->render());
+      ]]></search>
+            <add><![CDATA[
+        if (isset($this->request->post['amount'])) {
+          $this->data['amount'] = $this->request->post['amount'];
+        } else {
+          $this->data['amount'] = $this->config->get('default_amount');
+        }
+        if (isset($this->session->data['balance_error'])) {
+          $this->data['error_warning'] = $this->session->data['balance_error'];
+          unset($this->session->data['balance_error']);
+        }
+        if (isset($this->session->data['balance_success'])) {
+          $this->data['success'] = $this->session->data['balance_success'];
+          unset($this->session->data['balance_success']);
+        } else {
+          $this->data['success'] = '';
+        }
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+        if (!$this->error) {
+      ]]></search>
+            <add><![CDATA[
+        if (($this->request->post['amount'] < $this->config->get('config_voucher_min')) || ($this->request->post['amount'] > $this->config->get('config_voucher_max'))) {
+      		$this->error['amount'] = sprintf($this->language->get('error_amount'), $this->currency->format($this->config->get('config_voucher_min'), false, 1), $this->currency->format($this->config->get('config_voucher_max'), false, 1) . ' ' . $this->currency->getCode());
+        } else {
+          unset($this->error['amount']);
+        }
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/checkout/checkout.php">
+        <operation>
+            <search position="replace"><![CDATA[
+        if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+        ]]></search>
+            <add><![CDATA[
+        if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/language/english/checkout/checkout.php">
+        <operation>
+            <search position="before"><![CDATA[
+        ?>
+      ]]></search>
+            <add><![CDATA[
+        $_['button_voucher'] = 'Apply Voucher';
+        $_['text_voucher'] = 'Use Gift Voucher';
+        $_['entry_voucher'] = 'Enter your gift voucher code here:';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/checkout/payment_method.php">
+        <operation>
+            <search position="after"><![CDATA[
+        $this->language->load('checkout/checkout');
+      ]]></search>
+            <add><![CDATA[
+        $this->data['button_voucher'] = $this->language->get('button_voucher');
+        $this->data['entry_voucher'] = $this->language->get('entry_voucher');
+        $this->data['text_voucher'] = $this->language->get('text_voucher');
+        $this->data['show_during_checkout'] = $this->config->get('show_during_checkout');
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/checkout/payment_method.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+        <?php if ($text_agree) { ?>
+      ]]></search>
+            <add><![CDATA[
+        <?php if ($show_during_checkout) { ?>
+        <div id="voucher">
+          <b><?php echo $text_voucher; ?></b><br />
+          <?php echo $entry_voucher; ?>&nbsp;
+          <input type="text" name="voucher" />
+          &nbsp;<a id="button-voucher" class="button"><span><?php echo $button_voucher; ?></span></a>
+          <br />
+          <br />
+        </div>
+
+        <script type="text/javascript"><!--
+        $('#button-voucher').bind('click', function() {
+          $.ajax({
+            type: 'POST',
+            url: 'index.php?route=checkout/cart/calculateVoucher',
+            data: $('#voucher :input'),
+            dataType: 'json',
+            beforeSend: function() {
+              $('.success, .warning').remove();
+              $('#button-voucher').attr('disabled', true);
+              $('#button-voucher').after('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
+            },
+            complete: function() {
+              $('#button-voucher').attr('disabled', false);
+              $('.wait').remove();
+            },
+            success: function(json) {
+              $('.success, .warning').remove();
+              if (json['error']) {
+                $('#voucher').before('<div class="warning">' + json['error'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+              }
+
+              if (json['success']) {
+                $('#voucher').before('<div class="success">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+              }
+            }
+          });
+        });
+        //--></script>
+        <?php } ?>
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/account/voucher.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+        <?php if ($error_warning) { ?>
+      ]]></search>
+            <add><![CDATA[
+      <?php if ($success) { ?>
+      <div class="success"><?php echo $success; ?></div>
+      <?php } ?>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+      <?php echo $content_bottom; ?></div>
+      ]]></search>
+            <add><![CDATA[
+      <?php if ($allow_check_balance) { ?>
+        <a name="balance"></a>
+        <h1><?php echo $heading_title_balance; ?></h1>
+        <p><?php echo $text_description_balance; ?></p>
+        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="balance">
+          <input type="hidden" name="check_balance" value="1" />
+          <table class="form">
+            <tr>
+              <td><span class="required">*</span> <?php echo $entry_captcha; ?></td>
+              <td><input type="text" name="captcha" value="" /><br /><img src="index.php?route=information/contact/captcha" alt="" /></td>
+            </tr>
+            <tr>
+              <td><span class="required">*</span> <?php echo $entry_code; ?></td>
+              <td><input type="text" name="voucher" value="" /></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td><a onclick="$('#balance').submit();" class="button"><span><?php echo $button_check_balance; ?></span></a></td>
+          </table>
+        </form>
+      <?php } ?>
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/checkout/voucher.php">
+        <operation>
+            <search position="replace" offset="1"><![CDATA[
+      public function addVoucher($order_id, $data) {
+      ]]></search>
+            <add><![CDATA[
+      public function addVoucher($order_id, $data) {
+        $code = '';
+
+        $chars = $this->config->get('code_chars');
+        $size = $this->config->get('code_length');
+
+        $i = 1;
+
+        while ($i <= $size) {
+        $max = strlen($chars)-1;
+        $num = rand(0,$max);
+        $tmp = substr($chars,$num,1);
+        $code .= $tmp;
+          $i++;
+        }
+        $this->db->query("INSERT INTO " . DB_PREFIX . "voucher SET order_id = '" . (int)$order_id . "', code = '" . $this->db->escape($code) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', status = '1', date_added = NOW()");
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/checkout/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+      $this->db->query("INSERT INTO " . DB_PREFIX . "order_total SET order_id = '" . (int)$order_id . "', code = '" . $this->db->escape($total['code']) . "', title = '" . $this->db->escape($total['title']) . "', text = '" . $this->db->escape($total['text']) . "', `value` = '" . (float)$total['value'] . "', sort_order = '" . (int)$total['sort_order'] . "'");
+      ]]></search>
+            <add><![CDATA[
+      $total['title'] = preg_replace('/(<!--start:voucher_remove-->.+?)+(<!--end:voucher_remove-->)/i', '', $total['title']);
+      ]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: FRONT END / CHECKOUT -->
+
+    <!-- ******************************************* START: FRONT END / TOTAL -->
+
+    <file name="catalog/language/english/total/voucher.php">
+        <operation>
+            <search position="before"><![CDATA[
+      ?>
+      ]]></search>
+            <add><![CDATA[
+      $_['text_remove_success'] = 'Success: Your gift voucher (%s) has been removed from the order.';
+      $_['text_remove_vouchers'] = 'Select a voucher to remove:';
+      $_['text_remove'] = 'Remove Voucher';
+      $_['heading_title_remove'] = 'Remove Gift Voucher';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/checkout/cart.php">
+        <operation>
+            <search position="replace"><![CDATA[
+			$this->session->data['voucher'] = $this->request->post['voucher'];
+			]]></search>
+            <add><![CDATA[
+      $this->session->data['vouchers_to_redeem'][$this->request->post['voucher']] = $this->request->post['voucher'];
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+      protected function validateVoucher() {
+      ]]></search>
+            <add><![CDATA[
+      public function removeVoucher() {
+        $this->language->load('total/voucher');
+
+        if (isset($this->request->get['voucher'])) {
+          unset($this->session->data['vouchers_to_redeem'][$this->request->get['voucher']]);
+
+          $this->session->data['success'] = sprintf($this->language->get('text_remove_success'), $this->request->get['voucher']);
+        }
+
+        $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+      }
+
+      public function calculateVoucher() {
+
+            $this->language->load('total/voucher');
+
+            $json = array();
+
+            if (!$this->cart->hasProducts()) {
+                $json['redirect'] = $this->url->link('checkout/cart');
+            }
+
+            if (isset($this->request->post['voucher'])) {
+                $this->load->model('checkout/voucher');
+
+                $voucher_info = $this->model_checkout_voucher->getVoucher($this->request->post['voucher']);
+
+                if ($voucher_info) {
+                    $this->session->data['vouchers_to_redeem'][$this->request->post['voucher']] = $this->request->post['voucher'];
+
+                    $this->session->data['success'] = $this->language->get('text_success');
+
+                    $json['success'] = $this->language->get('text_success');
+
+                    $json['redirect'] = $this->url->link('checkout/cart', '', 'SSL');
+                } else {
+                    $json['error'] = $this->language->get('error_voucher');
+                }
+            }
+
+            $this->response->setOutput(json_encode($json));
+
+      }
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/checkout/cart.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+      <input type="text" name="voucher" value="<?php echo $voucher; ?>" class="span6" />
+      ]]></search>
+            <add><![CDATA[
+      <input type="text" name="voucher" value="" class="span6" />
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/total/voucher.php">
+        <operation>
+            <search position="all"><![CDATA[]]></search>
+            <add><![CDATA[<?php
+      class ModelTotalVoucher extends Model {
+        public function getTotal(&$total_data, &$total, &$taxes) {
+          if (isset($this->session->data['vouchers_to_redeem'])) {
+            $this->load->language('total/voucher');
+
+            $this->load->model('checkout/voucher');
+
+            foreach ($this->session->data['vouchers_to_redeem'] as $voucher)
+            {
+              $voucher_info = $this->model_checkout_voucher->getVoucher($voucher);
+
+              if ($voucher_info) {
+
+                $amount = $total;
+
+                foreach ($total_data as $data) {
+                  if (!$this->config->get('valid_for_shipping')) {
+                    if ($data['code'] == 'shipping')
+                    {
+                      $amount -= $data['value'];
+                    }
+                  }
+                  if (!$this->config->get('valid_for_tax')) {
+                    if ($data['code'] == 'tax')
+                    {
+                      $amount -= $data['value'];
+                    }
+                  }
+                }
+
+                if ($voucher_info['amount'] < $amount) {
+                  $amount = $voucher_info['amount'];
+                }
+
+                if ($this->config->get('allow_remove'))
+                {
+                  $title = sprintf($this->language->get('text_voucher'), $voucher); //'<!--start:voucher_remove--> <a href="index.php?route=checkout/cart/removeVoucher&voucher=' . $voucher . '" title="' . $this->language->get('text_remove') . '">[x]</a><!--end:voucher_remove-->';
+                } else {
+                  $title = sprintf($this->language->get('text_voucher'), $voucher);
+                }
+
+                $total_data[] = array(
+                  'code'       => 'voucher',
+                     'title'      => $title,
+                    'text'       => $this->currency->format(-$amount),
+                     'value'      => -$amount,
+                  'sort_order' => $this->config->get('voucher_sort_order')
+                   );
+
+                $total -= $amount;
+              }
+            }
+          }
+        }
+
+        public function confirm($order_info, $order_total) {
+          $code = '';
+
+          $start = strpos($order_total['title'], '(') + 1;
+          $end = strrpos($order_total['title'], ')');
+
+          if ($start && $end) {
+            $code = substr($order_total['title'], $start, $end - $start);
+          }
+
+          $this->load->model('checkout/voucher');
+
+          $voucher_info = $this->model_checkout_voucher->getVoucher($code);
+
+          if ($voucher_info) {
+            $this->model_checkout_voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['value']);
+          }
+        }
+      }
+      ?>]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: FRONT END / TOTAL -->
+
+    <!-- ******************************************* START: FRONT END / ACCOUNT -->
+
+    <file name="catalog/controller/account/account.php">
+        <operation>
+            <search position="after"><![CDATA[
+        $this->language->load('account/account');
+      ]]></search>
+            <add><![CDATA[
+        $this->data['text_voucher_balance'] = $this->language->get('text_voucher_balance');
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+        $this->data['transaction'] = $this->url->link('account/transaction', '', 'SSL');
+      ]]></search>
+            <add><![CDATA[
+        $this->data['voucher_balance'] = $this->url->link('account/voucher') . '#balance';
+        $this->data['allow_check_balance'] = $this->config->get('allow_check_balance');
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/language/english/account/account.php">
+        <operation>
+            <search position="before"><![CDATA[
+        ?>
+      ]]></search>
+            <add><![CDATA[
+        $_['text_voucher_balance'] = 'Check Gift Voucher balances';
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/account/account.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+        <li><a href="<?php echo $transaction; ?>"><?php echo $text_transaction; ?></a></li>
+      ]]></search>
+            <add><![CDATA[
+        <?php if ($allow_check_balance) { ?>
+        <li><a href="<?php echo $voucher_balance; ?>"><?php echo $text_voucher_balance; ?></a></li>
+        <?php } ?>
+      ]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: FRONT END / ACCOUNT -->
+
+    <!-- ******************************************* START: FRONT END / MISC -->
+
+    <file name="catalog/controller/account/logout.php">
+        <operation>
+            <search position="after"><![CDATA[
+      unset($this->session->data['voucher']);
+      ]]></search>
+            <add><![CDATA[
+      unset($this->session->data['vouchers_to_redeem']);
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/checkout/success.php">
+        <operation>
+            <search position="after"><![CDATA[
+      unset($this->session->data['voucher']);
+      ]]></search>
+            <add><![CDATA[
+      unset($this->session->data['vouchers_to_redeem']);
+      ]]></add>
+        </operation>
+    </file>
+
+    <!-- ******************************************* END: FRONT END / MISC -->
+
+</modification>

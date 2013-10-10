@@ -17,6 +17,7 @@ class ControllerCheckoutSuccess extends Controller {
 			unset($this->session->data['vouchers']);
 			
 			unset($this->session->data['recurring']);
+			unset($this->session->data['recurring_id']);
 			unset($this->session->data['recurring_frequency']);
 		}	
 									   

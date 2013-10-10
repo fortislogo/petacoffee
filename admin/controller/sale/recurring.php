@@ -131,8 +131,10 @@ class ControllerSaleRecurring extends Controller {
 
 		$this->load->model('sale/recurring');
 
-    	if (isset($this->request->post['selected']) && ($this->validateDelete())) {
-			foreach ($this->request->post['selected'] as $recurring_id) {
+    	if (isset($this->request->post['selected']) && ($this->validateDelete())) 
+		{
+			foreach ($this->request->post['selected'] as $recurring_id) 
+			{
 				$this->model_sale_recurring->deleterecurring($recurring_id);
 			}
 

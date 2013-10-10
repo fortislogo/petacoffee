@@ -301,8 +301,46 @@ class ModelAccountRecurring extends Model
 		
 		//print_r($payment_address);
 		
-		$this->db->query("update recurring set recurring = '".$data['recurring']."', next_order_date = '".$data['next_order_date']."', status = '".$data['status']."', comment = '".$data['comment']."', payment_firstname = '".$payment_address['firstname']."', payment_lastname = '".$payment_address['lastname']."', payment_company = '".$payment_address['company']."',  payment_address_1 = '".$payment_address['address_1']."', payment_address_2 = '".$payment_address['address_2']."', payment_city = '".$payment_address['city']."', payment_postcode = '".$payment_address['postcode']."', payment_country_id = '".$payment_address['country_id']."', payment_zone_id = '".$payment_address['zone_id']."', shipping_firstname = '".$shipping_address['firstname']."', shipping_lastname = '".$$shipping_address['lastname']."', shipping_company = '".$shipping_address['company']."',  shipping_address_1 = '".$shipping_address['address_1']."', shipping_address_2 = '".$shipping_address['address_2']."', shipping_city = '".$shipping_address['city']."', shipping_postcode = '".$shipping_address['postcode']."', shipping_country_id = '".$shipping_address['country_id']."', shipping_zone_id = '".$shipping_address['zone_id']."', payment_address_id = '".$payment_address_id."', shipping_address_id = '".$shipping_address_id."', shipping_code = '".$data['shipping_method']."', payment_code = '".$data['payment_method']."', amount = '".(float)$next_order_total."', cc = '".serialize($cc)."', coupon = '".$data['coupon']."', gift_voucher = '".$data['gift_voucher']."' where recurring_id = '".$id."'");
+		//print_r($data);
+		
+		$this->db->query("update recurring 
+						  set recurring = '".$data['recurring']."', 
+						  	  next_order_date = '".$this->dateMdyToYmd($data['next_order_date'])."', 
+							  status = '".$data['status']."', 
+							  comment = '".$data['comment']."', 
+							  payment_firstname = '".$payment_address['firstname']."', 
+							  payment_lastname = '".$payment_address['lastname']."', 
+							  payment_company = '".$payment_address['company']."',  
+							  payment_address_1 = '".$payment_address['address_1']."', 
+							  payment_address_2 = '".$payment_address['address_2']."', 
+							  payment_city = '".$payment_address['city']."', 
+							  payment_postcode = '".$payment_address['postcode']."', 
+							  payment_country_id = '".$payment_address['country_id']."', 
+							  payment_zone_id = '".$payment_address['zone_id']."', 
+							  shipping_firstname = '".$shipping_address['firstname']."', 
+							  shipping_lastname = '".$shipping_address['lastname']."', 
+							  shipping_company = '".$shipping_address['company']."',  
+							  shipping_address_1 = '".$shipping_address['address_1']."', 
+							  shipping_address_2 = '".$shipping_address['address_2']."', 
+							  shipping_city = '".$shipping_address['city']."', 
+							  shipping_postcode = '".$shipping_address['postcode']."', 
+							  shipping_country_id = '".$shipping_address['country_id']."', 
+							  shipping_zone_id = '".$shipping_address['zone_id']."', 
+							  payment_address_id = '".$payment_address_id."', 
+							  shipping_address_id = '".$shipping_address_id."', 
+							  shipping_code = '".$data['shipping_method']."', 
+							  payment_code = '".$data['payment_method']."', 
+							  amount = '".(float)$next_order_total."', 
+							  cc = '".serialize($cc)."', 
+							  coupon = '".$data['coupon']."'
+					     where recurring_id = '".$id."'");
 	
+	}
+	
+	private function dateMdyToYmd($date)
+	{
+		list($m, $d, $y) = explode('-', $date);
+		return implode("-", array($y,$m,$d));
 	}
 	
 	

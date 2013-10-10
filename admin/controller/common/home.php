@@ -411,8 +411,192 @@ class ControllerCommonHome extends Controller {
 		$this->import_product_options();
 		$this->import_orders();
 		$this->import_orders_items();
-		$this->import_customers();
-		$this->import_temp_orders();*/
+		$this->import_customers();*/
+		$this->import_temp_orders();
+		/*$this->import_recurring();*/
+		
+		//$this->import_coupon();
+	}
+	
+	
+	private function import_coupon()
+	{
+		$query = $this->db->query("delete from coupon");
+		$query = $this->db->query("select * from xcart_discount_coupons");
+		$result = $query->rows;
+		foreach($result as $row)
+		{
+			$coupon = array();
+			$ss = array();
+			
+			$coupon['name'] = $row['coupon'];
+			$coupon['code'] = $row['coupon'];
+			$coupon['type'] = $row['coupon_type'] == 'percent' ? 'P' : 'F';
+			$coupon['discount'] = $row['discount'];
+			
+			$end = date("Y-m-d", $row['expire']);
+			
+			$coupon['date_start'] = $end;
+			$coupon['date_end'] = $end;
+			$coupon['status'] = $row['status'] == 'A' ? 1 : 0;
+			$coupon['uses_total'] = $row['times'];
+			$coupon['uses_customer'] = $row['per_user'] == 'Y' ? 1 : 0;
+			$coupon['total'] = $row['minimum'];
+			
+			$sql = "INSERT INTO `coupon` SET";
+			
+			foreach($coupon as $field => $value)
+			{
+				$ss[] = sprintf(" `%s` = '%s'", $field, $value);
+			}
+			
+			$sql .= implode(',', $ss);
+			
+			$this->db->query($sql);
+		}
+	}
+	
+	public function import_recurring()
+	{
+		$this->db->query("delete from recurring");
+		$this->db->query("delete from recurring_option");
+		$this->db->query("delete from recurring_product");
+		$query = $this->db->query("select * from recurring_orders");
+		$results = $query->rows;
+		foreach($results as $row)
+		{
+			$recurring['name'] = $row['last_orderid'];			
+			$recurring['order_id'] = $row['last_orderid'];
+			$recurring['amount'] = $row['original_total'];
+			$recurring['recurring'] = $row['order_frequency'];
+			
+			$status = '';
+			if ($row['active'] == 'Y') $status = 'active';
+			
+			$recurring['status'] = $status;
+			
+			$order = $this->getOrder($row['last_orderid']);
+			
+			$payment_country_id = $this->getCountryId($order['b_country']);
+			$payment_zone_id = $this->getZoneId($order['b_state']);
+			
+			$shipping_country_id = $this->getCountryId($order['s_country']);
+			$shipping_zone_id = $this->getZoneId($order['s_state']);
+			
+			$recurring['date'] = date("Y-m-d", $order['date']);
+			
+			$email_address = $this->getCustomerEmail($order['login']);
+			
+			$customer_id = $this->getCustomerIdByEmail($email_address);
+			
+			$recurring['customer_id'] = $customer_id;
+			
+			$next_order_date = date("Y-m-d", strtotime(sprintf("%s +%s week", date("Y-m-d", $order['date']),$row['order_frequency'])));
+			
+			$recurring['next_order_date'] = $next_order_date;
+			
+			$recurring['payment_firstname'] = $order['b_firstname'];
+			$recurring['payment_lastname'] = $order['b_lastname'];
+			$recurring['payment_address_1'] = $order['b_address'];
+			$recurring['payment_city'] = $order['b_city'];
+			$recurring['payment_postcode'] = $order['b_zipcode'];
+			$recurring['payment_country'] = $order['b_country'];
+			$recurring['payment_country_id'] = $payment_country_id;
+			$recurring['payment_zone'] = $order['b_state'];
+			$recurring['payment_zone_id'] = $payment_zone_id;
+			
+			$recurring['shipping_firstname'] = $order['s_firstname'];
+			$recurring['shipping_lastname'] = $order['s_lastname'];
+			$recurring['shipping_address_1'] = $order['s_address'];
+			$recurring['shipping_city'] = $order['b_city'];
+			$recurring['shipping_postcode'] = $order['b_zipcode'];
+			$recurring['shipping_country'] = $order['b_country'];
+			$recurring['shipping_country_id'] = $shipping_country_id;
+			$recurring['shipping_zone'] = $order['b_state'];
+			$recurring['shipping_zone_id'] = $shipping_zone_id;
+			
+			$recurring_id = $this->addRecurring($recurring);
+			
+			$this->load->model('sale/order');
+			
+			$products = $this->model_sale_order->getOrderProducts($row['last_orderid']);
+			
+			foreach($products as $product)
+			{
+				$this->db->query("insert into recurring_product set product_id = '".$product['product_id']."', name = '".$product['name']."', model = '".$product['model']."', quantity = '".$product['quantity']."', price = '".$product['price']."', total = '".$product['total']."', tax = '".$product['tax']."', reward = '".$product['reward']."', recurring_id = '".$recurring_id."'");
+			}
+			
+		}
+		
+		echo "done.";
+	}
+	
+	
+	
+	
+	function addRecurring($data)
+	{
+		$sql = "INSERT INTO recurring SET";
+		$new = array();
+		foreach($data as $field => $value)
+		{
+			$new[] = " `$field` = '$value'";
+		}
+		
+		$sql .= implode(',', $new);
+		
+		$this->db->query($sql);
+		
+		return $this->db->getLastId();
+	}
+	
+	
+	/*function getCustomerIdByEmail($email)
+	{
+		$customerid = 0;
+		$query = $this->db->query("select * from customer where email = '".$email."'");
+		$result = $query->row;
+		if ($result)
+			$customerid = $result['customer_id'];
+		return $customerid;
+	}*/
+	
+	function getCustomerEmail($login)
+	{
+		$query = $this->db->query("select * from xcart_customers where login = '".$login."'");
+		$result = $query->row;
+		$email = "";
+		if ($result)
+			$email = $result['email'];
+		return $email;
+	}
+	
+	function getCountryId($country)
+	{
+		$countryid = 223;
+		
+		return $countryid;
+	}
+	
+	function getZoneId($zone)
+	{
+		$zoneid = 0;
+		
+		$query = $this->db->query("select * from zone where country_id = 223 and code = '".$zone."'");
+		$result = $query->row;
+		
+		if ($result)
+		
+			$zoneid = $result['zone_id'];
+		
+		return $zoneid;
+	}
+	
+	function getOrder($order_id)
+	{
+		$query = $this->db->query("select * from xcart_orders where orderid = " . $order_id);
+		$result = $query->row;
+		return $result;
 	}
 	
 	public function update_customer_password()
@@ -422,7 +606,7 @@ class ControllerCommonHome extends Controller {
 		foreach($result as $row)
 		{
 			$email = $row['email'];
-			$pass = $row['password'];
+			$pass = text_decrypt($row['password']);
 			
 			//echo sprintf("email:%s password: %s<br />", $email, $pass);
 			
@@ -430,10 +614,14 @@ class ControllerCommonHome extends Controller {
 			
 			if ($id > 0)
 			{
-				$this->db->query("update customer set password = '".$pass."' where customer_id = " . $id);
+				echo sprintf("%s: %s: %s<br />", $id, $row['email'], $pass);
+				$this->db->query("UPDATE customer SET salt = '" . $this->db->escape($salt = substr(md5(uniqid(rand(), true)), 0, 9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($pass)))) . "' WHERE customer_id = '" . (int)$id . "'");
+				//$this->db->query("update customer set password = '".$pass."' where customer_id = " . $id);
 			}
 		}
 	}
+	
+	
 	
 	function getCustomerIdByEmail($email)
 	{
@@ -448,7 +636,7 @@ class ControllerCommonHome extends Controller {
 		return $id;
 	}
 	
-	/*
+	
 	
 	public function import_customers()
 	{
@@ -792,7 +980,7 @@ class ControllerCommonHome extends Controller {
 		}
 	}
 	
-	function getCountryId($country)
+	/*function getCountryId($country)
 	{
 		$query = $this->db->query("select country_id from country where iso_code_2 = '".$country."'");
 			
@@ -822,7 +1010,7 @@ class ControllerCommonHome extends Controller {
 		
 		return $zone_id;
 	}
-	
+	*/
 	function getShippingMethod($id)
 	{
 		$query = $this->db->query("select shipping from xcart_shipping where shippingid = " . $id);
@@ -890,6 +1078,7 @@ class ControllerCommonHome extends Controller {
 			
 			$shipping_method = $this->getShippingMethod($row['shippingid']);
 			
+			$order['order_id'] = $row['orderid'];
 			$order['shipping_country_id'] = $shipping_country_id;
 			$order['shipping_zone_id'] = $shipping_zone_id;
 			
@@ -1011,6 +1200,6 @@ class ControllerCommonHome extends Controller {
 		}
 		
 				
-	}*/
+	}
 }
 ?>

@@ -140,9 +140,16 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 			}
 			
 			//$response_info[1] = '1';
+			
+			//print_r($response_info);
 		
-			if ($response_info[1] == '1') {
-				if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {
+			if ($response_info[1] == '1') 
+			{
+				
+				
+				
+				if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) 
+				{
 					
 					$this->model_checkout_order->updateCC($this->session->data['order_id'], $cc);
 					$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
@@ -169,14 +176,20 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 						$message .= 'Cardholder Authentication Verification Response: ' . $response_info['40'] . "\n";
 					}				
 	
-					$this->model_checkout_order->update($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);				
+					$this->model_checkout_order->update($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);		
+					
 				}
 				
 				$json['success'] = $this->url->link('checkout/success', '', 'SSL');
-			} else {
+				
+			} 
+			else 
+			{
 				$json['error'] = $response_info[4];
 			}
-		} else {
+		} 
+		else 
+		{
 			$json['error'] = 'Empty Gateway Response';
 			
 			$this->log->write('AUTHNET AIM CURL ERROR: Empty Gateway Response');

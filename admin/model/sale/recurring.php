@@ -273,34 +273,19 @@ class ModelSaleRecurring extends Model {
 		$this->db->query("UPDATE `" . DB_PREFIX . "recurring` SET total = '" . (float)$total . "', affiliate_id = '" . (int)$affiliate_id . "', commission = '" . (float)$commission . "' WHERE recurring_id = '" . (int)$recurring_id . "'"); 
 	}
 	
-	public function deleterecurring($recurring_id) {
-		$recurring_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "recurring` WHERE recurring_status_id > '0' AND recurring_id = '" . (int)$recurring_id . "'");
+	public function deleterecurring($recurring_id) 
+	{
+		$recurring_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "recurring` WHERE recurring_id = '" . (int)$recurring_id . "'");
 
-		if ($recurring_query->num_rows) {
+		if ($recurring_query->num_rows) 
+		{
 			$product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "recurring_product WHERE recurring_id = '" . (int)$recurring_id . "'");
-
-			foreach($product_query->rows as $product) {
-				$this->db->query("UPDATE `" . DB_PREFIX . "product` SET quantity = (quantity + " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
-
-				$option_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "recurring_option WHERE recurring_id = '" . (int)$recurring_id . "' AND recurring_product_id = '" . (int)$product['recurring_product_id'] . "'");
-
-				foreach ($option_query->rows as $option) {
-					$this->db->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity + " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
-				}
-			}
+			
 		}
 
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "recurring` WHERE recurring_id = '" . (int)$recurring_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_product WHERE recurring_id = '" . (int)$recurring_id . "'");
-      	$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_option WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_download WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_voucher WHERE recurring_id = '" . (int)$recurring_id . "'");
-      	$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_total WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_history WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "recurring_fraud WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_transaction WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_reward WHERE recurring_id = '" . (int)$recurring_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "affiliate_transaction WHERE recurring_id = '" . (int)$recurring_id . "'");
+      	
 	}
 
 	public function getrecurring($recurring_id) {

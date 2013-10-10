@@ -416,7 +416,7 @@
                         <thead>
 							<tr>
 								<td colspan="2">
-									Coupon / Gift Voucher
+									Coupon
 								</td>
 							</tr>
 						</thead>
@@ -427,13 +427,6 @@
                             	<td>
                                 	<input type="text" name="coupon" value="<?php echo $coupon; ?>" />
 									<input type="submit" value="Submit" class="btn btn-coupon" />
-                                </td>
-                            </tr>
-                            <tr>
-                            	<td>Gift Voucher:</td>
-                            	<td>
-                                	<input type="text" name="gift_voucher" value="<?php echo $gift_voucher; ?>" />
-									<input type="submit" value="Submit" class="btn btn-gift-voucher" />
                                 </td>
                             </tr>
                         </tbody>
@@ -458,7 +451,7 @@
                             <td>
 								<?php foreach ($payment_methods as $payment_method) { ?>
 				
-								<label>
+								<span>
                                 	<?php if ($payment_code == $payment_method['code']): ?>
                                     <input type="radio" name="payment_method" value="<?php echo $payment_method['code']; ?>" id="<?php echo $payment_method['code']; ?>" checked="checked" class="radio inline" />
                                     <?php else: ?>
@@ -466,9 +459,11 @@
                                     <?php endif; ?>
 									<?php echo $payment_method['title']; ?><br />
                                     <?php include($payment_method['form']); ?>
-								</label>
+								
 
 								<?php } ?>
+                                
+                                </span>
                            </td>     
                            
                         </tr>   
@@ -544,8 +539,7 @@
                           <tbody id="ordertotals-total">
 			              <?php foreach ($order_totals as $order_total) { ?>
            				  <tr id="total-row<?php echo $total_row; ?>">
-			                <td class="right" colspan="4"><?php echo html_entity_decode($order_total['title']); ?>:
-            			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][order_total_id]" value="<?php echo $order_total['order_total_id']; ?>" />
+			                <td class="right" colspan="4"><?php echo $order_total['title']; ?>:
 			                  <input type="hidden" name="order_total[<?php echo $total_row; ?>][code]" value="<?php echo $order_total['code']; ?>" />
             			      <input type="hidden" name="order_total[<?php echo $total_row; ?>][title]" value="<?php echo $order_total['title']; ?>" />
 			                  <input type="hidden" name="order_total[<?php echo $total_row; ?>][text]" value="<?php echo $order_total['text']; ?>" />
@@ -569,7 +563,7 @@
                     
                     <div class="form-actions">
 						<a href="" onclick="$('#recurring_form').submit(); return false;" class="btn btn-inverse"><span>Update Recurring Order</span></a>
-                        <a href="" class="btn btn-inverse"><span>Reprocess Recurring Order Now</span></a>
+                        <a href="" onclick="$('#recurring_form').attr('action', '<?php echo $reprocess; ?>'); $('#recurring_form').submit(); return false;" class="btn btn-inverse"><span>Reprocess Recurring Order Now</span></a>
 					</div>
 					
 				</form>
@@ -588,7 +582,7 @@
 	<script type="text/javascript"><!--
 
 		$(document).ready(function() {
-			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+			$('.date').datepicker({dateFormat: 'mm-dd-yy'});
 		});
 	
 //--></script>
@@ -605,6 +599,10 @@ $('#button-product').live('click', function()
 		type: 'post',
 		success: function(json)
 		{
+			$('#product_id').val('');
+			$('#option').html('');
+			$('input[name=product]').val('');
+			
 			var productHtml = '';
 			var products = json['products'];
 			for(var i=0; i<products.length; i++)
