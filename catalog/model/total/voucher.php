@@ -1,6 +1,6 @@
 <?php
 class ModelTotalVoucher extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+	public function getTotal(&$total_data, &$total, &$taxes) {		
 		if (isset($this->session->data['voucher'])) {
 			$this->language->load('total/voucher');
 			
@@ -13,7 +13,9 @@ class ModelTotalVoucher extends Model {
 					$amount = $total;	
 				} else {
 					$amount = $voucher_info['amount'];	
-				}				
+				}
+				
+				echo sprintf($this->language->get('text_voucher'), $this->session->data['voucher']);
       			
 				$total_data[] = array(
 					'code'       => 'voucher',

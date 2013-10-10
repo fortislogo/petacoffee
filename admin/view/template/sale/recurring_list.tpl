@@ -84,9 +84,9 @@
             <?php foreach ($orders as $order) { ?>
             <tr>
               <td style="text-align: center;"><?php if ($order['selected']) { ?>
-                <input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" checked="checked" />
+                <input type="checkbox" name="selected[]" value="<?php echo $order['recurring_id']; ?>" checked="checked" />
                 <?php } else { ?>
-                <input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" />
+                <input type="checkbox" name="selected[]" value="<?php echo $order['recurring_id']; ?>" />
                 <?php } ?></td>
               <td class="right"><?php echo $order['recurring_id']; ?></td>
               <td class="left"><?php echo $order['customer']; ?></td>

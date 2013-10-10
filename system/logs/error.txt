@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2013-04-22 20:26:21 - PHP Notice:  Error: Unknown column 'cc' in 'field list'<br />Error No: 1054<br />update `order` set cc = '0027' where order_id = 26825 in /var/www/vhosts/petacoffee.com/httpdocs/system/database/mysql.php on line 50
 2013-05-01 22:10:04 - PHP Notice:  Undefined variable: sort_order in C:\odesk\petacoffee\admin\view\template\sale\recurring_list.tpl on line 28
 2013-05-01 22:10:04 - PHP Notice:  Undefined variable: filter_order_status_id in C:\odesk\petacoffee\admin\view\template\sale\recurring_list.tpl on line 65
@@ -5184,3 +5185,8 @@
 2013-10-01 20:44:34 - PHP Notice:  Undefined index: order_total_id in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 499
 2013-10-01 20:44:34 - PHP Notice:  Undefined index: order_total_id in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 499
 2013-10-01 20:44:34 - PHP Notice:  Undefined index: order_total_id in C:\xampp\htdocs\gbsmanila\petacoffee\catalog\view\theme\fortuna\template\account\recurring_form.tpl on line 499
+=======
+2013-10-10 1:35:20 - PHP Warning:  mail() [<a href='function.mail'>function.mail</a>]: Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in C:\projects\petacoffee\system\library\mail.php on line 150
+2013-10-10 1:35:31 - PHP Warning:  mail() [<a href='function.mail'>function.mail</a>]: Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in C:\projects\petacoffee\system\library\mail.php on line 150
+2013-10-10 1:43:43 - PHP Warning:  mail() [<a href='function.mail'>function.mail</a>]: Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in C:\projects\petacoffee\system\library\mail.php on line 150
+>>>>>>> 4cd8348ee65e57e9010ac3bc1adef82dc13e0c06

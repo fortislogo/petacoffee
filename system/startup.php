@@ -76,6 +76,8 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 // Helper
 require_once(DIR_SYSTEM . 'helper/json.php'); 
 require_once(DIR_SYSTEM . 'helper/utf8.php'); 
+require_once(DIR_SYSTEM . 'helper/crypt.php'); 
+require_once(DIR_SYSTEM . 'helper/blowfish.php'); 
 
 // Engine
 require_once(DIR_SYSTEM . 'engine/action.php'); 
@@ -101,4 +103,5 @@ require_once(DIR_SYSTEM . 'library/request.php');
 require_once(DIR_SYSTEM . 'library/response.php');
 require_once(DIR_SYSTEM . 'library/session.php');
 require_once(DIR_SYSTEM . 'library/template.php');
+
 ?>

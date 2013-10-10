@@ -112,6 +112,8 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 
 	return true;
 }
+
+
 	
 // Error Handler
 set_error_handler('error_handler');

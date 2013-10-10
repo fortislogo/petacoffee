@@ -468,6 +468,16 @@ class ModelShippingUsps extends Model {
       			);
 			}
 		}
+		
+		if ($method_data)
+		{
+			foreach($method_data['quote'] as $id => $quote)
+			{
+				$quote['title'] = str_replace('&lt;sup&gt;&#8482;&lt;/sup&gt;', '', $quote['title']);
+				$quote['title'] = str_replace('&lt;sup&gt;&#174;&lt;/sup&gt;', '', $quote['title']);
+				$method_data['quote'][$id] = $quote;
+			}
+		}
 
 		return $method_data;
 	}

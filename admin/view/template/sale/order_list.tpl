@@ -92,7 +92,7 @@
                 <?php } else { ?>
                 <input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" />
                 <?php } ?></td>
-              <td class="right"><?php echo $order['order_id']; ?></td>
+              <td class="right"><?php echo $order['order_id']; ?> <?php if ($order['recurring']): ?>(R)<?php endif; ?></td>
               <td class="left"><?php echo $order['customer']; ?></td>
               <td class="left"><?php echo $order['status']; ?></td>
               <td class="right"><?php echo $order['total']; ?></td>

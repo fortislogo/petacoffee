@@ -74,7 +74,7 @@
 
 							
 						<tbody>
-                        	<tr class="<?php echo $order['status']; ?>">
+                        	<tr class="<?php echo ($order['status'] == 'active') ? 'active' : 'cancel'; ?>">
                             	<td><a href="<?php echo $order['href']; ?>"><?php echo $order['name']; ?></a></td>
                                 <td><?php echo $order['status']; ?></td>
                                 <td><?php echo $order['recurring']; ?> weeks</td>
@@ -86,7 +86,7 @@
                                 	<?php if ($order['status'] == 'active') { ?>
                                     <a href="<?php echo $order['edit']; ?>" class="btn btn-mini btn-cart" title="Edit">Modify</a>
                                 	<a href="<?php echo $order['reorder']; ?>" class="btn btn-mini btn-cart" title="Cancel">Cancel</a>
-                                    <?php } else if ($order['status'] == 'cancel') { ?>
+                                    <?php } else { ?>
                                     <a href="<?php echo $order['restart']; ?>" class="btn btn-mini btn-cart" title="Restart">Restart</a>
                                     <?php } ?>
                                 </td>

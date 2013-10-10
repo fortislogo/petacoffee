@@ -93,6 +93,7 @@ class ControllerCheckoutConfirm extends Controller {
 				}
 			}
 			
+			
 			$sort_order = array(); 
 		  
 			foreach ($total_data as $key => $value) {
@@ -153,17 +154,27 @@ class ControllerCheckoutConfirm extends Controller {
 			$data['payment_country'] = $payment_address['country'];
 			$data['payment_country_id'] = $payment_address['country_id'];
 			$data['payment_address_format'] = $payment_address['address_format'];
-		
-			if (isset($this->session->data['payment_method']['title'])) {
-				$data['payment_method'] = $this->session->data['payment_method']['title'];
-			} else {
-				$data['payment_method'] = '';
-			}
 			
-			if (isset($this->session->data['payment_method']['code'])) {
-				$data['payment_code'] = $this->session->data['payment_method']['code'];
-			} else {
-				$data['payment_code'] = '';
+			if ($total > 0)
+			{		
+				if (isset($this->session->data['payment_method']['title'])) {
+					$data['payment_method'] = $this->session->data['payment_method']['title'];
+				} else {
+					$data['payment_method'] = '';
+				}
+			
+				if (isset($this->session->data['payment_method']['code'])) {
+					$data['payment_code'] = $this->session->data['payment_method']['code'];
+				} else {
+					$data['payment_code'] = '';
+				}
+			}
+			else
+			{
+				$data['payment_method'] = 'Free Checkout';
+				$data['payment_code'] = 'free_checkout';
+				$this->session->data['payment_method']['title'] = 'Free Checkout';
+				$this->session->data['payment_method']['code'] = 'free_checkout';
 			}
 						
 			if ($this->cart->hasShipping()) {
@@ -381,7 +392,10 @@ class ControllerCheckoutConfirm extends Controller {
 			$this->data['totals'] = $total_data;
 	
 			$this->data['payment'] = $this->getChild('payment/' . $this->session->data['payment_method']['code']);
-		} else {
+		
+		} 
+		else 
+		{
 			$this->data['redirect'] = $redirect;
 		}			
 		

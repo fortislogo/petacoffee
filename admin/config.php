@@ -1,5 +1,7 @@
 <?php
 // HTTP
+$blowfish_key ='3be60871f3b8897a8196825dc164ce8d';
+
 define('HTTP_SERVER', 'http://'.$_SERVER['HTTP_HOST'].'/admin/');
 define('HTTP_CATALOG', 'http://'.$_SERVER['HTTP_HOST'].'/');
 

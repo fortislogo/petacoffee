@@ -9,7 +9,7 @@ class ModelTotalShipping extends Model {
         		'value'      => $this->session->data['shipping_method']['cost'],
 				'sort_order' => $this->config->get('shipping_sort_order')
 			);
-
+			
 			if ($this->session->data['shipping_method']['tax_class_id']) {
 				$tax_rates = $this->tax->getRates($this->session->data['shipping_method']['cost'], $this->session->data['shipping_method']['tax_class_id']);
 				
